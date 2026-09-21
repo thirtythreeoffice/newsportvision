@@ -1390,11 +1390,5 @@
         }
       ]
     }
-  ],
-  "rewrites": [
-    {
-      "source": "/it/:path*",
-      "destination": "/it/404.html"
-    }
   ]
 }

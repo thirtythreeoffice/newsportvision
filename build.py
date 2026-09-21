@@ -70,15 +70,23 @@ def vercel_json(redirects, secure, immutable, revalidate):
     the filesystem, then rewrites, then the 404. Three consequences shape the
     file below.
 
-      * The legacy Wix URLs are redirects, so they are answered at the edge in
-        a single 301 — the HTML stubs a dumber host needs are never built.
+      * The legacy Wix URLs are redirects, answered at the edge — the HTML
+        stubs a dumber host needs are never built. Measured against the live
+        deployment: trailingSlash normalisation runs BEFORE these rules, so a
+        bare /shop is answered 308 -> /shop/ and only then 301 -> /products/.
+        Both spellings are listed because the slashed one is what the rules
+        actually receive; the bare one costs nothing and covers the case where
+        that order ever changes.
       * Every rule below is written so that no two rules can set the same
         header on the same request. A header set twice is joined with a comma,
         and "max-age=0, max-age=31536000" would quietly stop the assets from
         being cached at all.
-      * A rewrite is the only way to keep an unknown Italian URL inside the
-        Italian tree. It answers 200 rather than 404, which is why the page
-        itself carries <meta name="robots" content="noindex">.
+      * There is no rewrite for the Italian tree. One was tried: Vercel serves
+        the root 404.html for every unmatched path and the rewrite never fired,
+        so an unknown /it/ URL answers 404 with the English page. That is the
+        better half of the trade — a rewrite would have returned 200, and a
+        wrong status on an error page costs more than a wrong language on a
+        page that carries noindex.
     """
     rules = []
     for src, dst in sorted(redirects.items()):
@@ -108,7 +116,6 @@ def vercel_json(redirects, secure, immutable, revalidate):
              "headers": [{"key": "Access-Control-Allow-Origin", "value": "*"}]},
         ] + [{"source": h,
               "headers": [{"key": "Cache-Control", "value": revalidate}]} for h in html],
-        "rewrites": [{"source": "/it/:path*", "destination": "/it/404.html"}],
     }
     with open(os.path.join(HERE, "vercel.json"), "w", encoding="utf-8") as f:
         json.dump(cfg, f, indent=2)

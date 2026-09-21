@@ -14,7 +14,11 @@ beyond the Python standard library.
 and headers can never drift from the ones the site is built with. It carries:
 
 * **228 redirect rules** — every legacy Wix URL, in both locales, spelled with
-  and without a trailing slash so an old link lands in a single 301.
+  and without a trailing slash. Vercel normalises the trailing slash before it
+  reads these rules, so a bare `/shop` is answered `308 -> /shop/` and then
+  `301 -> /products/`: two hops, both permanent, query strings preserved. Every
+  one of the 114 URLs was followed on the live deployment and lands on its
+  page.
 * **Security headers** on every response, including a Content-Security-Policy
   whose `script-src` pins the one inline script by SHA-256 hash. If that script
   ever changes, the build recomputes the hash; nothing has to be remembered.
@@ -22,6 +26,9 @@ and headers can never drift from the ones the site is built with. It carries:
   content hash, so a changed file is a changed URL.
 * **HTML revalidated on every visit**, so a deploy is visible at once.
 * **`trailingSlash: true`** — the canonical form of every route here.
+
+An unknown URL answers 404 with the English page, in both trees: Vercel serves
+one `404.html` for the whole deployment and has no per-directory equivalent.
 
 Import the repository at <https://vercel.com/new>. The build settings come
 from `vercel.json` (Framework: Other, Build Command: `python3 build.py
