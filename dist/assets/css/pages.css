@@ -110,9 +110,24 @@
   .datarow > div + div { border-top: var(--rule-hair) solid var(--rule-color); padding-top: var(--space-2); }
 }
 
+/* Between 768px and 920px the closing line stands in a half-width column,
+   and NEWSPORTVISION. — one word, fifteen letters — is wider than that column:
+   at 768px it reaches the page edge and takes two pixels of the document with
+   it. Here, and only here, the size follows the column it is set in rather
+   than the page. Outside this band the word already fits and the type is
+   untouched. */
+@media (min-width: 768px) and (max-width: 919px) {
+  .act-event .grid > .event-slit + div { container-type: inline-size; }
+  .act-event .event-close { font-size: min(var(--fs-h2), 10cqw); }
+}
 .event-close {
   font-family: var(--font-display); font-weight: 800;
-  font-size: var(--fs-h2); line-height: .98;
+  /* NEWSPORTVISION. is one word of fifteen letters, and --fs-h2 stops
+     following the screen at 30px. On a 320px phone that word is wider than
+     the column it sits in and pushes the whole page sideways, so the size is
+     also capped by the measure. The cap is the smaller value only below about
+     330px; at every other width the heading is set exactly as before. */
+  font-size: min(var(--fs-h2), calc(var(--content) / 9.9)); line-height: .98;
   letter-spacing: var(--track-display); text-transform: uppercase;
 }
 /* The event plate.
@@ -714,7 +729,8 @@ html:not(.js-justify) .hlw { white-space: normal; }
 .tongue--left::after  { left:  calc(50% - var(--vw) / 2); width: calc(var(--bleed-x) + var(--span-4)); }
 .tongue--right::after { right: calc(50% - var(--vw) / 2); width: calc(var(--bleed-x) + var(--span-4)); }
 @media (max-width: 767px) {
-  .tongue::after { height: calc(var(--act) * .6); width: 46vw !important; }
+  /* --vw, not vw: the lane a scrollbar may occupy is not part of the page. */
+  .tongue::after { height: calc(var(--act) * .6); width: calc(var(--vw) * .46) !important; }
 }
 
 /* The Help Desk's own name, set apart inside the question it asks. */

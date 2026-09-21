@@ -435,7 +435,14 @@ figure { margin: 0; }
   display: flex; align-items: baseline; gap: var(--space-2);
   font-family: var(--font-display);
   font-weight: 800;
-  font-size: clamp(34px, 7.4vw, 108px);
+  /* The floor of that clamp is a real floor: below about 460px the type stops
+     following the screen, and on the narrowest phones the longest name, its
+     number and its arrow together ask for more room than the panel has — the
+     list then sits wider than the screen it is drawn on. The second term caps
+     the size by the page's own width, so the longest name always fits. It is
+     only ever the smaller of the two below ~340px; every wider screen is set
+     exactly as before. */
+  font-size: min(clamp(34px, 7.4vw, 108px), calc(var(--vw, 100vw) / 10));
   line-height: 1.04;
   letter-spacing: var(--track-display);
   text-transform: uppercase;

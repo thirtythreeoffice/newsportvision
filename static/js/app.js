@@ -428,7 +428,7 @@
       el.addEventListener("pointermove", function (e) {
         lastX = e.clientX;
         if (!raf) raf = requestAnimationFrame(place);
-      });
+      }, { passive: true });
       el.addEventListener("pointerleave", function () { el.style.setProperty("--ex", "0px"); });
       el.style.setProperty("--ey", el.getBoundingClientRect().height * 1.02 + "px");
     });
