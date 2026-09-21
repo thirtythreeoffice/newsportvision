@@ -1,0 +1,813 @@
+@charset "utf-8";
+/* ===========================================================================
+   NEWSPORTVISION — page compositions
+   Each page is a different spread in one publication: same grid, same rule,
+   different rhythm.
+   =========================================================================== */
+
+/* ===========================================================================
+   ACT 01 — the masthead field
+   The viewport is the logo at page scale. Four hero lines set by the logo's
+   own rule: fill the measure, and where the words run out, the bar takes over.
+   =========================================================================== */
+.act-hero {
+  position: relative;
+  min-height: 100svh;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  padding-top: clamp(96px, 13vh, 180px);
+  padding-bottom: clamp(20px, 3vh, 48px);
+}
+.hero-top { display: flex; justify-content: space-between; align-items: baseline; gap: var(--space-3); }
+.act-hero > .wrap:nth-child(2) { align-self: center; width: var(--content); }
+.hero-stack {
+  display: grid;
+  gap: calc(var(--fs-display) * 0.055);   /* the logo's 3u leading gap */
+  padding-block: clamp(24px, 4vh, 72px);
+}
+.hero-stack .hl {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: var(--fs-display);
+  line-height: var(--lh-display);
+  letter-spacing: var(--track-display);
+  text-transform: uppercase;
+  color: var(--nsv-ink);
+}
+/* Line 1 and line 4 carry the rule. Line 1's rule runs past the page margin to
+   the viewport edge — the composition does not stop at the grid. */
+/* Rule-lines carry the stack's font size, so the bar can be expressed in em
+   and stay locked to the 3/16-of-cap proportion measured off the logo. */
+.hero-stack .hl--rule { display: flex; align-items: baseline; gap: .05em; }
+.hero-stack .hl--rule .jline__rule {
+  height: .137em;               /* 3/16 of the cap; cap = .73em */
+  top: -.006em;
+  margin-left: -.045em;         /* the bar tucks under the preceding glyph */
+  min-width: .2em;
+}
+.hero-stack .hl--bleed { margin-right: calc(var(--bleed-x) * -1); }
+
+.hero-bottom { align-items: end; row-gap: var(--space-2); }
+.hero-foot-l { display: flex; align-items: baseline; justify-content: space-between; gap: var(--space-3); }
+/* The event tag takes the last four columns — the same 2/3 : 1/3 division the
+   logo makes on its first line, reused as the page's baseline. */
+.hero-next { display: grid; gap: 10px; justify-items: stretch; align-content: end; }
+.hero-next .rule { width: auto; margin-right: calc(var(--bleed-x) * -1);
+  transition: transform var(--t-ui) var(--ease-editorial); transform-origin: left center; }
+.hero-next:focus-visible .rule { transform: scaleY(3); }
+@media (hover: hover) { .hero-next:hover .rule { transform: scaleY(3); } }
+.hero-next > * { justify-self: start; }
+.hero-next .rule { justify-self: stretch; }
+.hero-next .fsf {
+  font-family: var(--font-display); font-weight: 800;
+  font-size: clamp(30px, 4vw, 62px); line-height: .92;
+  letter-spacing: var(--track-display); text-transform: uppercase;
+}
+
+/* The scroll cue is the rule again, drawing downward. */
+.scroll-cue { display: flex; align-items: center; gap: 12px; }
+.scroll-cue i { display: block; width: var(--rule-thin); height: 34px; background: currentColor;
+                transform-origin: top center; animation: cue 2600ms var(--ease-editorial) infinite; }
+@keyframes cue { 0%,100% { transform: scaleY(.3); opacity: .45 } 45% { transform: scaleY(1); opacity: 1 } }
+@media (prefers-reduced-motion: reduce) { .scroll-cue i { animation: none; transform: none; } }
+
+@media (max-width: 767px) {
+  .act-hero { min-height: auto; padding-top: 118px; padding-bottom: var(--space-4); }
+  .hero-stack { gap: 2px; }
+  .hero-top { flex-direction: column; align-items: flex-start; gap: 6px; }
+  .hero-foot-l { flex-direction: column; align-items: flex-start; gap: 4px; }
+  .scroll-cue { display: none; }
+}
+
+/* ===========================================================================
+   ACT 02 — the event
+   =========================================================================== */
+.act-event { position: relative; padding-top: var(--act); padding-bottom: var(--act); }
+.event-head { display: grid; gap: var(--space-2); }
+.event-title {
+  font-family: var(--font-display); font-weight: 800;
+  font-size: var(--fs-h1); line-height: .94;
+  letter-spacing: var(--track-display); text-transform: uppercase;
+}
+/* The event's facts, set as a print data row: rules above and below, tabular. */
+.datarow {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--gutter);
+  border-top: var(--rule-thin) solid var(--rule-color);
+  border-bottom: var(--rule-thin) solid var(--rule-color);
+  padding-block: var(--space-2);
+  margin-top: var(--space-3);
+}
+.datarow > div { display: grid; gap: 8px; align-content: start; }
+.datarow dd, .datarow .val {
+  font-family: var(--font-display); font-weight: 600;
+  font-size: var(--fs-h3); line-height: 1.02; letter-spacing: var(--track-h);
+  margin: 0;
+}
+@media (max-width: 767px) {
+  .datarow { grid-template-columns: 1fr; gap: var(--space-2); }
+  .datarow > div + div { border-top: var(--rule-hair) solid var(--rule-color); padding-top: var(--space-2); }
+}
+
+.event-close {
+  font-family: var(--font-display); font-weight: 800;
+  font-size: var(--fs-h2); line-height: .98;
+  letter-spacing: var(--track-display); text-transform: uppercase;
+}
+/* The event plate.
+
+   It used to be a slit that bled off the left edge of the screen, sized by
+   ratio alone: at 2560px it stood 1349px tall, and at every width it was
+   pinned against the edge and cropped to a sliver of the photograph. It now
+   behaves like every other plate on the site — it begins on the page margin,
+   in the grid, and it is shown at the photograph's own proportion, so nothing
+   of it is cropped away. Four columns beside the text on a wide screen, five
+   on a narrow window, the full column on a phone. */
+.event-slit .frame { aspect-ratio: 2200 / 1579; }   /* the photograph's own */
+@media (min-width: 1280px) {
+  .act-event .grid > .event-slit { grid-column: 1 / span 4; }
+}
+@media (min-width: 768px) and (max-width: 1279px) {
+  .act-event .grid > .event-slit { grid-column: 1 / span 5; }
+  .act-event .grid > .event-slit + div { grid-column: 6 / -1; }
+}
+@media (max-width: 767px) {
+  .act-event .grid > .event-slit,
+  .act-event .grid > .event-slit + div { grid-column: 1 / -1; }
+}
+
+/* A ruled row of the site's own straplines, held between two rules. */
+.straprow {
+  display: flex; align-items: center; gap: var(--space-2);
+  border-top: var(--rule-hair) solid var(--rule-color);
+  border-bottom: var(--rule-hair) solid var(--rule-color);
+  padding-block: 14px;
+  margin-top: var(--act);
+}
+.straprow .rule { flex: 1 1 auto; }
+@media (max-width: 767px) {
+  .straprow { flex-wrap: wrap; gap: 8px var(--space-1); }
+  .straprow .rule { min-width: 22px; }
+}
+
+/* ===========================================================================
+   ACT 03 — products & services
+   =========================================================================== */
+.act-po { padding-top: var(--act); padding-bottom: var(--act); position: relative; }
+.po-head { font-size: var(--fs-h2); }
+.po-fig { margin-top: var(--space-1); }
+/* The plate rises above the text it sits beside — but not into the section
+   head above it: at -0.4 of the big step it covered the head's own label
+   ("PRODUCTS") at every width from 768px up, and the label is set on the same
+   side of the page. It now clears it. */
+@media (min-width: 768px) { .po-fig { margin-top: calc(var(--space-2) * -1); } }
+
+/* The index. Every row carries its term of the axis, and floods with that
+   term's ink on approach — the list is also a colour chart. */
+.index { margin-top: var(--space-5); border-top: var(--rule-thin) solid var(--rule-color); }
+.index__row {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: var(--space-2);
+  padding: clamp(14px, 1.7vw, 30px) 0;
+  border-bottom: var(--rule-hair) solid var(--rule-color);
+  overflow: clip;
+  isolation: isolate;
+  transition: color var(--t-ui) var(--ease-enter);
+}
+.index__row::before {
+  content: ""; position: absolute; inset: 0 0 0 0; z-index: -1;
+  background: var(--axis-field, var(--nsv-ink));
+  transform: scaleY(0); transform-origin: bottom center;
+  transition: transform var(--t-ui) var(--ease-editorial);
+}
+.index__row:focus-visible { color: var(--axis-on, var(--nsv-yellow)); }
+@media (hover: hover) { .index__row:hover { color: var(--axis-on, var(--nsv-yellow)); } }
+.index__row:focus-visible::before { transform: scaleY(1); }
+@media (hover: hover) { .index__row:hover::before { transform: scaleY(1); } }
+.index__row:focus-visible .idx { color: inherit; opacity: .7; }
+@media (hover: hover) { .index__row:hover .idx { color: inherit; opacity: .7; } }
+/* on the filled row the painted tab inverts to the field's own text colour */
+.index__row:focus-visible .tab { background: var(--axis-on, var(--nsv-yellow)); }
+@media (hover: hover) { .index__row:hover .tab { background: var(--axis-on, var(--nsv-yellow)); } }
+.index__row .tab { margin-right: var(--space-1); }
+.index__name {
+  font-family: var(--font-display); font-weight: 700;
+  font-size: clamp(22px, 2.9vw, 52px); line-height: 1.04;
+  letter-spacing: var(--track-h); text-transform: uppercase;
+  transition: transform var(--t-ui) var(--ease-editorial);
+}
+.index__row:focus-visible .index__name {
+  transform: translateX(clamp(8px, 1vw, 20px));
+}
+@media (hover: hover) { .index__row:hover .index__name {
+  transform: translateX(clamp(8px, 1vw, 20px));
+} }
+/* The go-bar is the term's own ink, so colour runs all the way down the list. */
+.index__go { width: clamp(30px, 3.4vw, 64px); height: var(--rule-thin);
+             background: var(--axis-mark, currentColor);
+             transition: width var(--t-ui) var(--ease-editorial), background-color var(--t-ui) linear; }
+.index__row:focus-visible .index__go { background: currentColor; }
+@media (hover: hover) { .index__row:hover .index__go { background: currentColor; } }
+.index__row:focus-visible .index__go { width: clamp(46px, 5.6vw, 110px); }
+@media (hover: hover) { .index__row:hover .index__go { width: clamp(46px, 5.6vw, 110px); } }
+@media (max-width: 767px) {
+  .index__row { grid-template-columns: auto minmax(0, 1fr) auto; gap: var(--space-1); }
+  .index__row .tab { width: 28px; margin-right: 0; }
+  /* "FutureSportFuture" is one word, and on a phone it is wider than the
+     column. The names are narrowed with the width axis — the same instrument
+     the display type is set with — rather than cut off or broken. Breaking
+     anywhere is only the last resort, on the narrowest screens. */
+  .index__name {
+    font-size: clamp(17px, 5.6vw, 30px);
+    font-variation-settings: "wdth" 86;
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+  .index__go { width: 24px; }
+}
+
+/* ===========================================================================
+   ACT 04 — the axis. culture – sport – art, in their words, at full width.
+   =========================================================================== */
+.act-axis { padding-top: var(--act); padding-bottom: var(--act); }
+.concept-line {
+  font-family: var(--font-display); font-weight: 600;
+  font-size: var(--fs-h3); line-height: 1.16;
+  letter-spacing: var(--track-h); text-transform: uppercase;
+  padding-block: var(--space-1);
+  border-bottom: var(--rule-hair) solid var(--rule-color);
+}
+.concept-line:first-child { border-top: var(--rule-hair) solid var(--rule-color); }
+
+.axis {
+  margin-top: var(--space-5);
+  display: grid;
+  gap: calc(var(--fs-mega) * .04);
+}
+.axis__w {
+  font-family: var(--font-display); font-weight: 800;
+  font-size: var(--fs-mega); line-height: var(--lh-display);
+  letter-spacing: var(--track-display); text-transform: uppercase;
+  position: relative;
+  display: block;
+}
+/* Each term is underwritten by its own ink, painted rather than ruled. The
+   bar is 3/16 of the cap, exactly like the logo's — the same measurement,
+   made with a brush. */
+.axis__paint {
+  height: .115em;
+  width: 100%;
+  margin-top: -.018em;
+  margin-bottom: .035em;
+  background: var(--axis-mark);
+  transform-origin: left center;
+}
+.js [data-reveal] .axis__paint, .js .axis .axis__paint { transform: scaleX(0); }
+.js .axis.is-painted .axis__paint { transform: scaleX(1); transition: transform 900ms var(--ease-rule); }
+.js .axis.is-painted .axis__w:nth-child(3) .axis__paint { transition-delay: 90ms; }
+.js .axis.is-painted .axis__w:nth-child(4) .axis__paint { transition-delay: 180ms; }
+@media (prefers-reduced-motion: reduce) {
+  .js .axis .axis__paint { transform: none; }
+}
+/* The echo. VISION, looked at twice. It is off by default, surfaces only
+   under a fine pointer, and never moves more than a few pixels. */
+.echo { position: relative; display: inline-block; }
+.echo::after {
+  content: attr(data-echo);
+  position: absolute; left: 0; top: 0;
+  transform: translate(var(--ex, 0px), var(--ey, 0px)) scaleY(-1);
+  transform-origin: center bottom;
+  color: var(--nsv-ink);
+  opacity: 0;
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, transparent 62%);
+          mask-image: linear-gradient(to bottom, #000 0%, transparent 62%);
+  transition: opacity 520ms var(--ease-editorial);
+  pointer-events: none;
+}
+@media (hover: hover) and (pointer: fine) {
+  .echo::after { will-change: transform; }
+  .echo:hover::after, .echo:focus-within::after { opacity: .13; }
+}
+@media (prefers-reduced-motion: reduce) { .echo::after { display: none; } }
+
+/* ===========================================================================
+   ACT 05 — history teaser / the About page proper
+   =========================================================================== */
+/* The ghost year is decorative and may run past the measure; the chapter
+   clips it rather than letting it widen the page. */
+.chapter { position: relative; overflow: clip;
+           padding-block: var(--act); border-top: var(--rule-hair) solid var(--rule-color); }
+/* The year is an object in the room, not a label on a timeline. */
+.chapter__year {
+  font-family: var(--font-display); font-weight: 800;
+  font-size: clamp(84px, 18vw, 300px);
+  line-height: .78;
+  letter-spacing: -.045em;
+  color: var(--nsv-ink);
+  opacity: .1;
+  position: absolute;
+  left: 0; top: clamp(20px, 5vh, 80px);
+  z-index: 0;
+  pointer-events: none;
+  user-select: none;
+}
+.on-ink .chapter__year { color: var(--nsv-paper); opacity: .13; }
+.chapter__body { position: relative; z-index: 1; }
+.chapter__label {
+  font-family: var(--font-display); font-weight: 800;
+  font-size: var(--fs-h2); line-height: .98;
+  letter-spacing: var(--track-display); text-transform: uppercase;
+}
+@media (max-width: 767px) {
+  .chapter__year { position: static !important; opacity: .17; margin-bottom: -.1em; display: block; }
+}
+
+/* ===========================================================================
+   ACT 06 — the last poster
+   =========================================================================== */
+.footer-canvas { transition: background-color var(--t-editorial) var(--ease-editorial),
+                             color var(--t-editorial) var(--ease-editorial); }
+/* The final gesture: the closing field inverts under the pointer. */
+.footer-canvas.is-lit { background: var(--nsv-ink); color: var(--nsv-yellow); --rule-color: var(--nsv-yellow); --fg-quiet: #A39150; }
+
+/* ===========================================================================
+   Interior pages
+   =========================================================================== */
+
+/* Page masthead — the same four-line logic, one or two lines instead of four. */
+.page-head { padding-top: clamp(140px, 19vh, 260px); padding-bottom: var(--space-5); position: relative; }
+.page-head .kicker { display: flex; align-items: baseline; gap: var(--space-2); margin-bottom: var(--space-3); }
+.page-head .kicker .rule { flex: 1 1 auto; }
+.page-title {
+  font-family: var(--font-display); font-weight: 800;
+  font-size: var(--fs-display); line-height: var(--lh-display);
+  letter-spacing: var(--track-display); text-transform: uppercase;
+}
+/* A statement page: the whole first screen is one sentence. */
+.statement {
+  font-family: var(--font-display); font-weight: 800;
+  font-size: var(--fs-h1); line-height: 1.0;
+  letter-spacing: var(--track-display); text-transform: uppercase;
+  text-wrap: balance;
+}
+
+/* Editorial body pages (Guidelines, Books, Workshops) */
+.editorial { padding-bottom: var(--act); }
+.editorial .prose p { text-wrap: pretty; }
+.editorial .prose p + p { margin-top: 1.25em; }
+/* Drop the first paragraph up into the display, the way a standfirst sits. */
+.standfirst { font-size: var(--fs-lead); line-height: 1.34; font-weight: 300; }
+
+/* A pull line — their sentence, given a wall to itself. */
+.pull {
+  position: relative;
+  font-family: var(--font-display); font-weight: 700;
+  font-size: var(--fs-h3); line-height: 1.1;
+  letter-spacing: var(--track-h); text-transform: uppercase;
+  padding-top: calc(var(--space-2) + var(--rule-bar));
+  margin-block: var(--space-5);
+}
+/* A sentence of theirs, under a painted bar rather than a ruled one. */
+.pull::before {
+  content: ""; position: absolute; left: 0; right: 0; top: 0;
+  height: var(--rule-bar);
+  background: var(--axis-mark, var(--rule-color));
+  -webkit-mask-image: var(--paint-2); mask-image: var(--paint-2);
+  -webkit-mask-size: 100% 100%; mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
+}
+
+/* Specimen strip — three fields of colour, the palette used as a rule. */
+.specimen { display: grid; grid-auto-flow: column; height: var(--rule-bar); }
+.specimen i:nth-child(1) { background: var(--nsv-ink); }
+.specimen i:nth-child(2) { background: var(--nsv-yellow); }
+.specimen i:nth-child(3) { background: var(--nsv-paper-deep); }
+
+/* ===========================================================================
+   HELP DESK — the instrument. Blue is the response colour and appears
+   only here (plus focus rings). Steel is its apparatus.
+   =========================================================================== */
+.hd { padding-bottom: var(--act); }
+.hd-steps { display: flex; flex-wrap: wrap; gap: var(--space-1) var(--space-3); align-items: baseline;
+            border-block: var(--rule-hair) solid var(--rule-color); padding-block: var(--space-1);
+            margin-bottom: var(--space-4); }
+.hd-step { display: flex; align-items: baseline; gap: 10px; color: var(--fg-quiet); }
+.hd-step[data-state="done"] { color: var(--nsv-ink); }
+.hd-step[data-state="active"] { color: var(--nsv-blue); }
+.hd-step__n { font-variant-numeric: tabular-nums; }
+.hd-step__v { font-family: var(--font-display); font-weight: 700; text-transform: uppercase;
+              letter-spacing: var(--track-h); font-size: var(--fs-small); }
+
+.hd-panel[hidden] { display: none !important; }
+/* Each question arrives rather than replacing the last one in a cut: the
+   panel lifts a few pixels into place and its answers follow, one beat
+   apart. A panel is display:none while hidden, so this replays every time. */
+@media (prefers-reduced-motion: no-preference) {
+  .js .hd-panel:not([hidden]) {
+    animation: rv-fade 320ms var(--ease-enter) both, hd-lift 420ms var(--ease-editorial) both;
+  }
+  .js .hd-panel:not([hidden]) .opt {
+    animation: rv-fade 360ms var(--ease-enter) both, hd-lift 460ms var(--ease-editorial) both;
+  }
+  .js .hd-panel .opt:nth-child(2) { animation-delay: 30ms; }
+  .js .hd-panel .opt:nth-child(3) { animation-delay: 60ms; }
+  .js .hd-panel .opt:nth-child(4) { animation-delay: 90ms; }
+  .js .hd-panel .opt:nth-child(5) { animation-delay: 120ms; }
+  .js .hd-panel .opt:nth-child(6) { animation-delay: 150ms; }
+  .js .hd-panel .opt:nth-child(n+7) { animation-delay: 180ms; }
+}
+@keyframes hd-lift { from { translate: 0 10px; } to { translate: 0 0; } }
+.hd-q { font-size: var(--fs-h3); margin-bottom: var(--space-3); }
+
+.opts { display: grid; gap: 0; border-top: var(--rule-thin) solid var(--rule-color); }
+.opt {
+  position: relative;
+  display: grid; grid-template-columns: 4ch 1fr auto; align-items: center; gap: var(--space-2);
+  width: 100%; text-align: left;
+  padding: clamp(13px, 1.5vw, 24px) 0;
+  border-bottom: var(--rule-hair) solid var(--rule-color);
+  overflow: clip; isolation: isolate;
+  transition: color var(--t-ui) var(--ease-enter), padding-left var(--t-ui) var(--ease-editorial);
+}
+.opt::before { content: ""; position: absolute; inset: 0; z-index: -1; background: var(--nsv-blue);
+               transform: scaleX(0); transform-origin: left center;
+               transition: transform var(--t-ui) var(--ease-editorial); }
+.opt:focus-visible { color: #fff; padding-left: clamp(10px, 1vw, 20px); }
+@media (hover: hover) { .opt:hover { color: #fff; padding-left: clamp(10px, 1vw, 20px); } }
+.opt:focus-visible::before { transform: scaleX(1); }
+@media (hover: hover) { .opt:hover::before { transform: scaleX(1); } }
+.opt[aria-pressed="true"] { color: #fff; }
+.opt[aria-pressed="true"]::before { transform: scaleX(1); }
+.opt__name { font-family: var(--font-display); font-weight: 700; text-transform: uppercase;
+             font-size: clamp(16px, 1.5vw, 26px); line-height: 1.12; letter-spacing: var(--track-h); }
+.opt__go { width: 28px; height: var(--rule-thin); background: currentColor;
+           transition: width var(--t-ui) var(--ease-editorial); }
+.opt:focus-visible .opt__go { width: 52px; }
+@media (hover: hover) { .opt:hover .opt__go { width: 52px; } }
+
+.hd-back { display: inline-flex; align-items: center; gap: 10px; margin-top: var(--space-3); }
+.hd-back i { width: 28px; height: var(--rule-thin); background: currentColor;
+             transition: width var(--t-ui) var(--ease-editorial); }
+@media (hover: hover) { .hd-back:hover i { width: 46px; } }
+
+/* Form — paper stock on a steel ground. Inputs are ruled lines, not boxes. */
+.hd-form { display: grid; gap: var(--space-3); margin-top: var(--space-3); }
+.field { display: grid; gap: 8px; }
+.field > label { color: var(--fg-quiet); }
+.field input, .field select, .field textarea {
+  width: 100%;
+  background: transparent;
+  border: 0;
+  border-bottom: var(--rule-thin) solid var(--nsv-ink);
+  padding: 10px 0;
+  font-family: var(--font-display);
+  font-size: var(--fs-body);
+  font-weight: 500;
+  border-radius: 0;
+  transition: border-color var(--t-micro) linear;
+}
+.field textarea { min-height: 7em; resize: vertical; font-family: var(--font-text); }
+.field input:focus, .field select:focus, .field textarea:focus { border-bottom-color: var(--nsv-blue); }
+.field-row { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-3); }
+@media (max-width: 767px) { .field-row { grid-template-columns: 1fr; } }
+.check { display: flex; gap: 12px; align-items: flex-start; }
+.check input { width: 22px; height: 22px; flex: 0 0 auto; accent-color: var(--nsv-blue); margin-top: 2px; }
+.hd-summary { border-left: var(--rule-bar) solid var(--nsv-blue); padding-left: var(--space-2); }
+
+/* ===========================================================================
+   PRIVACY — legal typography. Wide margins, quiet, obviously readable.
+   =========================================================================== */
+.legal { padding-bottom: var(--act); }
+.legal-toc { position: sticky; top: calc(var(--space-5) + 10px); align-self: start; }
+.legal-toc ol { display: grid; gap: 8px; counter-reset: toc; }
+.legal-toc a { display: block; color: var(--fg-quiet); padding: 3px 0;
+               transition: color var(--t-micro) linear, padding-left var(--t-micro) var(--ease-editorial); }
+.legal-toc a:focus-visible, .legal-toc a.is-current { color: var(--nsv-ink); padding-left: 8px; }
+@media (hover: hover) { .legal-toc a:hover { color: var(--nsv-ink); padding-left: 8px; } }
+.legal-body { max-width: 34em; }
+.legal-body h2 {
+  font-family: var(--font-display); font-weight: 700;
+  font-size: var(--fs-h3); line-height: 1.1; letter-spacing: var(--track-h);
+  text-transform: uppercase;
+  margin-top: var(--space-5); margin-bottom: var(--space-2);
+  padding-top: var(--space-2);
+  border-top: var(--rule-thin) solid var(--rule-color);
+  scroll-margin-top: calc(var(--space-5) + 20px);
+}
+.legal-body h2:first-of-type { margin-top: 0; }
+.legal-body p { margin-bottom: 1.05em; }
+.legal-body p em { font-style: normal; font-family: var(--font-display); font-weight: 700;
+                   font-size: var(--fs-small); letter-spacing: var(--track-meta); text-transform: uppercase;
+                   display: block; margin-top: 1.6em; margin-bottom: .5em; }
+.legal-body ul { list-style: none; display: grid; gap: .5em; margin-bottom: 1.05em; }
+.legal-body li { padding-left: 1.4em; position: relative; }
+.legal-body li::before { content: ""; position: absolute; left: 0; top: .72em;
+                         width: .8em; height: var(--rule-thin); background: var(--nsv-ink); }
+.legal-body a { text-decoration: underline; text-underline-offset: .18em; }
+@media (max-width: 1023px) { .legal-toc { position: static; margin-bottom: var(--space-4); } }
+
+/* ===========================================================================
+   WORK IN PROGRESS — the site's own held breath. Yellow, almost empty.
+   =========================================================================== */
+.wip { min-height: 100svh; display: grid; align-content: center; padding-block: clamp(140px,20vh,240px) var(--space-4); }
+.wip__lines { display: grid; gap: calc(var(--fs-h1) * .05); }
+.wip__l { font-family: var(--font-display); font-weight: 800; font-size: var(--fs-h1);
+          line-height: var(--lh-display); letter-spacing: var(--track-display); text-transform: uppercase; }
+
+/* 404 */
+.nf { min-height: 100svh; display: grid; align-content: center; }
+
+/* ===========================================================================
+   THE OPENING SEQUENCE
+   Frame 1  the yellow field, already there
+   Frame 2  the rule draws across one grid unit
+   Frame 3  the lines lift out from behind their own baselines
+   Frame 4  the apparatus arrives
+   Total ~1.25s, once per session, never on a route change.
+   =========================================================================== */
+/* The lines lift out from behind their own baselines, so the stack clips —
+   with a couple of pixels of tolerance, since a justified line can end a
+   fraction of a pixel past its measure and the last letter must not be
+   shaved. */
+[data-intro] .hl { overflow: clip; overflow-clip-margin: 3px; }
+[data-intro] .hl > * { display: inline-block; }
+
+[data-intro].intro-run .hero-top,
+[data-intro].intro-run .hero-bottom { animation: introFade 520ms var(--ease-enter) 780ms both; }
+
+[data-intro] .hl--rule .jline__rule { transform-origin: left center; }
+[data-intro].intro-run .hl--rule .jline__rule { animation: introBar 620ms var(--ease-rule) 60ms both; }
+[data-intro].intro-run .hl > .jline__t,
+[data-intro].intro-run .hl > .hlw { animation: introLift 760ms var(--ease-editorial) both; }
+[data-intro].intro-run .hl:nth-child(1) > *  { animation-delay: 240ms; }
+[data-intro].intro-run .hl:nth-child(2) > *  { animation-delay: 320ms; }
+[data-intro].intro-run .hl:nth-child(3) > *  { animation-delay: 400ms; }
+[data-intro].intro-run .hl:nth-child(4) > *  { animation-delay: 480ms; }
+[data-intro].intro-run .hl:nth-child(5) > *  { animation-delay: 560ms; }
+/* The same beat, counted over the lines actually shown at this width, so a
+   line swapped out for the phone setting never leaves a gap in the rhythm. */
+[data-intro].intro-run .hl:nth-child(2 of :not([hidden])) > * { animation-delay: 320ms; }
+[data-intro].intro-run .hl:nth-child(3 of :not([hidden])) > * { animation-delay: 400ms; }
+[data-intro].intro-run .hl:nth-child(4 of :not([hidden])) > * { animation-delay: 480ms; }
+[data-intro].intro-run .hl:nth-child(5 of :not([hidden])) > * { animation-delay: 560ms; }
+[data-intro].intro-run .hl--rule > .jline__rule { animation-delay: 60ms; }
+
+@keyframes introBar  { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@keyframes introLift { from { transform: translateY(104%); } to { transform: translateY(0); } }
+@keyframes introFade { from { opacity: 0; } to { opacity: 1; } }
+
+/* Before the sequence runs, hold the composition back — but only when JS is
+   actually there to release it. */
+.js [data-intro]:not(.intro-run):not(.intro-done) .hl > * { transform: translateY(104%); }
+.js [data-intro]:not(.intro-run):not(.intro-done) .hl > .jline__rule { transform: scaleX(0); }
+.js [data-intro]:not(.intro-run):not(.intro-done) .hero-top,
+.js [data-intro]:not(.intro-run):not(.intro-done) .hero-bottom { opacity: 0; }
+
+@media (prefers-reduced-motion: reduce) {
+  .js [data-intro] .hl > *,
+  .js [data-intro] .hero-top,
+  .js [data-intro] .hero-bottom { transform: none !important; opacity: 1 !important; animation: none !important; }
+}
+
+/* ===========================================================================
+   Justified stacks, generally
+   Any display heading can be set by the logo's rule: one size for the stack,
+   each line filled to the measure.
+   =========================================================================== */
+.jstack { display: grid; gap: .055em; }
+.jstack .hl {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: var(--fs-h1);
+  line-height: var(--lh-display);
+  letter-spacing: var(--track-display);
+  text-transform: uppercase;
+  display: block;
+}
+.jstack.statement-stack .hl { font-size: var(--fs-display); }
+.jstack.event-title .hl { font-size: var(--fs-h1); }
+.hlw, .jline__t { display: inline-block; font-variation-settings: "wdth" var(--wdth, 100); white-space: nowrap; }
+.js-justify .hlw, .js-justify .jline__t { white-space: nowrap; }
+/* Without JS nothing is forced onto one line, so nothing can overflow. */
+html:not(.js-justify) .hlw { white-space: normal; }
+/* A line is a grid item, and a grid item's automatic minimum is its content:
+   a line that is momentarily wider than its track — the window resized
+   between the type being set and the frame that re-sets it — would push the
+   whole page wider and flash a horizontal scrollbar. It is held to the track
+   instead, and the clip it already carries hides the overhang until the next
+   frame re-sets it. */
+[data-justify-stack] > .hl,
+[data-justify-stack] > .hl > * { min-width: 0; }
+
+/* Hold a stack back until it has been composed, so a heading is never seen
+   resizing. Released by justify.js, including on failure — and if that file
+   never arrives at all, released by the failsafe after three seconds. */
+.js-justify [data-justify-stack]:not(.is-justified) {
+  visibility: hidden;
+  animation: compose-failsafe 1ms 3s forwards;
+}
+@keyframes compose-failsafe { to { visibility: visible; } }
+
+.datarow--2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.datarow dt { margin: 0; }
+
+/* The initials, set apart — a device the live Italian About page already uses. */
+.nsv-split b { font-weight: inherit; }
+.nsv-split b::after { content: "\2009"; }
+
+/* ===========================================================================
+   The hinge — a photograph widens until it is the ground the next act
+   stands on. This is how two reading sections stay one canvas.
+   =========================================================================== */
+.hinge { width: var(--vw); margin-left: calc(50% - var(--vw) / 2); overflow: clip; }
+.hinge .frame { aspect-ratio: 32 / 9; }
+@media (max-width: 767px) { .hinge .frame { aspect-ratio: 16 / 10; } }
+
+/* ===========================================================================
+   The wall — products and services as an exhibition, not a card grid.
+   Each item owns a different share of the grid and a different vertical
+   position. The variation is fixed in the layout map, never random.
+   =========================================================================== */
+.wall { row-gap: var(--space-6); align-items: stretch; margin-top: var(--space-4); }
+.wall__item {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: var(--space-1);
+  border-bottom: var(--rule-thin) solid var(--rule-color);
+}
+.wall__item--drop { margin-top: var(--space-6); }
+/* An item with no photograph carries its weight typographically, and opens
+   with the full bar instead of a hairline. */
+/* An item with no photograph opens with a painted bar in its own ink — the
+   mark does the work the picture would have done. */
+.wall__item--type {
+  position: relative;
+  padding-top: calc(var(--space-2) + var(--rule-bar));
+  /* A typographic item hugs its own content instead of stretching to the
+     height of the photograph beside it — a dense block against a large image,
+     not a bar marooned above a caption. */
+  align-self: start;
+}
+.wall__item--type::before {
+  content: ""; position: absolute; left: 0; right: 0; top: 0;
+  height: var(--rule-bar);
+  background: var(--axis-mark, var(--rule-color));
+  -webkit-mask-image: var(--paint-1); mask-image: var(--paint-1);
+  -webkit-mask-size: 100% 100%; mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
+}
+.wall__item--type:nth-child(even)::before { -webkit-mask-image: var(--paint-3); mask-image: var(--paint-3); }
+.wall__item--type .wall__foot { margin-top: var(--space-2); }
+.wall__item--type .wall__name { font-size: clamp(26px, 3.4vw, 62px); }
+.wall__item .frame { margin-bottom: var(--space-2); }
+.wall__item .frame picture { transition: scale 900ms var(--ease-editorial); }
+.wall__item:focus-visible .frame picture { scale: 1.03; }
+@media (hover: hover) { .wall__item:hover .frame picture { scale: 1.03; } }
+/* The label is pinned to the foot of the cell, so every name in a row sits on
+   one line above the shared rule. */
+.wall__foot { margin-top: auto; display: grid; gap: var(--space-1); }
+.wall__meta { display: flex; align-items: center; justify-content: space-between; gap: var(--space-2); }
+.wall__go { width: 34px; height: var(--rule-thin); background: var(--axis-mark, currentColor);
+            transition: width var(--t-ui) var(--ease-editorial); }
+.wall__item:focus-visible .wall__go { width: 72px; }
+@media (hover: hover) { .wall__item:hover .wall__go { width: 72px; } }
+.wall__name {
+  font-family: var(--font-display); font-weight: 700;
+  font-size: clamp(22px, 2.3vw, 42px); line-height: 1.02;
+  letter-spacing: var(--track-h); text-transform: uppercase;
+  text-wrap: balance;
+  transition: transform var(--t-ui) var(--ease-editorial);
+}
+.wall__item:focus-visible .wall__name { transform: translateX(6px); }
+@media (hover: hover) { .wall__item:hover .wall__name { transform: translateX(6px); } }
+@media (max-width: 767px) {
+  .wall { row-gap: var(--space-4); }
+  .wall__item--drop { margin-top: 0; }
+}
+
+/* Statement page head keeps a little air under the masthead. */
+.page-head .kicker .idx { flex: 0 0 auto; }
+.legal-toc li { line-height: 1.3; }
+
+/* ===========================================================================
+   FIELD TONGUES
+   A field does not stop at its section's edge: it carries four columns of
+   itself down into the next one — the same third of the measure the logo's
+   bar occupies, and the same interlock (the bar tucks under the W rather than
+   butting against it). The tongue is always shorter than the next section's
+   top padding, so it never lands on content.
+   =========================================================================== */
+.tongue { position: relative; }
+.tongue::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  height: calc(var(--act) * .72);
+  background: var(--bg);
+  z-index: 2;
+  pointer-events: none;
+}
+.tongue--left::after  { left:  calc(50% - var(--vw) / 2); width: calc(var(--bleed-x) + var(--span-4)); }
+.tongue--right::after { right: calc(50% - var(--vw) / 2); width: calc(var(--bleed-x) + var(--span-4)); }
+@media (max-width: 767px) {
+  .tongue::after { height: calc(var(--act) * .6); width: 46vw !important; }
+}
+
+/* The Help Desk's own name, set apart inside the question it asks. */
+.hd-q__lead { display: block; font-size: .62em; letter-spacing: var(--track-meta);
+              color: var(--nsv-blue); margin-bottom: .35em; }
+
+/* A two-column data row is still one column on a phone. (Stated after the
+   .datarow--2 modifier so the narrow rule actually wins.) */
+@media (max-width: 767px) {
+  .datarow, .datarow--2 { grid-template-columns: 1fr; gap: var(--space-2); }
+}
+
+/* The wall's foot carries the same index marks as the list. */
+.wall__meta { flex-wrap: wrap; }
+.wall__item .tab { margin-right: auto; }
+
+/* Each chapter of the history states where it sits on the axis. */
+.chapter__tag { display: flex; align-items: center; gap: var(--space-1);
+                margin-bottom: var(--space-2); flex-wrap: wrap; }
+.chapter__tag .meta:first-of-type { color: var(--axis); }
+.chapter__year { color: var(--axis-mark, var(--nsv-ink)); opacity: .11; }
+.on-ink .chapter__year { color: var(--axis-mark, var(--nsv-paper)); opacity: .15; }
+
+/* Captions carry a short painted tab so a plate number is never alone. */
+.cap { align-items: center; }
+.cap .idx { color: var(--axis, var(--fg-quiet)); }
+.tab--cap { width: clamp(22px, 2.2vw, 36px); height: clamp(6px, .6vw, 10px); }
+
+/* Editorial pages close on an address, not on a third giant action row. */
+.editorial-end {
+  margin-top: var(--space-6);
+  padding-top: var(--space-2);
+  border-top: var(--rule-thin) solid var(--rule-color);
+  display: grid; gap: var(--space-1);
+}
+/* The page's own term, so a pull line and its plate agree. */
+body[class*="axis-"] .page-head .kicker .idx { color: var(--axis, inherit); }
+.axis-culture { --axis: var(--nsv-culture); --axis-mark: #2158A8; }
+.axis-sport   { --axis: var(--nsv-sport);   --axis-mark: #0F6433; }
+.axis-art     { --axis: var(--nsv-art-deep); --axis-mark: #E2610F; }
+
+.sweep-art     { --sweep-page: var(--nsv-art); }
+.sweep-sport   { --sweep-page: var(--nsv-sport); }
+.sweep-culture { --sweep-page: var(--nsv-culture); }
+
+/* The services act closes on its own sentence rather than on a third copy of
+   the same action row. */
+.close-statement {
+  margin-top: var(--space-5);
+  display: grid;
+  gap: var(--space-2);
+  align-content: start;
+}
+.close-statement__bar { height: var(--rule-bar); color: var(--axis-mark); width: 100%; }
+.close-statement__t { text-wrap: balance; }
+.close-statement__go { justify-self: start; }
+
+
+/* A section number takes its term's ink when the section has one. */
+.shead[data-axis] .idx { color: var(--axis); }
+.page-head .kicker[data-axis] .idx { color: var(--axis); }
+/* The painted kicker rule is inked by the page's own subject. */
+.page-head .kicker .paint { color: var(--sweep-page, var(--rule-color)); }
+
+/* The About masthead: the identity at page scale. */
+.about-mast .hl { font-size: var(--fs-display); }
+.about-head { align-items: end; row-gap: var(--space-4); }
+.about-head__intro { padding-bottom: .4em; }
+.about-mast .hl--rule { display: flex; align-items: baseline; gap: .05em; }
+.about-mast .jline__rule { height: .137em; top: -.006em; margin-left: -.045em; min-width: .2em; }
+
+/* An act can close on a painted mark instead of a line of labels. */
+.act-close { margin-top: calc(var(--act) * .5); height: var(--rule-bar); width: 100%;
+             color: var(--nsv-art); opacity: .9; }
+.on-ink .act-close { color: var(--nsv-art); }
+
+/* ===========================================================================
+   Touch
+   A finger has no hover, so the rows answer the press instead — the same
+   flood, arriving a beat late so a finger that is only passing through on
+   its way to a scroll never sets it off.
+   =========================================================================== */
+@media (hover: none) {
+  .index__row:active { color: var(--axis-on, var(--nsv-yellow)); transition: color 160ms linear 70ms; }
+  .index__row:active::before { transform: scaleY(1); transition: transform 220ms var(--ease-editorial) 70ms; }
+  .index__row:active .tab { background: var(--axis-on, var(--nsv-yellow)); }
+  .index__row:active .index__go { background: currentColor; }
+  .action:active::before { transform: scaleX(1); transition: transform 220ms var(--ease-editorial) 70ms; }
+  .action:active { --action-fg: var(--nsv-ink); }
+  .on-yellow .action:active { --action-fg: var(--nsv-yellow); }
+  .opt:active { color: #fff; transition: color 160ms linear 60ms; }
+  .opt:active::before { transform: scaleX(1); transition: transform 220ms var(--ease-editorial) 60ms; }
+  .wall__item:active .frame picture { scale: 1.02; transition: scale 260ms var(--ease-editorial) 70ms; }
+  .wall__item:active .wall__go { width: 72px; }
+  .menu-list a:active .menu-tab { width: clamp(38px, 3.8vw, 64px); }
+}

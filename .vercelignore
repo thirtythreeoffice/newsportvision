@@ -1,0 +1,7 @@
+# Uploaded to Vercel: the sources the build needs, nothing else.
+__pycache__/
+*.pyc
+.DS_Store
+tools/
+*.zip
+netlify.toml

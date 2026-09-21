@@ -1,0 +1,1400 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": null,
+  "installCommand": "",
+  "buildCommand": "python3 build.py --vercel",
+  "outputDirectory": "dist",
+  "trailingSlash": true,
+  "cleanUrls": false,
+  "redirects": [
+    {
+      "source": "/1",
+      "destination": "/help-desk/",
+      "statusCode": 301
+    },
+    {
+      "source": "/1/",
+      "destination": "/help-desk/",
+      "statusCode": 301
+    },
+    {
+      "source": "/about-us",
+      "destination": "/about/",
+      "statusCode": 301
+    },
+    {
+      "source": "/about-us/",
+      "destination": "/about/",
+      "statusCode": 301
+    },
+    {
+      "source": "/active-benessere-sport-advisor",
+      "destination": "/help-desk/",
+      "statusCode": 301
+    },
+    {
+      "source": "/active-benessere-sport-advisor/",
+      "destination": "/help-desk/",
+      "statusCode": 301
+    },
+    {
+      "source": "/copia-di-3",
+      "destination": "/help-desk/?sport=football",
+      "statusCode": 301
+    },
+    {
+      "source": "/copia-di-3/",
+      "destination": "/help-desk/?sport=football",
+      "statusCode": 301
+    },
+    {
+      "source": "/copia-di-basket-supply",
+      "destination": "/help-desk/?sport=basketball&topic=injuries",
+      "statusCode": 301
+    },
+    {
+      "source": "/copia-di-basket-supply/",
+      "destination": "/help-desk/?sport=basketball&topic=injuries",
+      "statusCode": 301
+    },
+    {
+      "source": "/copia-di-basketball-injuries",
+      "destination": "/help-desk/?sport=basketball&topic=training",
+      "statusCode": 301
+    },
+    {
+      "source": "/copia-di-basketball-injuries/",
+      "destination": "/help-desk/?sport=basketball&topic=training",
+      "statusCode": 301
+    },
+    {
+      "source": "/copia-di-basketball-injuries-1",
+      "destination": "/help-desk/?who=institution",
+      "statusCode": 301
+    },
+    {
+      "source": "/copia-di-basketball-injuries-1/",
+      "destination": "/help-desk/?who=institution",
+      "statusCode": 301
+    },
+    {
+      "source": "/copia-di-basketball-scouting",
+      "destination": "/help-desk/?sport=basketball&topic=legal",
+      "statusCode": 301
+    },
+    {
+      "source": "/copia-di-basketball-scouting/",
+      "destination": "/help-desk/?sport=basketball&topic=legal",
+      "statusCode": 301
+    },
+    {
+      "source": "/copia-di-basketball-training",
+      "destination": "/help-desk/?sport=basketball&topic=scouting",
+      "statusCode": 301
+    },
+    {
+      "source": "/copia-di-basketball-training/",
+      "destination": "/help-desk/?sport=basketball&topic=scouting",
+      "statusCode": 301
+    },
+    {
+      "source": "/copia-di-email-basketball",
+      "destination": "/help-desk/?sport=basketball&step=contact",
+      "statusCode": 301
+    },
+    {
+      "source": "/copia-di-email-basketball/",
+      "destination": "/help-desk/?sport=basketball&step=contact",
+      "statusCode": 301
+    },
+    {
+      "source": "/copia-di-email-clubs",
+      "destination": "/help-desk/?who=federation&step=contact",
+      "statusCode": 301
+    },
+    {
+      "source": "/copia-di-email-clubs/",
+      "destination": "/help-desk/?who=federation&step=contact",
+      "statusCode": 301
+    },
+    {
+      "source": "/copia-di-email-federation",
+      "destination": "/help-desk/?who=institution&step=contact",
+      "statusCode": 301
+    },
+    {
+      "source": "/copia-di-email-federation/",
+      "destination": "/help-desk/?who=institution&step=contact",
+      "statusCode": 301
+    },
+    {
+      "source": "/copia-di-email-football",
+      "destination": "/help-desk/?sport=volleyball&step=contact",
+      "statusCode": 301
+    },
+    {
+      "source": "/copia-di-email-football/",
+      "destination": "/help-desk/?sport=volleyball&step=contact",
+      "statusCode": 301
+    },
+    {
+      "source": "/copia-di-email-institution",
+      "destination": "/help-desk/?who=schools&step=contact",
+      "statusCode": 301
+    },
+    {
+      "source": "/copia-di-email-institution/",
+      "destination": "/help-desk/?who=schools&step=contact",
+      "statusCode": 301
+    },
+    {
+      "source": "/copia-di-email-tennis",
+      "destination": "/help-desk/?sport=other&step=contact",
+      "statusCode": 301
+    },
+    {
+      "source": "/copia-di-email-tennis/",
+      "destination": "/help-desk/?sport=other&step=contact",
+      "statusCode": 301
+    },
+    {
+      "source": "/copia-di-email-volley",
+      "destination": "/help-desk/?sport=tennis&step=contact",
+      "statusCode": 301
+    },
+    {
+      "source": "/copia-di-email-volley/",
+      "destination": "/help-desk/?sport=tennis&step=contact",
+      "statusCode": 301
+    },
+    {
+      "source": "/copia-di-email-volley-1",
+      "destination": "/help-desk/?who=clubs&step=contact",
+      "statusCode": 301
+    },
+    {
+      "source": "/copia-di-email-volley-1/",
+      "destination": "/help-desk/?who=clubs&step=contact",
+      "statusCode": 301
+    },
+    {
+      "source": "/copia-di-email-which-sport",
+      "destination": "/help-desk/?who=person&step=contact",
+      "statusCode": 301
+    },
+    {
+      "source": "/copia-di-email-which-sport/",
+      "destination": "/help-desk/?who=person&step=contact",
+      "statusCode": 301
+    },
+    {
+      "source": "/copia-di-email-which-sport-1",
+      "destination": "/help-desk/?who=person&step=contact",
+      "statusCode": 301
+    },
+    {
+      "source": "/copia-di-email-which-sport-1/",
+      "destination": "/help-desk/?who=person&step=contact",
+      "statusCode": 301
+    },
+    {
+      "source": "/copia-di-football",
+      "destination": "/help-desk/?sport=volleyball",
+      "statusCode": 301
+    },
+    {
+      "source": "/copia-di-football/",
+      "destination": "/help-desk/?sport=volleyball",
+      "statusCode": 301
+    },
+    {
+      "source": "/copia-di-football-1",
+      "destination": "/help-desk/?sport=football&topic=equipment",
+      "statusCode": 301
+    },
+    {
+      "source": "/copia-di-football-1/",
+      "destination": "/help-desk/?sport=football&topic=equipment",
+      "statusCode": 301
+    },
+    {
+      "source": "/copia-di-football-equipment",
+      "destination": "/help-desk/?sport=football&topic=supply",
+      "statusCode": 301
+    },
+    {
+      "source": "/copia-di-football-equipment/",
+      "destination": "/help-desk/?sport=football&topic=supply",
+      "statusCode": 301
+    },
+    {
+      "source": "/copia-di-football-injuries",
+      "destination": "/help-desk/?sport=football&topic=training",
+      "statusCode": 301
+    },
+    {
+      "source": "/copia-di-football-injuries/",
+      "destination": "/help-desk/?sport=football&topic=training",
+      "statusCode": 301
+    },
+    {
+      "source": "/copia-di-football-scouting",
+      "destination": "/help-desk/?sport=football&topic=legal",
+      "statusCode": 301
+    },
+    {
+      "source": "/copia-di-football-scouting/",
+      "destination": "/help-desk/?sport=football&topic=legal",
+      "statusCode": 301
+    },
+    {
+      "source": "/copia-di-football-supply",
+      "destination": "/help-desk/?sport=football&topic=injuries",
+      "statusCode": 301
+    },
+    {
+      "source": "/copia-di-football-supply/",
+      "destination": "/help-desk/?sport=football&topic=injuries",
+      "statusCode": 301
+    },
+    {
+      "source": "/copia-di-football-training",
+      "destination": "/help-desk/?sport=football&topic=scouting",
+      "statusCode": 301
+    },
+    {
+      "source": "/copia-di-football-training/",
+      "destination": "/help-desk/?sport=football&topic=scouting",
+      "statusCode": 301
+    },
+    {
+      "source": "/copia-di-football-training-1",
+      "destination": "/help-desk/?who=federation",
+      "statusCode": 301
+    },
+    {
+      "source": "/copia-di-football-training-1/",
+      "destination": "/help-desk/?who=federation",
+      "statusCode": 301
+    },
+    {
+      "source": "/copia-di-tennis",
+      "destination": "/help-desk/?sport=other",
+      "statusCode": 301
+    },
+    {
+      "source": "/copia-di-tennis/",
+      "destination": "/help-desk/?sport=other",
+      "statusCode": 301
+    },
+    {
+      "source": "/copia-di-tennis-1",
+      "destination": "/help-desk/?sport=tennis&topic=equipment",
+      "statusCode": 301
+    },
+    {
+      "source": "/copia-di-tennis-1/",
+      "destination": "/help-desk/?sport=tennis&topic=equipment",
+      "statusCode": 301
+    },
+    {
+      "source": "/copia-di-tennis-equipment",
+      "destination": "/help-desk/?sport=tennis&topic=supply",
+      "statusCode": 301
+    },
+    {
+      "source": "/copia-di-tennis-equipment/",
+      "destination": "/help-desk/?sport=tennis&topic=supply",
+      "statusCode": 301
+    },
+    {
+      "source": "/copia-di-tennis-injuries",
+      "destination": "/help-desk/?sport=tennis&topic=training",
+      "statusCode": 301
+    },
+    {
+      "source": "/copia-di-tennis-injuries/",
+      "destination": "/help-desk/?sport=tennis&topic=training",
+      "statusCode": 301
+    },
+    {
+      "source": "/copia-di-tennis-supply",
+      "destination": "/help-desk/?sport=tennis&topic=injuries",
+      "statusCode": 301
+    },
+    {
+      "source": "/copia-di-tennis-supply/",
+      "destination": "/help-desk/?sport=tennis&topic=injuries",
+      "statusCode": 301
+    },
+    {
+      "source": "/copia-di-tennis-training",
+      "destination": "/help-desk/?who=schools",
+      "statusCode": 301
+    },
+    {
+      "source": "/copia-di-tennis-training/",
+      "destination": "/help-desk/?who=schools",
+      "statusCode": 301
+    },
+    {
+      "source": "/copia-di-volley-equipment",
+      "destination": "/help-desk/?sport=volleyball&topic=supply",
+      "statusCode": 301
+    },
+    {
+      "source": "/copia-di-volley-equipment/",
+      "destination": "/help-desk/?sport=volleyball&topic=supply",
+      "statusCode": 301
+    },
+    {
+      "source": "/copia-di-volley-injuries",
+      "destination": "/help-desk/?sport=volleyball&topic=training",
+      "statusCode": 301
+    },
+    {
+      "source": "/copia-di-volley-injuries/",
+      "destination": "/help-desk/?sport=volleyball&topic=training",
+      "statusCode": 301
+    },
+    {
+      "source": "/copia-di-volley-legal",
+      "destination": "/help-desk/?who=clubs",
+      "statusCode": 301
+    },
+    {
+      "source": "/copia-di-volley-legal/",
+      "destination": "/help-desk/?who=clubs",
+      "statusCode": 301
+    },
+    {
+      "source": "/copia-di-volley-scouting",
+      "destination": "/help-desk/?sport=volleyball&topic=legal",
+      "statusCode": 301
+    },
+    {
+      "source": "/copia-di-volley-scouting/",
+      "destination": "/help-desk/?sport=volleyball&topic=legal",
+      "statusCode": 301
+    },
+    {
+      "source": "/copia-di-volley-supply",
+      "destination": "/help-desk/?sport=volleyball&topic=injuries",
+      "statusCode": 301
+    },
+    {
+      "source": "/copia-di-volley-supply/",
+      "destination": "/help-desk/?sport=volleyball&topic=injuries",
+      "statusCode": 301
+    },
+    {
+      "source": "/copia-di-volley-supply-1",
+      "destination": "/help-desk/?who=clubs&topic=camps",
+      "statusCode": 301
+    },
+    {
+      "source": "/copia-di-volley-supply-1/",
+      "destination": "/help-desk/?who=clubs&topic=camps",
+      "statusCode": 301
+    },
+    {
+      "source": "/copia-di-volley-training",
+      "destination": "/help-desk/?sport=volleyball&topic=scouting",
+      "statusCode": 301
+    },
+    {
+      "source": "/copia-di-volley-training/",
+      "destination": "/help-desk/?sport=volleyball&topic=scouting",
+      "statusCode": 301
+    },
+    {
+      "source": "/copia-di-volley-training-1",
+      "destination": "/help-desk/?who=clubs&topic=plans",
+      "statusCode": 301
+    },
+    {
+      "source": "/copia-di-volley-training-1/",
+      "destination": "/help-desk/?who=clubs&topic=plans",
+      "statusCode": 301
+    },
+    {
+      "source": "/copia-di-volleyball",
+      "destination": "/help-desk/?sport=tennis",
+      "statusCode": 301
+    },
+    {
+      "source": "/copia-di-volleyball/",
+      "destination": "/help-desk/?sport=tennis",
+      "statusCode": 301
+    },
+    {
+      "source": "/copia-di-volleyball-1",
+      "destination": "/help-desk/?sport=volleyball&topic=equipment",
+      "statusCode": 301
+    },
+    {
+      "source": "/copia-di-volleyball-1/",
+      "destination": "/help-desk/?sport=volleyball&topic=equipment",
+      "statusCode": 301
+    },
+    {
+      "source": "/formula-salute-sport-advisor",
+      "destination": "/help-desk/",
+      "statusCode": 301
+    },
+    {
+      "source": "/formula-salute-sport-advisor/",
+      "destination": "/help-desk/",
+      "statusCode": 301
+    },
+    {
+      "source": "/hd-basketball",
+      "destination": "/help-desk/?sport=basketball",
+      "statusCode": 301
+    },
+    {
+      "source": "/hd-basketball/",
+      "destination": "/help-desk/?sport=basketball",
+      "statusCode": 301
+    },
+    {
+      "source": "/hd-basketball-equipment",
+      "destination": "/help-desk/?sport=basketball&topic=equipment",
+      "statusCode": 301
+    },
+    {
+      "source": "/hd-basketball-equipment/",
+      "destination": "/help-desk/?sport=basketball&topic=equipment",
+      "statusCode": 301
+    },
+    {
+      "source": "/hd-basketball-supply",
+      "destination": "/help-desk/?sport=basketball&topic=supply",
+      "statusCode": 301
+    },
+    {
+      "source": "/hd-basketball-supply/",
+      "destination": "/help-desk/?sport=basketball&topic=supply",
+      "statusCode": 301
+    },
+    {
+      "source": "/helpdesk",
+      "destination": "/help-desk/news/",
+      "statusCode": 301
+    },
+    {
+      "source": "/helpdesk/",
+      "destination": "/help-desk/news/",
+      "statusCode": 301
+    },
+    {
+      "source": "/home-hd",
+      "destination": "/help-desk/",
+      "statusCode": 301
+    },
+    {
+      "source": "/home-hd/",
+      "destination": "/help-desk/",
+      "statusCode": 301
+    },
+    {
+      "source": "/it/1",
+      "destination": "/it/help-desk/",
+      "statusCode": 301
+    },
+    {
+      "source": "/it/1/",
+      "destination": "/it/help-desk/",
+      "statusCode": 301
+    },
+    {
+      "source": "/it/about-us",
+      "destination": "/it/about/",
+      "statusCode": 301
+    },
+    {
+      "source": "/it/about-us/",
+      "destination": "/it/about/",
+      "statusCode": 301
+    },
+    {
+      "source": "/it/active-benessere-sport-advisor",
+      "destination": "/it/help-desk/",
+      "statusCode": 301
+    },
+    {
+      "source": "/it/active-benessere-sport-advisor/",
+      "destination": "/it/help-desk/",
+      "statusCode": 301
+    },
+    {
+      "source": "/it/copia-di-3",
+      "destination": "/it/help-desk/?sport=football",
+      "statusCode": 301
+    },
+    {
+      "source": "/it/copia-di-3/",
+      "destination": "/it/help-desk/?sport=football",
+      "statusCode": 301
+    },
+    {
+      "source": "/it/copia-di-basket-supply",
+      "destination": "/it/help-desk/?sport=basketball&topic=injuries",
+      "statusCode": 301
+    },
+    {
+      "source": "/it/copia-di-basket-supply/",
+      "destination": "/it/help-desk/?sport=basketball&topic=injuries",
+      "statusCode": 301
+    },
+    {
+      "source": "/it/copia-di-basketball-injuries",
+      "destination": "/it/help-desk/?sport=basketball&topic=training",
+      "statusCode": 301
+    },
+    {
+      "source": "/it/copia-di-basketball-injuries/",
+      "destination": "/it/help-desk/?sport=basketball&topic=training",
+      "statusCode": 301
+    },
+    {
+      "source": "/it/copia-di-basketball-injuries-1",
+      "destination": "/it/help-desk/?who=institution",
+      "statusCode": 301
+    },
+    {
+      "source": "/it/copia-di-basketball-injuries-1/",
+      "destination": "/it/help-desk/?who=institution",
+      "statusCode": 301
+    },
+    {
+      "source": "/it/copia-di-basketball-scouting",
+      "destination": "/it/help-desk/?sport=basketball&topic=legal",
+      "statusCode": 301
+    },
+    {
+      "source": "/it/copia-di-basketball-scouting/",
+      "destination": "/it/help-desk/?sport=basketball&topic=legal",
+      "statusCode": 301
+    },
+    {
+      "source": "/it/copia-di-basketball-training",
+      "destination": "/it/help-desk/?sport=basketball&topic=scouting",
+      "statusCode": 301
+    },
+    {
+      "source": "/it/copia-di-basketball-training/",
+      "destination": "/it/help-desk/?sport=basketball&topic=scouting",
+      "statusCode": 301
+    },
+    {
+      "source": "/it/copia-di-email-basketball",
+      "destination": "/it/help-desk/?sport=basketball&step=contact",
+      "statusCode": 301
+    },
+    {
+      "source": "/it/copia-di-email-basketball/",
+      "destination": "/it/help-desk/?sport=basketball&step=contact",
+      "statusCode": 301
+    },
+    {
+      "source": "/it/copia-di-email-clubs",
+      "destination": "/it/help-desk/?who=federation&step=contact",
+      "statusCode": 301
+    },
+    {
+      "source": "/it/copia-di-email-clubs/",
+      "destination": "/it/help-desk/?who=federation&step=contact",
+      "statusCode": 301
+    },
+    {
+      "source": "/it/copia-di-email-federation",
+      "destination": "/it/help-desk/?who=institution&step=contact",
+      "statusCode": 301
+    },
+    {
+      "source": "/it/copia-di-email-federation/",
+      "destination": "/it/help-desk/?who=institution&step=contact",
+      "statusCode": 301
+    },
+    {
+      "source": "/it/copia-di-email-football",
+      "destination": "/it/help-desk/?sport=volleyball&step=contact",
+      "statusCode": 301
+    },
+    {
+      "source": "/it/copia-di-email-football/",
+      "destination": "/it/help-desk/?sport=volleyball&step=contact",
+      "statusCode": 301
+    },
+    {
+      "source": "/it/copia-di-email-institution",
+      "destination": "/it/help-desk/?who=schools&step=contact",
+      "statusCode": 301
+    },
+    {
+      "source": "/it/copia-di-email-institution/",
+      "destination": "/it/help-desk/?who=schools&step=contact",
+      "statusCode": 301
+    },
+    {
+      "source": "/it/copia-di-email-tennis",
+      "destination": "/it/help-desk/?sport=other&step=contact",
+      "statusCode": 301
+    },
+    {
+      "source": "/it/copia-di-email-tennis/",
+      "destination": "/it/help-desk/?sport=other&step=contact",
+      "statusCode": 301
+    },
+    {
+      "source": "/it/copia-di-email-volley",
+      "destination": "/it/help-desk/?sport=tennis&step=contact",
+      "statusCode": 301
+    },
+    {
+      "source": "/it/copia-di-email-volley/",
+      "destination": "/it/help-desk/?sport=tennis&step=contact",
+      "statusCode": 301
+    },
+    {
+      "source": "/it/copia-di-email-volley-1",
+      "destination": "/it/help-desk/?who=clubs&step=contact",
+      "statusCode": 301
+    },
+    {
+      "source": "/it/copia-di-email-volley-1/",
+      "destination": "/it/help-desk/?who=clubs&step=contact",
+      "statusCode": 301
+    },
+    {
+      "source": "/it/copia-di-email-which-sport",
+      "destination": "/it/help-desk/?who=person&step=contact",
+      "statusCode": 301
+    },
+    {
+      "source": "/it/copia-di-email-which-sport/",
+      "destination": "/it/help-desk/?who=person&step=contact",
+      "statusCode": 301
+    },
+    {
+      "source": "/it/copia-di-email-which-sport-1",
+      "destination": "/it/help-desk/?who=person&step=contact",
+      "statusCode": 301
+    },
+    {
+      "source": "/it/copia-di-email-which-sport-1/",
+      "destination": "/it/help-desk/?who=person&step=contact",
+      "statusCode": 301
+    },
+    {
+      "source": "/it/copia-di-football",
+      "destination": "/it/help-desk/?sport=volleyball",
+      "statusCode": 301
+    },
+    {
+      "source": "/it/copia-di-football/",
+      "destination": "/it/help-desk/?sport=volleyball",
+      "statusCode": 301
+    },
+    {
+      "source": "/it/copia-di-football-1",
+      "destination": "/it/help-desk/?sport=football&topic=equipment",
+      "statusCode": 301
+    },
+    {
+      "source": "/it/copia-di-football-1/",
+      "destination": "/it/help-desk/?sport=football&topic=equipment",
+      "statusCode": 301
+    },
+    {
+      "source": "/it/copia-di-football-equipment",
+      "destination": "/it/help-desk/?sport=football&topic=supply",
+      "statusCode": 301
+    },
+    {
+      "source": "/it/copia-di-football-equipment/",
+      "destination": "/it/help-desk/?sport=football&topic=supply",
+      "statusCode": 301
+    },
+    {
+      "source": "/it/copia-di-football-injuries",
+      "destination": "/it/help-desk/?sport=football&topic=training",
+      "statusCode": 301
+    },
+    {
+      "source": "/it/copia-di-football-injuries/",
+      "destination": "/it/help-desk/?sport=football&topic=training",
+      "statusCode": 301
+    },
+    {
+      "source": "/it/copia-di-football-scouting",
+      "destination": "/it/help-desk/?sport=football&topic=legal",
+      "statusCode": 301
+    },
+    {
+      "source": "/it/copia-di-football-scouting/",
+      "destination": "/it/help-desk/?sport=football&topic=legal",
+      "statusCode": 301
+    },
+    {
+      "source": "/it/copia-di-football-supply",
+      "destination": "/it/help-desk/?sport=football&topic=injuries",
+      "statusCode": 301
+    },
+    {
+      "source": "/it/copia-di-football-supply/",
+      "destination": "/it/help-desk/?sport=football&topic=injuries",
+      "statusCode": 301
+    },
+    {
+      "source": "/it/copia-di-football-training",
+      "destination": "/it/help-desk/?sport=football&topic=scouting",
+      "statusCode": 301
+    },
+    {
+      "source": "/it/copia-di-football-training/",
+      "destination": "/it/help-desk/?sport=football&topic=scouting",
+      "statusCode": 301
+    },
+    {
+      "source": "/it/copia-di-football-training-1",
+      "destination": "/it/help-desk/?who=federation",
+      "statusCode": 301
+    },
+    {
+      "source": "/it/copia-di-football-training-1/",
+      "destination": "/it/help-desk/?who=federation",
+      "statusCode": 301
+    },
+    {
+      "source": "/it/copia-di-tennis",
+      "destination": "/it/help-desk/?sport=other",
+      "statusCode": 301
+    },
+    {
+      "source": "/it/copia-di-tennis/",
+      "destination": "/it/help-desk/?sport=other",
+      "statusCode": 301
+    },
+    {
+      "source": "/it/copia-di-tennis-1",
+      "destination": "/it/help-desk/?sport=tennis&topic=equipment",
+      "statusCode": 301
+    },
+    {
+      "source": "/it/copia-di-tennis-1/",
+      "destination": "/it/help-desk/?sport=tennis&topic=equipment",
+      "statusCode": 301
+    },
+    {
+      "source": "/it/copia-di-tennis-equipment",
+      "destination": "/it/help-desk/?sport=tennis&topic=supply",
+      "statusCode": 301
+    },
+    {
+      "source": "/it/copia-di-tennis-equipment/",
+      "destination": "/it/help-desk/?sport=tennis&topic=supply",
+      "statusCode": 301
+    },
+    {
+      "source": "/it/copia-di-tennis-injuries",
+      "destination": "/it/help-desk/?sport=tennis&topic=training",
+      "statusCode": 301
+    },
+    {
+      "source": "/it/copia-di-tennis-injuries/",
+      "destination": "/it/help-desk/?sport=tennis&topic=training",
+      "statusCode": 301
+    },
+    {
+      "source": "/it/copia-di-tennis-supply",
+      "destination": "/it/help-desk/?sport=tennis&topic=injuries",
+      "statusCode": 301
+    },
+    {
+      "source": "/it/copia-di-tennis-supply/",
+      "destination": "/it/help-desk/?sport=tennis&topic=injuries",
+      "statusCode": 301
+    },
+    {
+      "source": "/it/copia-di-tennis-training",
+      "destination": "/it/help-desk/?who=schools",
+      "statusCode": 301
+    },
+    {
+      "source": "/it/copia-di-tennis-training/",
+      "destination": "/it/help-desk/?who=schools",
+      "statusCode": 301
+    },
+    {
+      "source": "/it/copia-di-volley-equipment",
+      "destination": "/it/help-desk/?sport=volleyball&topic=supply",
+      "statusCode": 301
+    },
+    {
+      "source": "/it/copia-di-volley-equipment/",
+      "destination": "/it/help-desk/?sport=volleyball&topic=supply",
+      "statusCode": 301
+    },
+    {
+      "source": "/it/copia-di-volley-injuries",
+      "destination": "/it/help-desk/?sport=volleyball&topic=training",
+      "statusCode": 301
+    },
+    {
+      "source": "/it/copia-di-volley-injuries/",
+      "destination": "/it/help-desk/?sport=volleyball&topic=training",
+      "statusCode": 301
+    },
+    {
+      "source": "/it/copia-di-volley-legal",
+      "destination": "/it/help-desk/?who=clubs",
+      "statusCode": 301
+    },
+    {
+      "source": "/it/copia-di-volley-legal/",
+      "destination": "/it/help-desk/?who=clubs",
+      "statusCode": 301
+    },
+    {
+      "source": "/it/copia-di-volley-scouting",
+      "destination": "/it/help-desk/?sport=volleyball&topic=legal",
+      "statusCode": 301
+    },
+    {
+      "source": "/it/copia-di-volley-scouting/",
+      "destination": "/it/help-desk/?sport=volleyball&topic=legal",
+      "statusCode": 301
+    },
+    {
+      "source": "/it/copia-di-volley-supply",
+      "destination": "/it/help-desk/?sport=volleyball&topic=injuries",
+      "statusCode": 301
+    },
+    {
+      "source": "/it/copia-di-volley-supply/",
+      "destination": "/it/help-desk/?sport=volleyball&topic=injuries",
+      "statusCode": 301
+    },
+    {
+      "source": "/it/copia-di-volley-supply-1",
+      "destination": "/it/help-desk/?who=clubs&topic=camps",
+      "statusCode": 301
+    },
+    {
+      "source": "/it/copia-di-volley-supply-1/",
+      "destination": "/it/help-desk/?who=clubs&topic=camps",
+      "statusCode": 301
+    },
+    {
+      "source": "/it/copia-di-volley-training",
+      "destination": "/it/help-desk/?sport=volleyball&topic=scouting",
+      "statusCode": 301
+    },
+    {
+      "source": "/it/copia-di-volley-training/",
+      "destination": "/it/help-desk/?sport=volleyball&topic=scouting",
+      "statusCode": 301
+    },
+    {
+      "source": "/it/copia-di-volley-training-1",
+      "destination": "/it/help-desk/?who=clubs&topic=plans",
+      "statusCode": 301
+    },
+    {
+      "source": "/it/copia-di-volley-training-1/",
+      "destination": "/it/help-desk/?who=clubs&topic=plans",
+      "statusCode": 301
+    },
+    {
+      "source": "/it/copia-di-volleyball",
+      "destination": "/it/help-desk/?sport=tennis",
+      "statusCode": 301
+    },
+    {
+      "source": "/it/copia-di-volleyball/",
+      "destination": "/it/help-desk/?sport=tennis",
+      "statusCode": 301
+    },
+    {
+      "source": "/it/copia-di-volleyball-1",
+      "destination": "/it/help-desk/?sport=volleyball&topic=equipment",
+      "statusCode": 301
+    },
+    {
+      "source": "/it/copia-di-volleyball-1/",
+      "destination": "/it/help-desk/?sport=volleyball&topic=equipment",
+      "statusCode": 301
+    },
+    {
+      "source": "/it/formula-salute-sport-advisor",
+      "destination": "/it/help-desk/",
+      "statusCode": 301
+    },
+    {
+      "source": "/it/formula-salute-sport-advisor/",
+      "destination": "/it/help-desk/",
+      "statusCode": 301
+    },
+    {
+      "source": "/it/hd-basketball",
+      "destination": "/it/help-desk/?sport=basketball",
+      "statusCode": 301
+    },
+    {
+      "source": "/it/hd-basketball/",
+      "destination": "/it/help-desk/?sport=basketball",
+      "statusCode": 301
+    },
+    {
+      "source": "/it/hd-basketball-equipment",
+      "destination": "/it/help-desk/?sport=basketball&topic=equipment",
+      "statusCode": 301
+    },
+    {
+      "source": "/it/hd-basketball-equipment/",
+      "destination": "/it/help-desk/?sport=basketball&topic=equipment",
+      "statusCode": 301
+    },
+    {
+      "source": "/it/hd-basketball-supply",
+      "destination": "/it/help-desk/?sport=basketball&topic=supply",
+      "statusCode": 301
+    },
+    {
+      "source": "/it/hd-basketball-supply/",
+      "destination": "/it/help-desk/?sport=basketball&topic=supply",
+      "statusCode": 301
+    },
+    {
+      "source": "/it/helpdesk",
+      "destination": "/it/help-desk/news/",
+      "statusCode": 301
+    },
+    {
+      "source": "/it/helpdesk/",
+      "destination": "/it/help-desk/news/",
+      "statusCode": 301
+    },
+    {
+      "source": "/it/home-hd",
+      "destination": "/it/help-desk/",
+      "statusCode": 301
+    },
+    {
+      "source": "/it/home-hd/",
+      "destination": "/it/help-desk/",
+      "statusCode": 301
+    },
+    {
+      "source": "/it/portale-benessere-sport-advisor-home",
+      "destination": "/it/help-desk/",
+      "statusCode": 301
+    },
+    {
+      "source": "/it/portale-benessere-sport-advisor-home/",
+      "destination": "/it/help-desk/",
+      "statusCode": 301
+    },
+    {
+      "source": "/it/product-page/sono-un-prodotto-1",
+      "destination": "/it/products/",
+      "statusCode": 301
+    },
+    {
+      "source": "/it/product-page/sono-un-prodotto-1/",
+      "destination": "/it/products/",
+      "statusCode": 301
+    },
+    {
+      "source": "/it/product-page/sono-un-prodotto-2",
+      "destination": "/it/products/",
+      "statusCode": 301
+    },
+    {
+      "source": "/it/product-page/sono-un-prodotto-2/",
+      "destination": "/it/products/",
+      "statusCode": 301
+    },
+    {
+      "source": "/it/product-page/sono-un-prodotto-5",
+      "destination": "/it/products/",
+      "statusCode": 301
+    },
+    {
+      "source": "/it/product-page/sono-un-prodotto-5/",
+      "destination": "/it/products/",
+      "statusCode": 301
+    },
+    {
+      "source": "/it/salute-piu-benessere-sport-advisor",
+      "destination": "/it/help-desk/",
+      "statusCode": 301
+    },
+    {
+      "source": "/it/salute-piu-benessere-sport-advisor/",
+      "destination": "/it/help-desk/",
+      "statusCode": 301
+    },
+    {
+      "source": "/it/shop",
+      "destination": "/it/products/",
+      "statusCode": 301
+    },
+    {
+      "source": "/it/shop/",
+      "destination": "/it/products/",
+      "statusCode": 301
+    },
+    {
+      "source": "/it/tua-benessere-sport-advisor",
+      "destination": "/it/help-desk/",
+      "statusCode": 301
+    },
+    {
+      "source": "/it/tua-benessere-sport-advisor/",
+      "destination": "/it/help-desk/",
+      "statusCode": 301
+    },
+    {
+      "source": "/it/workshop",
+      "destination": "/it/workshops/",
+      "statusCode": 301
+    },
+    {
+      "source": "/it/workshop/",
+      "destination": "/it/workshops/",
+      "statusCode": 301
+    },
+    {
+      "source": "/portale-benessere-sport-advisor-home",
+      "destination": "/help-desk/",
+      "statusCode": 301
+    },
+    {
+      "source": "/portale-benessere-sport-advisor-home/",
+      "destination": "/help-desk/",
+      "statusCode": 301
+    },
+    {
+      "source": "/product-page/sono-un-prodotto-1",
+      "destination": "/products/",
+      "statusCode": 301
+    },
+    {
+      "source": "/product-page/sono-un-prodotto-1/",
+      "destination": "/products/",
+      "statusCode": 301
+    },
+    {
+      "source": "/product-page/sono-un-prodotto-2",
+      "destination": "/products/",
+      "statusCode": 301
+    },
+    {
+      "source": "/product-page/sono-un-prodotto-2/",
+      "destination": "/products/",
+      "statusCode": 301
+    },
+    {
+      "source": "/product-page/sono-un-prodotto-5",
+      "destination": "/products/",
+      "statusCode": 301
+    },
+    {
+      "source": "/product-page/sono-un-prodotto-5/",
+      "destination": "/products/",
+      "statusCode": 301
+    },
+    {
+      "source": "/salute-piu-benessere-sport-advisor",
+      "destination": "/help-desk/",
+      "statusCode": 301
+    },
+    {
+      "source": "/salute-piu-benessere-sport-advisor/",
+      "destination": "/help-desk/",
+      "statusCode": 301
+    },
+    {
+      "source": "/shop",
+      "destination": "/products/",
+      "statusCode": 301
+    },
+    {
+      "source": "/shop/",
+      "destination": "/products/",
+      "statusCode": 301
+    },
+    {
+      "source": "/tua-benessere-sport-advisor",
+      "destination": "/help-desk/",
+      "statusCode": 301
+    },
+    {
+      "source": "/tua-benessere-sport-advisor/",
+      "destination": "/help-desk/",
+      "statusCode": 301
+    },
+    {
+      "source": "/workshop",
+      "destination": "/workshops/",
+      "statusCode": 301
+    },
+    {
+      "source": "/workshop/",
+      "destination": "/workshops/",
+      "statusCode": 301
+    }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "SAMEORIGIN"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        },
+        {
+          "key": "Permissions-Policy",
+          "value": "camera=(), microphone=(), geolocation=(), interest-cohort=()"
+        },
+        {
+          "key": "Content-Security-Policy",
+          "value": "default-src 'self'; img-src 'self' data:; font-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'sha256-RlzB6Nms8U9fychC5JuJqvLYQDcaCsG/JJEOfRhyDbE='; form-action 'self' mailto:; base-uri 'self'; frame-ancestors 'self'; object-src 'none'"
+        }
+      ]
+    },
+    {
+      "source": "/assets/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    },
+    {
+      "source": "/assets/fonts/(.*)",
+      "headers": [
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "*"
+        }
+      ]
+    },
+    {
+      "source": "/",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=0, must-revalidate"
+        }
+      ]
+    },
+    {
+      "source": "/it/",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=0, must-revalidate"
+        }
+      ]
+    },
+    {
+      "source": "/products/",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=0, must-revalidate"
+        }
+      ]
+    },
+    {
+      "source": "/it/products/",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=0, must-revalidate"
+        }
+      ]
+    },
+    {
+      "source": "/services/",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=0, must-revalidate"
+        }
+      ]
+    },
+    {
+      "source": "/it/services/",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=0, must-revalidate"
+        }
+      ]
+    },
+    {
+      "source": "/about/",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=0, must-revalidate"
+        }
+      ]
+    },
+    {
+      "source": "/it/about/",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=0, must-revalidate"
+        }
+      ]
+    },
+    {
+      "source": "/guidelines/",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=0, must-revalidate"
+        }
+      ]
+    },
+    {
+      "source": "/it/guidelines/",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=0, must-revalidate"
+        }
+      ]
+    },
+    {
+      "source": "/books/",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=0, must-revalidate"
+        }
+      ]
+    },
+    {
+      "source": "/it/books/",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=0, must-revalidate"
+        }
+      ]
+    },
+    {
+      "source": "/workshops/",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=0, must-revalidate"
+        }
+      ]
+    },
+    {
+      "source": "/it/workshops/",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=0, must-revalidate"
+        }
+      ]
+    },
+    {
+      "source": "/help-desk/",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=0, must-revalidate"
+        }
+      ]
+    },
+    {
+      "source": "/it/help-desk/",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=0, must-revalidate"
+        }
+      ]
+    },
+    {
+      "source": "/help-desk/news/",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=0, must-revalidate"
+        }
+      ]
+    },
+    {
+      "source": "/it/help-desk/news/",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=0, must-revalidate"
+        }
+      ]
+    },
+    {
+      "source": "/work-in-progress/",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=0, must-revalidate"
+        }
+      ]
+    },
+    {
+      "source": "/it/work-in-progress/",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=0, must-revalidate"
+        }
+      ]
+    },
+    {
+      "source": "/privacy/",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=0, must-revalidate"
+        }
+      ]
+    },
+    {
+      "source": "/it/privacy/",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=0, must-revalidate"
+        }
+      ]
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/it/:path*",
+      "destination": "/it/404.html"
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+# NEWSPORTVISION — Netlify
+#
+# Two ways to deploy, both correct:
+#
+#   1. Drag the  dist/  folder onto https://app.netlify.com/drop
+#      Nothing to build. What you drop is what goes live.
+#
+#   2. Connect this folder as a Git repository. Netlify runs the build below;
+#      it needs nothing but Python, which its image already has.
+#
+# Redirects live in dist/_redirects (114 legacy Wix URLs, all forced 301).
+
+[build]
+  publish = "dist"
+  command = "python3 build.py"
+
+[build.environment]
+  PYTHON_VERSION = "3.11"
+
+# Caching and security headers are generated into dist/_headers by the build,
+# so they apply to a drag-and-drop deploy as well — netlify.toml is only read
+# when Netlify builds from Git.
