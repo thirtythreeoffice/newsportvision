@@ -230,7 +230,7 @@ SERVICES_INDEX = {
         "statement": "Sport without culture is a disservice.",
         "items": [
             ("help-desk", "Help Desk",                                "/help-desk"),
-            ("parents",   "Association of Parents of Young Athletes", "/work-in-progress"),
+            ("parents",   "Association of Parents of Young Athletes", "/arms/"),
             ("nsv-pass",  "NSV Pass",                                 "/work-in-progress"),
         ],
     },
@@ -239,7 +239,7 @@ SERVICES_INDEX = {
         "statement": "Lo sport senza cultura è un disservizio.",
         "items": [
             ("help-desk", "Help Desk",                        "/help-desk"),
-            ("parents",   "Associazione Genitori Giovani Atleti", "/work-in-progress"),
+            ("parents",   "Associazione Genitori Giovani Atleti", "/arms/"),
             ("nsv-pass",  "Tessera NSV",                      "/work-in-progress"),
         ],
     },

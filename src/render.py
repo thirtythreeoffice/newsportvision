@@ -51,6 +51,11 @@ NAV = [
 HEADER_LINKS = ["services", "products", "about"]
 
 
+# Pages that exist once, in their own language, outside the bilingual tree.
+# A link to one of them is the same link from either side of the site.
+SINGLE_ROOTS = ("/arms/",)
+
+
 def url(lang, path):
     """Route for a locale. Italian mirrors English one level down.
 
@@ -65,7 +70,7 @@ def url(lang, path):
     if base and not base.endswith("/") and "." not in base.rsplit("/", 1)[-1]:
         base += "/"
     path = base + qm + query + hsh + frag
-    if lang == "it":
+    if lang == "it" and not path.startswith(SINGLE_ROOTS):
         return "/it" + path
     return path
 

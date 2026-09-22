@@ -110,4 +110,5 @@
 <xhtml:link rel="alternate" hreflang="it" href="https://www.newsportvision.com/it/privacy/"/>
 <xhtml:link rel="alternate" hreflang="x-default" href="https://www.newsportvision.com/privacy/"/>
 <changefreq>monthly</changefreq></url>
+<url><loc>https://www.newsportvision.com/arms/</loc><changefreq>monthly</changefreq></url>
 </urlset>

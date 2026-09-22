@@ -20,6 +20,7 @@ sys.path.insert(0, os.path.join(HERE, "src"))
 from content import SITE, LANGS, REDIRECTS          # noqa: E402
 from render import url                              # noqa: E402
 import pages                                        # noqa: E402
+import arms                                         # noqa: E402
 
 DIST = os.path.join(HERE, "dist")
 STATIC = os.path.join(HERE, "static")
@@ -37,6 +38,14 @@ ROUTES = [
     ("/help-desk/news/",   pages.helpdesk_news),
     ("/work-in-progress/", pages.work_in_progress),
     ("/privacy/",          pages.privacy),
+]
+
+# Pages that exist once, in their own language. A.R.M.S. is a Serbian
+# association: a translated copy of it under /it/ would be a second URL saying
+# the same thing in a language neither of its readers asked for, and the host's
+# hreflang pairs would start claiming two pages are the same page.
+SINGLE = [
+    ("/arms/", arms.arms),
 ]
 
 
@@ -97,7 +106,8 @@ def vercel_json(redirects, secure, immutable, revalidate):
             # these legacy links have been answered with 301 for years.
             rules.append({"source": source, "destination": dst, "statusCode": 301})
 
-    html = [url(lang, path) for path, _ in ROUTES for lang in LANGS]
+    html = ([url(lang, path) for path, _ in ROUTES for lang in LANGS]
+            + [path for path, _ in SINGLE])
     cfg = {
         "$schema": "https://openapi.vercel.sh/vercel.json",
         "framework": None,
@@ -152,6 +162,12 @@ def build(host="netlify"):
     write("404.html", pages.not_found("en"))
     write("it/404.html", pages.not_found("it"))
     count += 2
+
+    for path, fn in SINGLE:
+        rel = os.path.join(path.strip("/"), "index.html")
+        write(rel, fn())
+        real_pages.add(rel)
+        count += 1
 
     # --- redirects --------------------------------------------------------
     # Every legacy Wix URL, in both locales, in three portable forms.
@@ -252,6 +268,9 @@ def build(host="netlify"):
             sm.append('<xhtml:link rel="alternate" hreflang="x-default" href="%s%s"/>'
                       % (SITE["domain"], url("en", path)))
             sm.append("<changefreq>monthly</changefreq></url>")
+    for path, _ in SINGLE:
+        sm.append("<url><loc>%s%s</loc><changefreq>monthly</changefreq></url>"
+                  % (SITE["domain"], path))
     sm.append("</urlset>")
     write("sitemap.xml", "\n".join(sm))
     write("robots.txt", "User-agent: *\nAllow: /\n\nSitemap: %s/sitemap.xml\n" % SITE["domain"])
@@ -274,7 +293,7 @@ def relativise():
                 os.removedirs(os.path.dirname(stub))
             except OSError:
                 pass
-    h, c = relativise.run(DIST, [r for r, _ in ROUTES])
+    h, c = relativise.run(DIST, [r for r, _ in ROUTES] + [r for r, _ in SINGLE])
     print("relativised %d pages and %d stylesheets" % (h, c))
 
 
