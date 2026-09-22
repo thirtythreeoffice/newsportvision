@@ -79,78 +79,31 @@
 .arms .header-inner > .header-nav { margin-left: auto; }
 
 /* ===========================================================================
-   The mark
+   The mark — placed, never rebuilt
    ---------------------------------------------------------------------------
-   Measured off the artwork: two columns of 702.99 with a 34.02 gutter, lower
-   blocks 0.3938 of the upper, bracket 15.59 thick from the centre of one
-   column to the centre of the other. Container units carry those ratios, so
-   the mark is the same drawing at 180px and at 460px.
-
-   It appears twice on the page. That is the whole budget.
+   One asset: the supplied PDF converted to SVG with every glyph outlined, so
+   the artwork's construction, spacing, proportions and colour relationships
+   are its own. It is shown once, on the only white surface on the page,
+   because that is the ground it was drawn for. Its size changes; nothing else
+   about it ever does.
    =========================================================================== */
-.ark {
-  container-type: inline-size;
-  position: relative;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: 827.72fr 325.98fr;
-  gap: 2.3625cqw;
-  aspect-ratio: 1440 / 1187.72;
-}
-.ark__b {
-  display: grid;
-  align-content: center;
-  justify-items: center;
-  padding: 2.6cqw 3.2cqw;
-  color: #fff;
-  font-family: var(--font-display);
-  font-style: normal;
-  font-size: 4.1cqw;
-  font-weight: 400;
-  line-height: 1.34;
-  text-align: center;
-}
-.ark__b span { display: block; white-space: nowrap; }
-.ark__b--m { background: var(--nsv-arms); }
-.ark__b--b { background: var(--nsv-arms-blue); }
-/* The bracket is drawn in whatever the field behind it is, so the mark reads
-   as a cut-out of its surface rather than a white sticker on it. */
-.ark__brace { position: absolute; inset: 0; width: 100%; height: 100%; }
-.ark__brace path { stroke: var(--bg, #fff); }
+.ark { display: block; width: 100%; height: auto; }
 
-/* Small, the inner setting stops being type and starts being texture, so the
-   footer keeps only the geometry — which is the part that carries at a glance. */
-.ark--foot .ark__b span { display: none; }
-
-/* The bracket draws itself with the hero's own intro — the host plays that
-   once per session and marks it with .intro-run, so on a second visit the
-   mark is simply there, exactly as the host's hero is. */
-.js [data-intro].intro-run .ark__brace path {
-  stroke-dasharray: 1104.1;
-  stroke-dashoffset: 1104.1;
-  animation: ark-draw 900ms var(--ease-editorial, ease) 520ms both;
+.act-arms-plate {
+  --bg: #FFFFFF;
+  --fg: var(--nsv-ink);
+  --rule-color: var(--nsv-ink);
+  background: var(--bg);
+  color: var(--fg);
+  padding-block: calc(var(--act) * 1.15);
 }
-@keyframes ark-draw { to { stroke-dashoffset: 0; } }
+.arms-plate__in { display: grid; justify-items: center; }
+/* Room on every side of the artwork, and nothing else on this surface. */
+.ark--plate { max-width: min(560px, 68%); }
+@media (max-width: 767px) { .ark--plate { max-width: 86%; } }
 
 /* ===========================================================================
-   Hero — the name is the opening statement; the mark is cropped against it
-   =========================================================================== */
-/* The mark is cropped against the right edge of the screen, the way the host
-   crops a photograph: what runs off the page is not missing, it is outside.
-   The section clips horizontally only, so the tongue below it still bleeds. */
-.arms-hero { overflow-x: clip; }
-.arms-hero__stack .hl--rule .jline__t { color: var(--nsv-arms); }
-.arms-hero .hero-foot-l { display: grid; gap: var(--space-1); align-content: end; }
-.arms-hero .hero-foot-l .rule { width: clamp(40px, 8vw, 150px); }
-
-.arms-hero__seal { position: relative; align-self: end; }
-.ark--hero {
-  width: clamp(190px, 25vw, 400px);
-  margin-left: auto;
-  translate: 26% 0;          /* a quarter of it stands off the page */
-}
-
-/* ===========================================================================
+   Statements/* ===========================================================================
    Statements — surface, not box
    =========================================================================== */
 .arms-says { display: grid; position: relative; }
@@ -234,16 +187,20 @@
 .arms-reg__say .arms-prep { margin-top: 0; }
 .arms-reg__t {
   margin: 0;
-  max-width: 44ch;              /* reading copy keeps a reading measure */
+  max-width: 38ch;              /* reading copy keeps a reading measure */
   font-family: var(--font-text);
-  font-size: var(--fs-body);
-  line-height: 1.5;
+  /* The name beside it is set at 41px; body size under that reads as a
+     caption. This is the site's own lead step — the one it uses whenever a
+     sentence has to hold its own next to a heading. */
+  font-size: var(--fs-lead);
+  line-height: 1.34;
 }
 
 /* What a category says while its content is being written. An empty room with
    a sign is honest; invented copy is not. */
 .arms-prep {
-  display: flex; align-items: baseline; gap: .7em;
+  /* the same step the host puts between a tab and the name beside it */
+  display: flex; align-items: baseline; gap: var(--space-1);
   /* clear of whatever is above: every reveal on this site travels 26px on its
      way in, and with no room the two cross */
   margin: var(--space-3) 0 0;
@@ -296,7 +253,6 @@
   display: flex; align-items: center; justify-content: space-between;
   gap: var(--space-3); flex-wrap: wrap;
 }
-.ark--foot { width: clamp(104px, 12vw, 168px); }
 .arms-foot__back { display: inline-flex; align-items: center; gap: .6em; }
 .arms-foot__arrow {
   width: 1.6em; height: 1px; background: currentColor; position: relative;
@@ -314,14 +270,6 @@
    Narrow screens — recomposed, not stacked
    =========================================================================== */
 @media (max-width: 1023px) {
-  .ark--hero {
-    position: static;
-    translate: none;
-    /* Lighter than the type it stands under: on the host's hero the bottom
-       row is a caption, and this one should not outweigh the name above it. */
-    width: min(52%, 250px);
-    margin-top: clamp(22px, 4vh, 44px);
-  }
   .act-arms-ink .arms-says { padding-left: 0; }
   .arms-brace { display: none; }
 }
@@ -337,7 +285,6 @@
   .arms-reg .tab { translate: 0 .5em; }
 }
 @media (max-width: 767px) {
-  .arms-hero__where { justify-items: start; text-align: left; }
   .act-arms-ink .arms-say--sm,
   .act-arms-paper .arms-say--sm { justify-self: start; text-align: left; }
   .arms-say--lg, .arms-say--xl { max-width: none; }

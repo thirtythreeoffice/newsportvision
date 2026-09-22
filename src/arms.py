@@ -113,31 +113,30 @@ def shead(label, thin=False):
             % (" rule--thin" if thin else "", esc(label)))
 
 
-def prep(what):
+def prep(_what=None):
+    """A category whose content is still being written says so in two words.
+
+    It used to say a whole sentence about founding acts and assemblies, which
+    read as a note between colleagues rather than as anything a visitor came
+    for. Two words, in the site's quietest type, is the whole statement.
+    """
     return ('<p class="arms-prep"><i class="tab" aria-hidden="true"></i>'
-            '<span>%s</span></p>' % esc(what))
+            '<span>u pripremi</span></p>')
 
 
 def mark(cls=""):
-    """The four blocks and the bracket that joins them.
+    """The official artwork, placed.
 
-    Used twice on the whole page: once cropped against the hero, once at the
-    close. A logotype repeated on every surface stops being a logotype.
+    Not rebuilt: the supplied PDF was converted to SVG with every glyph turned
+    into an outline, so the construction, proportions, spacing and colour
+    relationships are the artwork's own, down to the coordinate. It is one
+    asset, one element, and it is never recomposed — only its size changes.
     """
-    blocks = (("m", "t", ("asocijacija", "roditelja", "maloletnih", "sportista")),
-              ("b", "t", ("udruženje građana", "beograd", "srbija", "2025")),
-              ("b", "s", ("što udruženiji", "to bolji i jači")),
-              ("m", "s", ("newsportvision", "koncept")))
-    out = []
-    for i, (colour, height, lines) in enumerate(blocks):
-        rows = "".join("<span>%s</span>" % esc(t) for t in lines)
-        out.append('<i class="ark__b ark__b--%s ark__b--%s" style="--i:%d">%s</i>'
-                   % (colour, height, i, rows))
-    out.append('<svg class="ark__brace" viewBox="0 0 1440 1187.72" aria-hidden="true" '
-               'preserveAspectRatio="none" focusable="false">'
-               '<path d="M359.3 873.8V682.4h721.4v191.4" fill="none" stroke="#fff" '
-               'stroke-width="15.59"/></svg>')
-    return '<div class="ark %s" aria-hidden="true">%s</div>' % (cls, "".join(out))
+    alt = ("A.R.M.S. — asocijacija roditelja maloletnih sportista. "
+           "Udruženje građana, Beograd, Srbija, 2025. NewSportVision koncept. "
+           "Tok pozitivne energije.")
+    return ('<img class="ark %s" src="/assets/media/arms-mark.svg" alt="%s" '
+            'width="1701" height="1701" decoding="async">' % (cls, esc(alt)))
 
 
 # ---------------------------------------------------------------------------
@@ -160,12 +159,9 @@ def hero():
     <h1 class="hero-stack arms-hero__stack" id="arms-h" data-justify-stack data-jmax="230">
       <span class="hl hl--rule hl--bleed" data-jl-host><span class="jline__t" data-jl data-jl-rule>A.R.M.S.</span><i class="jline__rule"></i></span>%(lines)s</h1>
   </div>
-  <div class="wrap hero-bottom grid">
-    <div class="c7 hero-foot-l">
-      <span class="rule rule--thin" aria-hidden="true"></span>
-      <span class="meta">&deg; tok pozitivne energije &deg;</span>
-    </div>
-    <div class="c4 s9 arms-hero__seal">%(mark)s</div>
+  <div class="wrap hero-bottom">
+    <span class="rule rule--thin" aria-hidden="true"></span>
+    <span class="meta">&deg; tok pozitivne energije &deg;</span>
   </div>
 </section>""" % {
         # Wide, the name is two lines that fill the measure. Narrow, it
@@ -181,7 +177,6 @@ def hero():
             'data-jl-narrow="MALOLETNIH">MALOLETNIH SPORTISTA</span></span>'
             '<span class="hl" data-jl-host data-jl-only="narrow" hidden>'
             '<span class="hlw" data-jl>SPORTISTA</span></span>'),
-        "mark": mark("ark--hero"),
     }
 
 
@@ -281,6 +276,21 @@ def register():
 </section>""" % {"head": shead("sadržaj"), "rows": "".join(rows)}
 
 
+def plate():
+    """The mark, on its own ground.
+
+    The artwork was drawn for white, and this is the only white surface on the
+    page — which is the whole point: it is shown, once, with room around it,
+    the way a gallery hangs a thing rather than filling a gap with it.
+    """
+    return """
+<section class="act-arms-plate" aria-label="A.R.M.S.">
+  <div class="wrap">
+    <div class="arms-plate__in" data-reveal="fade">%s</div>
+  </div>
+</section>""" % mark("ark--plate")
+
+
 def publication():
     """A publication on a green field, its title set the way this site sets a
     title: justified to the measure. The link is a link — this site does not
@@ -355,23 +365,12 @@ def foot(lang):
     return """
 <footer class="footer-canvas on-arms arms-foot" data-field="ink">
   <div class="wrap">
-    <div class="grid">
-      <div class="c7" data-reveal="up">
-        <div class="lead measure-sm">
-          <p>A.R.M.S. — asocijacija roditelja maloletnih sportista.</p>
-          <p>udruženje građana · beograd · srbija · 2025</p>
-        </div>
-      </div>
-      <div class="c5 s8" data-reveal="up" data-delay="90">
-        <span class="meta meta--quiet">newsportvision koncept</span>
-      </div>
-    </div>
     %(stack)s
     <a class="mailto-big tlink" href="mailto:office@newsportvision.com"
        data-cursor="Piši" style="margin-top:var(--space-3)">office@newsportvision.com</a>
     <div style="margin-top:var(--space-4)"><span class="rule rule--thin" aria-hidden="true"></span></div>
     <div class="arms-foot__grid" style="margin-top:var(--space-3)">
-      %(mark)s
+      <span class="meta meta--quiet">a.r.m.s. &middot; newsportvision koncept</span>
       <a class="meta tlink tlink--invert arms-foot__back" href="%(home)s" data-cursor="Nazad">
         <span class="arms-foot__arrow" aria-hidden="true"></span>newsportvision
       </a>
@@ -381,7 +380,6 @@ def foot(lang):
         "stack": ('<div class="arms-foot__say" data-justify-stack data-jmax="250">'
                   '<span class="hl got" data-jl-host>'
                   '<span class="hlw" data-jl>Udruži se</span></span></div>'),
-        "mark": mark("ark--foot"),
         "home": esc(url(lang, "/")),
     }
 
@@ -460,7 +458,7 @@ def shell(lang, title, description, body):
 
 def arms(lang="en"):
     body = "\n".join((hero(), manifesto(), register(),
-                      publication(), resources(), closing()))
+                      publication(), resources(), plate(), closing()))
     return shell(
         lang,
         "A.R.M.S. | asocijacija roditelja maloletnih sportista",
