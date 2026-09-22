@@ -89,7 +89,7 @@ MENU_ROWS = [("arms", "#ciljevi",    "ciljevi",              False),
 # The host's own pieces, filled with ARMS
 # ---------------------------------------------------------------------------
 
-def jstack(lines, jmax=240, first_rule=None, cls="arms-stack"):
+def jstack(lines, jmax=240, first_rule=None, cls="jstack"):
     """A justified stack: the site's signature, and the reason this page reads
     as the same hand. Every line is stretched to one measure on Archivo's width
     axis by justify.js; a short first line hands the rest of its measure to a
@@ -231,74 +231,54 @@ def manifesto():
     }
 
 
-def index():
-    """The five categories as the site's own index rows — a list, not cards.
-    Same tab, same name, same arrow, same cursor label as every other index on
-    the site; only the ink is ARMS."""
+def register():
+    """The five categories, once.
+
+    The first build listed them in an index and then repeated them as five
+    chapter blocks — the same five words twice, with a ghosted number behind
+    each heading that carried no information the list above had not already
+    given. This is one object instead of two: the site's index row, opened up
+    to hold the category's thesis and its state, and still the anchor the menu
+    points at.
+    """
+    items = (
+        ("ciljevi", "ciljevi", None,
+         "što udruženiji — to bolji i jači.",
+         "Ciljevi se upisuju iz osnivačkog akta."),
+        ("aktivnosti", "aktivnosti", "šta ne radimo",
+         "Ono što asocijacija radi i ono što svesno ne radi stoje jedno uz "
+         "drugo, jer se jedno bez drugog ne razume.",
+         "Spisak aktivnosti i granice rada se pripremaju."),
+        ("clanstvo", "članstvo", None,
+         "Ko može da se učlani, kako se učlanjuje i šta članstvo znači.",
+         "Uslovi članstva se objavljuju kada ih usvoji skupština."),
+        ("odeljenja", "odeljenja", "po sportovima",
+         "Odeljenja se otvaraju po sportu, kako se roditelji udružuju.",
+         "Spisak odeljenja se otvara sa prvim upisanim sportom."),
+        ("kontakti", "kontakti", None,
+         "udruženje građana, beograd, srbija.",
+         "Adresa i kontakt se objavljuju po registraciji."),
+    )
     rows = []
-    for i, (slug, a, b, _) in enumerate(SECTIONS):
-        name = esc(a) + ('<span class="index__sub">%s</span>' % esc(b) if b else "")
+    for i, (slug, name, sub, thesis, state) in enumerate(items):
+        label = esc(name) + ('<span class="arms-reg__sub">%s</span>' % esc(sub)
+                             if sub else "")
         rows.append(
-            '<a class="index__row" href="#%s" data-axis="arms" data-cursor="Vidi" '
-            'data-reveal="up" data-delay="%d">'
+            '<section class="arms-reg" id="%s" data-axis="arms" '
+            'aria-labelledby="h-%s" data-reveal="up" data-delay="%d">'
             '<i class="tab" aria-hidden="true"></i>'
-            '<span class="index__name">%s</span>'
-            '<span class="index__go" aria-hidden="true"></span></a>'
-            % (slug, i * 55, name))
+            '<h2 class="arms-reg__n" id="h-%s">%s</h2>'
+            '<div class="arms-reg__say"><p class="arms-reg__t">%s</p>%s</div>'
+            '</section>'
+            % (slug, slug, i * 60, slug, label, esc(thesis), prep(state)))
     return """
-<section class="act-arms-index on-paper" data-field="paper" aria-labelledby="arms-idx">
+<section class="act-arms-reg on-paper" data-field="paper" aria-labelledby="arms-idx">
   <div class="wrap">
     %(head)s
     <h2 class="visually-hidden" id="arms-idx">Sadržaj</h2>
-    <div class="index">%(rows)s</div>
+    <div class="arms-register">%(rows)s</div>
   </div>
 </section>""" % {"head": shead("sadržaj"), "rows": "".join(rows)}
-
-
-def chapter(slug, name, sub, ghost, col, lead, note):
-    """The host's chapter block: a ghost word behind, a tab, a label, prose."""
-    label = esc(name) + ('<span class="chapter__sub">%s</span>' % esc(sub) if sub else "")
-    return """
-<article class="chapter arms-chapter" id="%(slug)s" data-axis="arms">
-  <span class="chapter__year" aria-hidden="true"
-        style="left:calc((var(--col) + var(--gutter)) * %(col)d)">%(ghost)s</span>
-  <div class="chapter__body grid">
-    <div class="c5 s1">
-      <p class="chapter__tag"><i class="tab" aria-hidden="true"></i></p>
-      <h2 class="chapter__label" data-reveal="up">%(label)s</h2>
-    </div>
-    <div class="c6 s7" style="align-self:end">
-      <div data-reveal="up" data-delay="80">%(lead)s%(note)s</div>
-    </div>
-  </div>
-</article>""" % {"slug": slug, "col": col, "ghost": esc(ghost),
-                 "label": label, "lead": lead, "note": note}
-
-
-def chapters():
-    out = [
-        chapter("ciljevi", "ciljevi", None, "01", 0,
-                '<div class="prose"><p>što udruženiji — to bolji i jači.</p></div>',
-                prep("Ciljevi se upisuju iz osnivačkog akta.")),
-        chapter("aktivnosti", "aktivnosti", "šta ne radimo", "02", 2,
-                '<div class="prose"><p>Ono što asocijacija radi i ono što svesno '
-                'ne radi stoje jedno uz drugo, jer se jedno bez drugog ne '
-                'razume.</p></div>',
-                prep("Spisak aktivnosti i granice rada se pripremaju.")),
-        chapter("clanstvo", "članstvo", None, "03", 1,
-                '<div class="prose"><p>Ko može da se učlani, kako se učlanjuje '
-                'i šta članstvo znači.</p></div>',
-                prep("Uslovi članstva se objavljuju kada ih usvoji skupština.")),
-        chapter("odeljenja", "odeljenja", "po sportovima", "04", 3,
-                '<div class="prose"><p>Odeljenja se otvaraju po sportu, kako se '
-                'roditelji udružuju.</p></div>',
-                prep("Spisak odeljenja se otvara sa prvim upisanim sportom.")),
-        chapter("kontakti", "kontakti", None, "05", 0,
-                '<div class="prose"><p>udruženje građana, beograd, srbija.</p></div>',
-                prep("Adresa i kontakt se objavljuju po registraciji.")),
-    ]
-    return ('<section class="act-arms-chapters on-paper" data-field="paper">'
-            '<div class="wrap">%s</div></section>' % "".join(out))
 
 
 def publication():
@@ -324,7 +304,11 @@ def publication():
   </div>
 </section>""" % {
         "head": shead("publikacija", thin=True),
-        "stack": jstack(PUB_TITLE, jmax=132, cls="arms-pub__t"),
+        # Held well under the hero: this is a resource inside the chapter, not
+        # the chapter's headline. Capped, the engine justifies the four lines
+        # to their own widest line instead of the page, which is what makes
+        # the title read as an object standing on the field.
+        "stack": jstack(PUB_TITLE, jmax=92, cls="jstack arms-pub__t"),
         "parts": "".join('<li><span class="meta">%s</span></li>' % esc(p)
                          for p in PUB_PARTS),
         "prep": prep("Publikacija se priprema za preuzimanje."),
@@ -361,7 +345,8 @@ def closing():
          aria-label="%(alt)s">
   <div class="wrap">%(stack)s</div>
 </section>""" % {"alt": esc(" ".join(CLOSING).lower()),
-                 "stack": jstack(CLOSING, jmax=190, cls="arms-close__t")}
+                 "stack": jstack(CLOSING, jmax=190,
+                                 cls="jstack statement-stack arms-close__t")}
 
 
 def foot(lang):
@@ -393,7 +378,9 @@ def foot(lang):
     </div>
   </div>
 </footer>""" % {
-        "stack": jstack(("Udruži se",), jmax=250, cls="arms-foot__say"),
+        "stack": ('<div class="arms-foot__say" data-justify-stack data-jmax="250">'
+                  '<span class="hl got" data-jl-host>'
+                  '<span class="hlw" data-jl>Udruži se</span></span></div>'),
         "mark": mark("ark--foot"),
         "home": esc(url(lang, "/")),
     }
@@ -472,7 +459,7 @@ def shell(lang, title, description, body):
 
 
 def arms(lang="en"):
-    body = "\n".join((hero(), manifesto(), index(), chapters(),
+    body = "\n".join((hero(), manifesto(), register(),
                       publication(), resources(), closing()))
     return shell(
         lang,

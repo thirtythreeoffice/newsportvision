@@ -17,6 +17,20 @@
    field and an edge only.
    =========================================================================== */
 
+/* --- The acts breathe like the host's ------------------------------------
+   Every act on this site is padded with --act; these were relying on their
+   contents' own margins, so a coloured field began at its first letter. The
+   rhythm below is deliberate rather than uniform: the statement surfaces are
+   given more room than the working sections, and the resources the least,
+   because a list of four lines does not need the air a manifesto does. */
+.act-arms-ink      { padding-block: var(--act); }
+.act-arms-field    { padding-block: calc(var(--act) * 1.5); }
+.act-arms-paper    { padding-block: calc(var(--act) * 1.15); }
+.act-arms-reg      { padding-block: var(--act); }
+.act-arms-pub      { padding-block: calc(var(--act) * 1.1); }
+.act-arms-res      { padding-block: calc(var(--act) * .82); }
+.act-arms-close    { padding-block: calc(var(--act) * 1.35); }
+
 /* --- Two more fields ------------------------------------------------------ */
 .on-arms {
   --bg: var(--nsv-arms);
@@ -108,8 +122,10 @@
    footer keeps only the geometry — which is the part that carries at a glance. */
 .ark--foot .ark__b span { display: none; }
 
-/* The bracket draws itself once, with the hero, and never again. */
-.js [data-intro] .ark__brace path {
+/* The bracket draws itself with the hero's own intro — the host plays that
+   once per session and marks it with .intro-run, so on a second visit the
+   mark is simply there, exactly as the host's hero is. */
+.js [data-intro].intro-run .ark__brace path {
   stroke-dasharray: 1104.1;
   stroke-dashoffset: 1104.1;
   animation: ark-draw 900ms var(--ease-editorial, ease) 520ms both;
@@ -175,49 +191,62 @@
 }
 @keyframes brace-in { to { clip-path: inset(0); } }
 
-.act-arms-field { padding-block: clamp(96px, 20vh, 260px); }
 .act-arms-field .arms-say--xl { max-width: 19ch; }
 
 /* ===========================================================================
-   Index and chapters — the host's components, two words richer
+   The register — the site's index row, opened up
+   ---------------------------------------------------------------------------
+   Same rule above each row, same tab, same display face and tracking as every
+   index on the site. What it adds is a second column: the category's thesis
+   and its state, so five categories need one section rather than a list and
+   five near-identical chapters after it.
    =========================================================================== */
-.index__sub {
-  display: block;
-  font-weight: 400;
-  font-variation-settings: "wdth" 96;
-  color: var(--fg-quiet, var(--nsv-steel));
-  font-size: .62em;
-  line-height: 1.1;
-  margin-top: .12em;
+.arms-register {
+  margin-top: var(--space-5);
+  border-top: var(--rule-thin) solid var(--rule-color);
 }
-.index__row--static { cursor: default; }
-.index__row--static:hover { color: inherit; }
-.index__note {
-  margin-left: auto;
-  padding-left: var(--space-2);
+.arms-reg {
+  display: grid;
+  grid-template-columns: auto minmax(0, 11fr) minmax(0, 13fr);
+  align-items: baseline;
+  gap: var(--space-2) var(--gutter);
+  padding: clamp(20px, 2.4vw, 42px) 0;
+  border-bottom: var(--rule-hair) solid var(--rule-color);
+  scroll-margin-top: clamp(12px, 3vh, 28px);
+}
+.arms-reg .tab { margin-right: var(--space-1); align-self: start; translate: 0 .62em; }
+.arms-reg__n {
+  margin: 0;
   font-family: var(--font-display);
-  font-size: var(--fs-meta);
-  letter-spacing: var(--track-meta);
+  font-weight: 700;
+  font-size: clamp(22px, 2.9vw, 52px);
+  line-height: 1.04;
+  letter-spacing: var(--track-h);
   text-transform: uppercase;
-  color: var(--nsv-steel);
-  text-align: right;
-  max-width: 22ch;
 }
-.arms-res .tab { background: var(--nsv-arms-green); }
-
-.chapter__sub {
+.arms-reg__sub {
   display: block;
   font-weight: 400;
   font-variation-settings: "wdth" 92;
   color: var(--nsv-steel);
 }
-.arms-chapter + .arms-chapter { margin-top: clamp(64px, 12vh, 170px); }
+.arms-reg__say { display: grid; gap: var(--space-1); }
+.arms-reg__say .arms-prep { margin-top: 0; }
+.arms-reg__t {
+  margin: 0;
+  max-width: 44ch;              /* reading copy keeps a reading measure */
+  font-family: var(--font-text);
+  font-size: var(--fs-body);
+  line-height: 1.5;
+}
 
-/* What a section says while its content is being written. An empty room with a
-   sign is honest; invented copy is not. */
+/* What a category says while its content is being written. An empty room with
+   a sign is honest; invented copy is not. */
 .arms-prep {
   display: flex; align-items: baseline; gap: .7em;
-  margin: var(--space-2) 0 0;
+  /* clear of whatever is above: every reveal on this site travels 26px on its
+     way in, and with no room the two cross */
+  margin: var(--space-3) 0 0;
   font-family: var(--font-display);
   font-size: var(--fs-meta);
   letter-spacing: var(--track-meta);
@@ -229,21 +258,39 @@
   width: 1.1em; height: .38em;
   background: var(--nsv-arms-green);
   transform: translateY(-.1em);
+  margin: 0;
 }
+
+/* The resources keep the site's index row exactly, with the green tab. */
+/* These are sentences, not labels: the site's meta treatment (uppercase, wide
+   tracking) is for labels, and reading a description in it is work. Same size
+   and colour, normal case. */
+.index__note {
+  margin-left: auto;
+  padding-left: var(--space-3);
+  font-family: var(--font-display);
+  font-size: var(--fs-small);
+  line-height: 1.35;
+  color: var(--nsv-steel);
+  text-align: right;
+  max-width: 30ch;
+}
+@media (max-width: 1023px) { .index__note { max-width: 22ch; } }
+.index__row--static { cursor: default; }
+.arms-res .tab { background: var(--nsv-arms-green); }
 
 /* ===========================================================================
    Publication — a title set the way this site sets titles
    =========================================================================== */
+/* The stacks take their type from the host's .jstack, as every other stack on
+   the site does; these only place them. */
 .arms-pub__t { margin-top: clamp(20px, 4vh, 54px); }
-.arms-pub__t .hl { font-weight: 800; }
-.arms-pub__t .hl:first-child { font-weight: 800; }
 .arms-pub__foot { margin-top: clamp(26px, 5vh, 64px); align-items: start; }
 .arms-pub__parts { list-style: none; margin: 0; padding: 0; display: grid; gap: .5em; }
 
 /* ===========================================================================
    Closing and footer
    =========================================================================== */
-.act-arms-close { padding-block: clamp(80px, 16vh, 220px); }
 .arms-foot__say { margin-top: var(--space-4); }
 .arms-foot__grid {
   display: flex; align-items: center; justify-content: space-between;
@@ -270,11 +317,24 @@
   .ark--hero {
     position: static;
     translate: none;
-    width: min(62%, 300px);
-    margin-top: clamp(26px, 5vh, 54px);
+    /* Lighter than the type it stands under: on the host's hero the bottom
+       row is a caption, and this one should not outweigh the name above it. */
+    width: min(52%, 250px);
+    margin-top: clamp(22px, 4vh, 44px);
   }
   .act-arms-ink .arms-says { padding-left: 0; }
   .arms-brace { display: none; }
+}
+@media (max-width: 1023px) {
+  /* Name over thesis, tab keeping its column: the row becomes two lines of a
+     list instead of three columns squeezed to nothing. */
+  .arms-reg {
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: start;
+    gap: var(--space-1) var(--space-2);
+  }
+  .arms-reg__say { grid-column: 2; }
+  .arms-reg .tab { translate: 0 .5em; }
 }
 @media (max-width: 767px) {
   .arms-hero__where { justify-items: start; text-align: left; }
