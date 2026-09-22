@@ -45,6 +45,8 @@ NAV = [
     ("about",     "/about/",     {"en": "About Us",   "it": "Chi siamo"}, "culture"),
     ("workshops", "/workshops/", {"en": "Workshops",  "it": "Laboratori"}, "culture"),
     ("help-desk", "/help-desk/", {"en": "Help Desk",  "it": "Help Desk"}, "sport"),
+    # A concept of the house, and the menu says so in the house's own voice.
+    ("arms",      "/arms/",      {"en": "A.R.M.S.",   "it": "A.R.M.S."},  "arms"),
 ]
 
 # The three links the live site keeps in its header bar, in its own order.
@@ -263,10 +265,12 @@ def lang_switch(lang, path, cls=""):
          esc(url("it", path)), "true" if lang == "it" else "false")
 
 
-def site_header(lang, path, active):
+def site_header(lang, path, active, chapter=None):
+    """chapter: when the page belongs to a concept rather than to the site's
+    own spine, the masthead says which one and the section links stand down."""
     ui = UI[lang]
     links = []
-    for key in HEADER_LINKS:
+    for key in ([] if chapter else HEADER_LINKS):
         item = next(n for n in NAV if n[0] == key)
         label = {"services": ui["nav_services"], "products": ui["nav_products"],
                  "about": ui["nav_about"]}[key]
@@ -285,19 +289,29 @@ def site_header(lang, path, active):
         '<span class="menu-btn__bars" aria-hidden="true"><i></i><i></i></span>'
         '</button>'
         '</nav></div></header>'
-    ) % (masthead(lang), esc(ui["menu"]), "".join(links), lang_switch(lang, path), esc(ui["menu"]))
+    ) % (masthead(lang) + (
+             '<span class="chapter-of"><span aria-hidden="true">/</span>'
+             '<span class="chapter-of__here">%s</span></span>' % esc(chapter)
+             if chapter else ""),
+         esc(ui["menu"]), "".join(links),
+         "" if chapter else lang_switch(lang, path), esc(ui["menu"]))
 
 
-def menu_panel(lang, path, active):
+def menu_panel(lang, path, active, rows=None, foot=None):
+    """rows: (axis, href, label, current) when a concept brings its own
+    destinations. The panel, its wipe, its focus trap and its type are the
+    site's; only the list inside it changes."""
     ui = UI[lang]
     items = []
-    for i, (key, href, labels, ax) in enumerate(NAV, 1):
-        cur = ' aria-current="page"' if active == key else ''
+    rows = rows if rows is not None else [
+        (ax, url(lang, href), labels[lang], active == key)
+        for key, href, labels, ax in NAV]
+    for ax, href, label, cur in rows:
         items.append(
             '<li%s><a href="%s"%s><i class="tab menu-tab" aria-hidden="true"></i>'
             '<span class="mword">%s</span></a></li>'
-            % (' data-axis="%s"' % ax if ax else '', esc(url(lang, href)), cur,
-               esc(labels[lang]))
+            % (' data-axis="%s"' % ax if ax else '',
+               esc(href), ' aria-current="page"' if cur else '', esc(label))
         )
     return (
         '<div class="menu-panel" id="menu" aria-hidden="true">'
@@ -310,16 +324,16 @@ def menu_panel(lang, path, active):
         '<span class="menu-btn__bars" aria-hidden="true"><i></i><i></i></span>'
         '</button></nav></div>'
         '<nav class="wrap" aria-label="%s"><ul class="menu-list">%s</ul></nav>'
-        '<div class="wrap menu-foot">'
-        '<a class="meta tlink tlink--invert" href="mailto:%s">%s</a>'
-        '<a class="meta tlink tlink--invert" href="%s">%s</a>'
-        '</div></div>'
+        '<div class="wrap menu-foot">%s</div></div>'
     ) % (masthead(lang, tag="span"),
-         lang_switch(lang, path),
+         "" if rows is not None else lang_switch(lang, path),
          esc(ui["close"]),
          esc(ui["menu"]), "".join(items),
-         esc(SITE["email"]), esc(SITE["email"]),
-         esc(url(lang, "/privacy/")), esc(ui["privacy"]))
+         foot if foot is not None else (
+             '<a class="meta tlink tlink--invert" href="mailto:%s">%s</a>'
+             '<a class="meta tlink tlink--invert" href="%s">%s</a>'
+             % (esc(SITE["email"]), esc(SITE["email"]),
+                esc(url(lang, "/privacy/")), esc(ui["privacy"]))))
 
 
 def footer(lang, path, invite, got_idea):

@@ -62,6 +62,10 @@
   --nsv-culture:      #2158A8;   /* 6.0:1 on paper — text-safe          */
   --nsv-sport:        #0F6433;   /* 6.3:1 on paper — text-safe          */
   --nsv-art:          #F37331;   /* 5.9:1 on ink   — text-safe on dark  */
+  --nsv-arms:         #9F194F;   /* A.R.M.S. magenta — 6.7:1 on paper   */
+  --nsv-arms-lift:    #DB6E99;   /* the same ink, lifted for the dark    */
+  --nsv-arms-blue:    #5C9ED6;   /* a field, never a letter: 2.87 on white */
+  --nsv-arms-green:   #077734;   /* the resource colour                  */
   --nsv-culture-lift: #6E9FDF;   /* for text on ink                     */
   --nsv-sport-lift:   #45AE76;   /* for text on ink                     */
   --nsv-art-deep:     #B4480D;   /* for text on paper                   */
@@ -281,10 +285,12 @@
 [data-axis="culture"] { --axis: var(--nsv-culture); --axis-mark: #2158A8; }
 [data-axis="sport"]   { --axis: var(--nsv-sport);   --axis-mark: #0F6433; }
 [data-axis="art"]     { --axis: var(--nsv-art-deep); --axis-mark: #E2610F; }
+[data-axis="arms"]    { --axis: var(--nsv-arms);     --axis-mark: #9F194F; }
 
 .on-ink [data-axis="culture"], .on-ink[data-axis="culture"] { --axis: var(--nsv-culture-lift); --axis-mark: #3B7FD4; }
 .on-ink [data-axis="sport"],   .on-ink[data-axis="sport"]   { --axis: var(--nsv-sport-lift);   --axis-mark: #2E9A5E; }
 .on-ink [data-axis="art"],     .on-ink[data-axis="art"]     { --axis: var(--nsv-art);          --axis-mark: #F37331; }
+.on-ink [data-axis="arms"],    .on-ink[data-axis="arms"]    { --axis: var(--nsv-arms-lift);    --axis-mark: #DB6E99; }
 
 /* On a field, the true ink is always used — legibility limits apply to text,
    not to a painted mark. --axis-on is what stays readable ON that field:
@@ -292,3 +298,4 @@
 [data-axis="culture"] { --axis-field: var(--nsv-culture); --axis-on: var(--nsv-paper); }
 [data-axis="sport"]   { --axis-field: var(--nsv-sport);   --axis-on: var(--nsv-paper); }
 [data-axis="art"]     { --axis-field: var(--nsv-art);     --axis-on: var(--nsv-ink); }
+[data-axis="arms"]    { --axis-field: var(--nsv-arms);    --axis-on: var(--nsv-paper); }

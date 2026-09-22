@@ -264,7 +264,7 @@ AXIS = {
     "camst":             "culture",  # a master course
     "back-to-school":    "sport",
     "help-desk":         "sport",
-    "parents":           "culture",
+    "parents":           "arms",     # the row that opens the ARMS chapter
     "nsv-pass":          "art",
 }
 

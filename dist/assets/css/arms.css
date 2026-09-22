@@ -1,662 +1,286 @@
 /* ===========================================================================
-   A.R.M.S. — the microsite's own room
+   A.R.M.S. — the chapter's own surfaces
    ---------------------------------------------------------------------------
-   Loaded only on /arms/. It sits on top of tokens.css and base.css, which give
-   it the reset, the focus ring, the reduced-motion contract and the spacing
-   scale, and it brings everything else itself. None of it can reach the rest
-   of the site: no file that the other twenty-four pages load mentions .a-*.
+   Loaded after the site's four sheets, on /arms/ only, and it adds rather than
+   replaces. The measure, the grid, the type, the acts, the tongues, the index
+   rows, the chapter blocks, the reveals and the closing canvas are the site's
+   and are not touched here. What this file contributes is what an identity is:
+   two more colour fields, one piece of geometry, and the handful of small
+   parts the host has no equivalent for.
 
-   Every number that matters is derived from the official mark rather than
-   chosen:
+   Fields work the way the host's do — four tokens and a background — so every
+   rule, meta line, prose block and focus ring inside them inherits correctly
+   without a single override.
 
-     the mark      1440 wide, 1187.72 tall; blocks 702.99 with a 34.02 gutter;
-                   lower blocks 0.3938 of the upper; bracket 15.59 thick.
-     --a-gut       34.02 / 1440 of the measure. The page is gutter-ed like the
-                   logo is.
-     --a-bar       15.59 / 1440 of the measure. Every rule on the page is the
-                   thickness of the bracket that holds the mark together.
-     --a-r         the architecture's blocks are drawn with a radius of about
-                   an eighth of their height; the index keeps that ratio.
-
-   The ground is white, not the site's warm paper. That is the boundary: the
-   mark was drawn for white, and crossing from paper into it is how a reader
-   knows they have walked into another institution without being told.
+   Contrast, measured: paper on magenta 6.7:1, paper on green 4.9:1, quiet on
+   magenta 4.5:1. ARMS blue never carries a letter anywhere (2.87:1); it is a
+   field and an edge only.
    =========================================================================== */
 
-/* --- Type -----------------------------------------------------------------
-   Apertura draws the mark: geometric, single-storey a, circular o, long
-   ascenders over a moderate x-height. Jost is the closest thing that can be
-   served from this origin, and it is the only new face the microsite loads —
-   43KB for both subsets, on these pages only. The host's Archivo stays for the
-   one strip that belongs to the host. */
-@font-face {
-  font-family: "Jost";
-  font-style: normal;
-  font-weight: 300 700;
-  font-display: swap;
-  src: url("../fonts/jost-normal-latin.woff2") format("woff2");
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
-                 U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122,
-                 U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+/* --- Two more fields ------------------------------------------------------ */
+.on-arms {
+  --bg: var(--nsv-arms);
+  --fg: var(--nsv-paper);
+  --fg-quiet: #E0BDCB;
+  --rule-color: var(--nsv-paper);
+  background: var(--bg);
+  color: var(--fg);
 }
-@font-face {
-  font-family: "Jost";
-  font-style: normal;
-  font-weight: 300 700;
-  font-display: swap;
-  src: url("../fonts/jost-normal-latin-ext.woff2") format("woff2");
-  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF,
-                 U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF,
-                 U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+.on-arms-green {
+  --bg: var(--nsv-arms-green);
+  --fg: var(--nsv-paper);
+  --fg-quiet: #D6E5DC;
+  --rule-color: var(--nsv-paper);
+  background: var(--bg);
+  color: var(--fg);
 }
-/* Metric-matched stand-in, so the first paint is not a different shape.
-   Jost is close to Futura; Avenir/Century Gothic are the system faces nearest
-   that skeleton. */
-@font-face {
-  font-family: "Jost Fallback";
-  src: local("Avenir Next"), local("Avenir"), local("Century Gothic"),
-       local("URW Gothic"), local("Trebuchet MS");
-  size-adjust: 96%;
-  ascent-override: 96%;
-  descent-override: 26%;
-  line-gap-override: 0%;
+.on-arms :focus-visible,
+.on-arms-green :focus-visible { outline-color: var(--nsv-yellow); }
+
+/* --- The header names the chapter it stands in ---------------------------- */
+.chapter-of {
+  display: inline-flex;
+  align-items: center;
+  gap: .55em;
+  align-self: center;
+  margin-left: .8em;
+  font-family: var(--font-display);
+  font-size: var(--fs-meta);
+  font-weight: 600;
+  letter-spacing: var(--track-meta);
+  text-transform: uppercase;
+  color: var(--nsv-steel);
 }
+.chapter-of__here { color: var(--nsv-arms); }
 
-.a-body {
-  --a-magenta: #9F194F;
-  --a-blue:    #5C9ED6;
-  --a-green:   #077734;
-  --a-ground:  #FFFFFF;
-  --a-ink:     var(--nsv-ink);
-  --a-quiet:   #6E6E68;
-  --a-line:    #E2E0DA;
-
-  /* Derived from the mark. See the header. */
-  --a-gut: calc(var(--content) * 0.02363);
-  --a-bar: clamp(5px, calc(var(--content) * 0.0108), 17px);
-  --a-r:   clamp(12px, 1.5vw, 24px);
-
-  --a-font: "Jost", "Jost Fallback", system-ui, sans-serif;
-
-  /* One scale, geometric, 1.25 between steps at the small end and wider at the
-     display end where the page is allowed to shout once. */
-  --a-fs-meta:  clamp(11px, 0.24vw + 10px, 14px);
-  --a-fs-body:  clamp(16px, 0.35vw + 14.6px, 20px);
-  --a-fs-lead:  clamp(20px, 0.9vw + 16.5px, 30px);
-  --a-fs-say:   clamp(25px, 2.5vw + 13px, 56px);
-  --a-fs-h3:    clamp(24px, 1.6vw + 17px, 42px);
-  --a-fs-h2:    clamp(34px, 4.4vw + 12px, 92px);
-  --a-fs-mark:  clamp(40px, 6.2vw, 96px);   /* one line, always */
-
-  --a-step: clamp(64px, 9vh, 150px);       /* the rhythm between sections */
-
-  background: var(--a-ground);
-  color: var(--a-ink);
-  font-family: var(--a-font);
-  font-size: var(--a-fs-body);
-  font-weight: 400;
-  line-height: 1.5;
-  -webkit-font-smoothing: antialiased;
+/* Entering the chapter. The site already carries the header across a
+   navigation on its own view transition, so NEWSPORTVISION never blinks; what
+   arrives is the name of the concept, written in after the page has settled.
+   One line of motion, 420ms, once. */
+@media (prefers-reduced-motion: no-preference) {
+  .js .chapter-of { clip-path: inset(0 100% 0 0); animation: chapter-in 420ms var(--ease-enter) 240ms both; }
 }
-
-.a-body ::selection { background: var(--a-magenta); color: #fff; }
-
-.a-wrap {
-  width: var(--content);
-  margin-inline: auto;
-}
-
-.a-sr {
-  position: absolute !important;
-  width: 1px; height: 1px; padding: 0; margin: -1px;
-  overflow: hidden; clip-path: inset(50%); white-space: nowrap;
-}
-
-/* --- Reveals ---------------------------------------------------------------
-   The host's engine decides when (app.js adds .is-in and writes --rd from
-   data-delay); this decides how. ARMS enters shorter and flatter than the host
-   does — it is a quieter room. */
-.js .a-body [data-reveal="up"]:not(.is-in)   { opacity: 0; translate: 0 18px; }
-.js .a-body [data-reveal="fade"]:not(.is-in) { opacity: 0; }
-.js .a-body [data-reveal="up"].is-in {
-  animation: a-in 620ms cubic-bezier(.2,.7,.2,1) var(--rd, 0ms) backwards,
-             a-up 620ms cubic-bezier(.2,.7,.2,1) var(--rd, 0ms) backwards;
-}
-.js .a-body [data-reveal="fade"].is-in {
-  animation: a-in 620ms cubic-bezier(.2,.7,.2,1) var(--rd, 0ms) backwards;
-}
-@keyframes a-in { from { opacity: 0; } to { opacity: 1; } }
-@keyframes a-up { from { translate: 0 18px; } to { translate: 0 0; } }
+@keyframes chapter-in { to { clip-path: inset(0 -2px 0 0); } }
+.arms .header-inner { justify-content: flex-start; }
+.arms .header-inner > .header-nav { margin-left: auto; }
 
 /* ===========================================================================
-   The threshold — the host's voice, once, at the top
+   The mark
+   ---------------------------------------------------------------------------
+   Measured off the artwork: two columns of 702.99 with a 34.02 gutter, lower
+   blocks 0.3938 of the upper, bracket 15.59 thick from the centre of one
+   column to the centre of the other. Container units carry those ratios, so
+   the mark is the same drawing at 180px and at 460px.
+
+   It appears twice on the page. That is the whole budget.
    =========================================================================== */
-.a-threshold {
-  background: var(--nsv-paper);
-  border-bottom: 1px solid var(--nsv-paper-deep);
-  font-family: var(--font-display, "Archivo", system-ui, sans-serif);
-}
-.a-threshold__in {
-  display: flex; align-items: center; gap: .7em;
-  padding-block: 13px;
-  font-size: var(--a-fs-meta);
-  letter-spacing: .14em;
-  text-transform: uppercase;
-  font-weight: 600;
-}
-.a-back {
-  display: inline-flex; align-items: center; gap: .55em;
-  color: var(--a-ink); text-decoration: none;
+.ark {
+  container-type: inline-size;
   position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 827.72fr 325.98fr;
+  gap: 2.3625cqw;
+  aspect-ratio: 1440 / 1187.72;
 }
-.a-back__arrow {
-  width: 1.5em; height: 1px; background: currentColor;
-  position: relative; transition: width var(--t-ui, 260ms) var(--ease-enter, ease);
+.ark__b {
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  padding: 2.6cqw 3.2cqw;
+  color: #fff;
+  font-family: var(--font-display);
+  font-style: normal;
+  font-size: 4.1cqw;
+  font-weight: 400;
+  line-height: 1.34;
+  text-align: center;
 }
-.a-back__arrow::before {
+.ark__b span { display: block; white-space: nowrap; }
+.ark__b--m { background: var(--nsv-arms); }
+.ark__b--b { background: var(--nsv-arms-blue); }
+/* The bracket is drawn in whatever the field behind it is, so the mark reads
+   as a cut-out of its surface rather than a white sticker on it. */
+.ark__brace { position: absolute; inset: 0; width: 100%; height: 100%; }
+.ark__brace path { stroke: var(--bg, #fff); }
+
+/* Small, the inner setting stops being type and starts being texture, so the
+   footer keeps only the geometry — which is the part that carries at a glance. */
+.ark--foot .ark__b span { display: none; }
+
+/* The bracket draws itself once, with the hero, and never again. */
+.js [data-intro] .ark__brace path {
+  stroke-dasharray: 1104.1;
+  stroke-dashoffset: 1104.1;
+  animation: ark-draw 900ms var(--ease-editorial, ease) 520ms both;
+}
+@keyframes ark-draw { to { stroke-dashoffset: 0; } }
+
+/* ===========================================================================
+   Hero — the name is the opening statement; the mark is cropped against it
+   =========================================================================== */
+/* The mark is cropped against the right edge of the screen, the way the host
+   crops a photograph: what runs off the page is not missing, it is outside.
+   The section clips horizontally only, so the tongue below it still bleeds. */
+.arms-hero { overflow-x: clip; }
+.arms-hero__stack .hl--rule .jline__t { color: var(--nsv-arms); }
+.arms-hero .hero-foot-l { display: grid; gap: var(--space-1); align-content: end; }
+.arms-hero .hero-foot-l .rule { width: clamp(40px, 8vw, 150px); }
+
+.arms-hero__seal { position: relative; align-self: end; }
+.ark--hero {
+  width: clamp(190px, 25vw, 400px);
+  margin-left: auto;
+  translate: 26% 0;          /* a quarter of it stands off the page */
+}
+
+/* ===========================================================================
+   Statements — surface, not box
+   =========================================================================== */
+.arms-says { display: grid; position: relative; }
+.arms-say {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 500;
+  line-height: 1.08;
+  letter-spacing: -.015em;
+  text-wrap: balance;
+}
+.arms-say--xl { font-size: var(--fs-h1); max-width: 17ch; }
+.arms-say--lg { font-size: var(--fs-h2); max-width: 20ch; }
+.arms-say--sm { font-size: var(--fs-h3); max-width: 26ch; font-weight: 400; }
+
+.act-arms-ink .arms-says { gap: clamp(48px, 9vh, 130px); padding-left: clamp(0px, 8vw, 132px); }
+.act-arms-ink .arms-say--sm { justify-self: end; text-align: right; }
+.act-arms-paper .arms-says--close { gap: clamp(44px, 8vh, 110px); }
+.act-arms-paper .arms-say--sm { justify-self: end; text-align: right; }
+
+/* The bracket from the mark, walking down the ink act: the same figure, the
+   same thickness relative to the measure, doing the same job — holding two
+   things together. */
+.arms-brace {
+  position: absolute;
+  left: 0; top: 4%;
+  width: clamp(26px, 5vw, 88px);
+  height: 78%;
+  border-left: var(--rule-bar) solid var(--nsv-arms-lift);
+  border-top: var(--rule-bar) solid var(--nsv-arms-lift);
+  border-bottom: var(--rule-bar) solid var(--nsv-arms-lift);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .js .arms-brace { clip-path: inset(0 0 100% 0); animation: brace-in 900ms var(--ease-editorial, ease) both; }
+  @supports (animation-timeline: view()) {
+    .js .arms-brace { animation-timeline: view(); animation-range: entry 10% cover 34%; }
+  }
+}
+@keyframes brace-in { to { clip-path: inset(0); } }
+
+.act-arms-field { padding-block: clamp(96px, 20vh, 260px); }
+.act-arms-field .arms-say--xl { max-width: 19ch; }
+
+/* ===========================================================================
+   Index and chapters — the host's components, two words richer
+   =========================================================================== */
+.index__sub {
+  display: block;
+  font-weight: 400;
+  font-variation-settings: "wdth" 96;
+  color: var(--fg-quiet, var(--nsv-steel));
+  font-size: .62em;
+  line-height: 1.1;
+  margin-top: .12em;
+}
+.index__row--static { cursor: default; }
+.index__row--static:hover { color: inherit; }
+.index__note {
+  margin-left: auto;
+  padding-left: var(--space-2);
+  font-family: var(--font-display);
+  font-size: var(--fs-meta);
+  letter-spacing: var(--track-meta);
+  text-transform: uppercase;
+  color: var(--nsv-steel);
+  text-align: right;
+  max-width: 22ch;
+}
+.arms-res .tab { background: var(--nsv-arms-green); }
+
+.chapter__sub {
+  display: block;
+  font-weight: 400;
+  font-variation-settings: "wdth" 92;
+  color: var(--nsv-steel);
+}
+.arms-chapter + .arms-chapter { margin-top: clamp(64px, 12vh, 170px); }
+
+/* What a section says while its content is being written. An empty room with a
+   sign is honest; invented copy is not. */
+.arms-prep {
+  display: flex; align-items: baseline; gap: .7em;
+  margin: var(--space-2) 0 0;
+  font-family: var(--font-display);
+  font-size: var(--fs-meta);
+  letter-spacing: var(--track-meta);
+  text-transform: uppercase;
+  color: var(--fg-quiet, var(--nsv-steel));
+}
+.arms-prep .tab {
+  flex: 0 0 auto;
+  width: 1.1em; height: .38em;
+  background: var(--nsv-arms-green);
+  transform: translateY(-.1em);
+}
+
+/* ===========================================================================
+   Publication — a title set the way this site sets titles
+   =========================================================================== */
+.arms-pub__t { margin-top: clamp(20px, 4vh, 54px); }
+.arms-pub__t .hl { font-weight: 800; }
+.arms-pub__t .hl:first-child { font-weight: 800; }
+.arms-pub__foot { margin-top: clamp(26px, 5vh, 64px); align-items: start; }
+.arms-pub__parts { list-style: none; margin: 0; padding: 0; display: grid; gap: .5em; }
+
+/* ===========================================================================
+   Closing and footer
+   =========================================================================== */
+.act-arms-close { padding-block: clamp(80px, 16vh, 220px); }
+.arms-foot__say { margin-top: var(--space-4); }
+.arms-foot__grid {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: var(--space-3); flex-wrap: wrap;
+}
+.ark--foot { width: clamp(104px, 12vw, 168px); }
+.arms-foot__back { display: inline-flex; align-items: center; gap: .6em; }
+.arms-foot__arrow {
+  width: 1.6em; height: 1px; background: currentColor; position: relative;
+  transition: width var(--t-ui) var(--ease-enter);
+}
+.arms-foot__arrow::before {
   content: ""; position: absolute; left: 0; top: 50%;
   width: 6px; height: 6px;
   border-left: 1px solid currentColor; border-bottom: 1px solid currentColor;
   transform: translateY(-50%) rotate(45deg);
 }
-.a-back__t { border-bottom: 1px solid transparent; transition: border-color var(--t-ui, 260ms); }
-@media (hover: hover) {
-  .a-back:hover .a-back__arrow { width: 2.2em; }
-  .a-back:hover .a-back__t { border-bottom-color: currentColor; }
-}
-.a-back:focus-visible .a-back__t { border-bottom-color: currentColor; }
-.a-threshold__slash { color: var(--nsv-steel); }
-.a-threshold__here { color: var(--a-magenta); }
-
-/* A thumb needs 24px even where the type is 11px. The invisible area grows
-   only where the pointer is coarse, so the desktop layout is untouched. */
-@media (pointer: coarse) {
-  .a-back, .a-foot__nsv a, .a-idx { position: relative; }
-  .a-back::before, .a-foot__nsv a::before {
-    content: ""; position: absolute; inset: -11px -10px; z-index: 0;
-  }
-}
+@media (hover: hover) { .arms-foot__back:hover .arms-foot__arrow { width: 2.4em; } }
 
 /* ===========================================================================
-   The mark
-   ---------------------------------------------------------------------------
-   Built, not placed, so it holds real text, stays sharp at every size and
-   keeps exactly the proportions measured out of the artwork. Container units
-   do the work: every inner measure is a percentage of the mark's own width, so
-   a 288px mark on a phone and a 900px mark on a desk are the same drawing.
-   =========================================================================== */
-.a-mark {
-  container-type: inline-size;
-  position: relative;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: 827.72fr 325.98fr;   /* the artwork's own ratio */
-  gap: 2.3625cqw;                          /* 34.02 / 1440 */
-  aspect-ratio: 1440 / 1187.72;
-  width: 100%;
-}
-.a-blk {
-  display: grid;
-  align-content: center;
-  justify-items: center;
-  padding: 2.6cqw 3.4cqw;
-  color: #fff;
-  font-size: 4.1cqw;
-  line-height: 1.34;
-  text-align: center;
-  font-weight: 400;
-}
-.a-blk--magenta { background: var(--a-magenta); }
-.a-blk--blue    { background: var(--a-blue); }
-.a-blk__l { display: block; white-space: nowrap; }
-.a-blk__l.is-b { font-weight: 700; }
-.a-blk__c { font-size: .5em; vertical-align: .6em; font-weight: 400; margin-left: .15em; }
-
-.a-mark__brace {
-  position: absolute; inset: 0;
-  width: 100%; height: 100%;
-  pointer-events: none;
-}
-
-/* The mark at small sizes: the bracket keeps its weight relative to the block,
-   which is what makes it read as the same drawing rather than a thinner one. */
-.a-mark--sm { max-width: 240px; }
-.a-mark--lg { max-width: min(100%, 880px); }
-
-/* ===========================================================================
-   Hero
-   =========================================================================== */
-.a-hero { padding-block: clamp(38px, 7vh, 96px) var(--a-step); }
-.a-hero__in {
-  display: grid;
-  grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
-  column-gap: var(--a-gut);
-  row-gap: clamp(28px, 5vh, 64px);
-  align-items: end;
-}
-.a-kicker {
-  grid-column: 1 / -1;
-  display: flex; align-items: center; gap: .9em; flex-wrap: wrap;
-  margin: 0 0 clamp(24px, 4vh, 54px);
-  font-size: var(--a-fs-meta);
-  letter-spacing: .2em;
-  text-transform: uppercase;
-  color: var(--a-quiet);
-}
-.a-kicker__sep { width: clamp(24px, 5vw, 76px); height: 1px; background: var(--a-line); }
-.a-hero__mark { grid-column: 1; }
-.a-hero__say  { grid-column: 2; padding-bottom: .4em; }
-
-.a-wordmark {
-  margin: 0;
-  font-size: var(--a-fs-mark);
-  font-weight: 500;
-  line-height: .95;
-  letter-spacing: .12em;
-  color: var(--a-magenta);
-  white-space: nowrap;
-  text-indent: .12em;           /* the tracking's trailing space, given back */
-}
-.a-wordmark span { display: inline-block; }
-.a-tag {
-  margin: .85em 0 0;
-  font-size: clamp(12px, .52vw + 9.5px, 17px);
-  letter-spacing: .3em;
-  text-transform: uppercase;
-  color: var(--a-magenta);
-}
-.a-hero__full {
-  margin: clamp(18px, 3vh, 34px) 0 0;
-  max-width: 22ch;
-  font-size: var(--a-fs-lead);
-  line-height: 1.3;
-  color: var(--a-ink);
-}
-
-/* The mark assembles: upper blocks wipe down, lower blocks wipe up, then the
-   bracket is drawn across them. Nothing bounces and nothing glows. */
-.js [data-a-draw] .a-blk { animation: a-wipe-d 760ms cubic-bezier(.22,.7,.2,1) both; }
-.js [data-a-draw] .a-blk--short { animation-name: a-wipe-u; }
-.js [data-a-draw] .a-blk { animation-delay: calc(var(--i, 0) * 105ms); }
-@keyframes a-wipe-d { from { clip-path: inset(0 0 100% 0); } to { clip-path: inset(0); } }
-@keyframes a-wipe-u { from { clip-path: inset(100% 0 0 0); } to { clip-path: inset(0); } }
-.js [data-a-draw] .a-mark__brace path {
-  stroke-dasharray: 1104.1;
-  stroke-dashoffset: 1104.1;
-  animation: a-draw 820ms cubic-bezier(.4,.1,.2,1) 430ms both;
-}
-@keyframes a-draw { to { stroke-dashoffset: 0; } }
-.js [data-a-draw] ~ .a-hero__say .a-wordmark span {
-  animation: a-in 560ms ease var(--ease-enter, ease) backwards;
-  animation-delay: calc(760ms + var(--n) * 45ms);
-}
-
-/* ===========================================================================
-   Manifesto — statements, paced by white
-   =========================================================================== */
-.a-manifesto { padding-block: var(--a-step); }
-.a-say { display: grid; }
-.a-say--l { justify-items: start; }
-.a-say--r { justify-items: end; }
-.a-say__t {
-  margin: 0;
-  max-width: 23ch;
-  font-size: var(--a-fs-say);
-  font-weight: 400;
-  line-height: 1.2;
-  letter-spacing: -.005em;
-  text-wrap: balance;
-}
-.a-say--r .a-say__t { text-align: right; max-width: 24ch; }
-.a-say--l .a-say__t { margin-inline-start: 0; }
-@media (min-width: 900px) {
-  .a-say--l .a-say__t { margin-inline-start: calc(var(--content) * .06); }
-  .a-say--r .a-say__t { margin-inline-end: calc(var(--content) * .04); }
-}
-.a-say__div { display: grid; place-items: center; padding-block: clamp(34px, 6vh, 86px); }
-.a-ast {
-  display: block;
-  font-size: clamp(20px, 1.6vw, 30px);
-  line-height: 1;
-  color: var(--a-magenta);
-}
-
-/* ===========================================================================
-   Index — the architecture's five blocks, given a contemporary temper
-   ---------------------------------------------------------------------------
-   One rule decides the colour of every word on this page: ARMS blue is a
-   field, never a letter. White on #5C9ED6 measures 2.87:1 and ink on it 5.88,
-   so a blue block carries ink and a magenta block carries white. The mark
-   keeps white on blue because a logotype is exempt and because that is how it
-   was drawn — but nothing else does.
-   =========================================================================== */
-.a-index { padding-block: var(--a-step); }
-.a-index__list {
-  list-style: none; margin: 0; padding: 0;
-  display: grid;
-  /* the li has to carry the row's height down to the block inside it, or the
-     five blocks end at five different depths */
-  align-items: stretch;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: var(--a-gut);
-}
-.a-index__list > li { display: grid; }
-.a-idx {
-  position: relative;
-  display: grid;
-  align-content: space-between;
-  gap: clamp(28px, 7vh, 64px);
-  min-height: clamp(168px, 22vh, 250px);
-  padding: clamp(16px, 1.5vw, 26px);
-  border-radius: var(--a-r);
-  background: var(--a-blue);
-  color: var(--a-ink);              /* 5.88:1 — white here would be 2.87 */
-  text-decoration: none;
-  overflow: hidden;
-  isolation: isolate;
-}
-.a-idx--magenta { background: var(--a-magenta); color: #fff; }
-.a-idx--magenta::before { background: rgba(0, 0, 0, .18); }
-.a-idx::before {                 /* the field that moves, not the whole block */
-  content: "";
-  position: absolute; inset: 0;
-  /* each block moves away from the colour of its own text, so the hover
-     state is always the more legible one */
-  background: rgba(255, 255, 255, .26);
-  transform: scaleY(0);
-  transform-origin: bottom;
-  transition: transform var(--t-ui, 300ms) var(--ease-enter, ease);
-  z-index: -1;
-}
-.a-idx__n {
-  font-size: var(--a-fs-meta);
-  letter-spacing: .18em;
-  opacity: .82;
-}
-.a-idx__t {
-  display: block;
-  /* sized against the block, not the page: "sportovima" is the longest word
-     the index has to hold, and at --a-fs-h3 it is wider than a fifth of the
-     measure. */
-  font-size: clamp(20px, 1.15vw + 13px, 31px);
-  line-height: 1.06;
-  font-weight: 500;
-  letter-spacing: -.01em;
-}
-.a-idx__a { display: block; }
-.a-idx__p { display: block; font-weight: 300; opacity: .8; line-height: 1.3; }
-.a-idx__b { display: block; font-weight: 300; }
-.a-idx__go {
-  position: absolute; right: clamp(16px, 1.5vw, 26px); bottom: clamp(18px, 1.6vw, 28px);
-  width: 1.5em; height: 1px; background: currentColor;
-  transition: width var(--t-ui, 300ms) var(--ease-enter, ease);
-}
-.a-idx__go::before {
-  content: ""; position: absolute; right: 0; top: 50%;
-  width: 7px; height: 7px;
-  border-top: 1px solid currentColor; border-right: 1px solid currentColor;
-  transform: translateY(-50%) rotate(45deg);
-}
-@media (hover: hover) {
-  .a-idx:hover::before { transform: scaleY(1); }
-  .a-idx:hover .a-idx__go { width: 2.6em; }
-}
-.a-idx:focus-visible::before { transform: scaleY(1); }
-.a-idx.is-here::before { transform: scaleY(1); }
-
-/* ===========================================================================
-   Sections
-   =========================================================================== */
-/* These five hold a thesis and a status while their content is written, so
-   they are paced tighter than the page's full step — five rooms at full
-   height would read as five empty rooms. */
-.a-sec { padding-block: calc(var(--a-step) * .62); scroll-margin-top: 24px; }
-.a-sec + .a-sec { padding-top: calc(var(--a-step) * .44); }
-.a-sec__head {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  align-items: start;
-  gap: clamp(14px, 1.6vw, 26px);
-  margin-bottom: clamp(26px, 4vh, 54px);
-}
-.a-sec__rule {
-  width: clamp(38px, 6vw, 104px);
-  height: var(--a-bar);
-  margin-top: .42em;
-  background: var(--a-magenta);
-}
-.a-sec--blue .a-sec__rule { background: var(--a-blue); }
-.a-sec__rule--g { background: var(--a-green); }
-.a-h {
-  margin: 0;
-  font-size: var(--a-fs-h2);
-  font-weight: 500;
-  line-height: .98;
-  letter-spacing: -.02em;
-}
-.a-h__b { display: block; font-weight: 300; color: var(--a-quiet); }
-/* The index numbers its five categories; a section carries the same number so
-   the two are visibly the same list seen twice. */
-.a-sec__n {
-  display: block;
-  margin-bottom: .34em;
-  font-size: var(--a-fs-meta);
-  font-weight: 500;
-  letter-spacing: .2em;
-  /* magenta on white is 7.7:1; the blue would be 2.87, so the alternation is
-     carried by the rule beside it instead of by the number */
-  color: var(--a-magenta);
-}
-.a-h--g { color: var(--a-green); }
-.a-h3 {
-  margin: 0 0 .6em;
-  font-size: var(--a-fs-h3);
-  font-weight: 500;
-  line-height: 1.06;
-  letter-spacing: -.01em;
-}
-.a-h3--neg { color: var(--a-magenta); }
-
-.a-cols {
-  display: grid;
-  grid-template-columns: minmax(0, 7fr) minmax(0, 4fr);
-  gap: var(--a-gut);
-  align-items: start;
-}
-.a-lead {
-  margin: 0;
-  max-width: 28ch;
-  font-size: var(--a-fs-lead);
-  line-height: 1.3;
-}
-
-/* aktivnosti + šta ne radimo: two parts, one bracket between them — the same
-   figure that holds the mark together, turned on its side. */
-.a-two {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
-  gap: var(--a-gut);
-  align-items: start;
-}
-.a-two__link {
-  align-self: stretch;
-  width: var(--a-bar);
-  min-height: 100%;
-  background: var(--a-blue);
-}
-@media (max-width: 767px) {
-  .a-two { grid-template-columns: 1fr; }
-  .a-two__link { width: clamp(64px, 30vw, 160px); height: var(--a-bar); min-height: 0; }
-}
-
-.a-qs { list-style: none; margin: 0 0 clamp(22px, 3vh, 40px); padding: 0; display: grid; }
-.a-q {
-  display: grid;
-  grid-template-columns: 3.2em 1fr;
-  gap: .6em;
-  align-items: baseline;
-  padding-block: clamp(14px, 1.7vh, 22px);
-  border-top: 1px solid var(--a-line);
-  font-size: var(--a-fs-lead);
-  line-height: 1.25;
-}
-.a-q:last-child { border-bottom: 1px solid var(--a-line); }
-.a-q__n { font-size: var(--a-fs-meta); letter-spacing: .16em; color: var(--a-magenta); }
-
-.a-dir__note { margin: 0 0 1.2em; max-width: 34ch; font-size: var(--a-fs-lead); line-height: 1.3; }
-
-/* What a section says while its content is being written. */
-.a-prep {
-  display: flex; align-items: center; gap: .7em;
-  margin: 0;
-  font-size: var(--a-fs-meta);
-  letter-spacing: .16em;
-  text-transform: uppercase;
-  color: var(--a-quiet);
-}
-.a-prep__dot {
-  width: 7px; height: 7px; flex: 0 0 auto;
-  background: var(--a-green);
-  border-radius: 50%;
-}
-
-/* ===========================================================================
-   Publication — an object, not a button
-   =========================================================================== */
-.a-pub { padding-block: var(--a-step); }
-.a-pub__in {
-  display: grid;
-  grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
-  gap: var(--a-gut);
-  align-items: center;
-}
-.a-pub__obj { position: relative; max-width: 420px; }
-.a-pub__cover {
-  position: relative;
-  display: grid;
-  justify-items: center;
-  gap: clamp(14px, 2.4vh, 26px);
-  padding: clamp(30px, 4.4vw, 56px) clamp(22px, 3vw, 40px);
-  background: var(--a-green);
-  color: #fff;
-  text-align: center;
-  z-index: 1;
-  transition: translate var(--t-ui, 320ms) var(--ease-enter, ease);
-}
-.a-pub__edge {                    /* the block of pages under the cover */
-  position: absolute; inset: 7px -7px -7px 7px;
-  background:
-    linear-gradient(90deg, transparent calc(100% - 7px), rgba(7, 119, 52, .32) 0),
-    linear-gradient(0deg,  rgba(7, 119, 52, .32) 7px, transparent 0);
-}
-.a-pub__t {
-  margin: 0;
-  /* the architecture sets this title nearly the full width of its block; the
-     cover is a cover, and the title is what is printed on it */
-  font-size: clamp(25px, 2.9vw, 45px);
-  font-weight: 300;
-  line-height: 1.12;
-  letter-spacing: -.005em;
-}
-.a-pub__t span { display: block; }
-.a-pub__t span:first-child { font-weight: 700; }
-.a-ast--pub { color: #fff; font-size: 1.1em; line-height: .6; }
-.a-pub__parts { list-style: none; margin: 0; padding: 0; font-weight: 600; line-height: 1.55; }
-.a-pub__fmt { margin: 0; font-size: clamp(20px, 1.8vw, 28px); font-weight: 700; letter-spacing: .04em; }
-@media (hover: hover) {
-  .a-pub__obj:hover .a-pub__cover { translate: -3px -3px; }
-}
-.a-pub__say { display: grid; gap: clamp(16px, 2.6vh, 28px); justify-items: start; }
-
-/* ===========================================================================
-   Resources — the second layer, in green
-   =========================================================================== */
-.a-resources { padding-block: var(--a-step); }
-.a-res__list {
-  list-style: none; margin: 0 0 clamp(26px, 4vh, 48px); padding: 0;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
-  gap: var(--a-gut);
-}
-.a-res { padding-top: clamp(14px, 1.8vh, 22px); border-top: var(--a-bar) solid var(--a-green); }
-.a-res__mark { display: none; }
-.a-res__t { margin: 0 0 .35em; font-size: var(--a-fs-h3); font-weight: 500; line-height: 1.06; letter-spacing: -.01em; }
-.a-res__n { margin: 0; font-size: var(--a-fs-meta); letter-spacing: .04em; color: var(--a-quiet); line-height: 1.5; }
-
-/* ===========================================================================
-   Closing
-   =========================================================================== */
-.a-closing {
-  padding-block: clamp(80px, 16vh, 220px);
-  border-top: 1px solid var(--a-line);
-}
-.a-closing__t {
-  margin: 0;
-  font-size: clamp(30px, 7.4vw, 124px);
-  font-weight: 300;
-  line-height: 1.0;
-  letter-spacing: -.02em;
-  text-wrap: balance;
-}
-.a-closing__t span { display: inline-block; }
-
-/* ===========================================================================
-   Footer — and the way back
-   =========================================================================== */
-.a-foot {
-  padding-block: clamp(40px, 7vh, 88px);
-  background: var(--nsv-paper);
-}
-.a-foot__in {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
-  gap: clamp(24px, 4vw, 64px);
-  align-items: center;
-}
-.a-foot__mark { width: clamp(124px, 14vw, 196px); }
-.a-foot__name { margin: 0; font-size: var(--a-fs-h3); font-weight: 500; letter-spacing: .12em; color: var(--a-magenta); }
-.a-foot__sub  { margin: .5em 0 0; font-size: var(--a-fs-meta); letter-spacing: .1em; text-transform: uppercase; color: var(--a-quiet); line-height: 1.8; }
-.a-foot__nsv  { margin: 1.2em 0 0; font-size: var(--a-fs-meta); letter-spacing: .2em; text-transform: uppercase; }
-.a-foot__nsv a { color: var(--a-ink); text-decoration: none; border-bottom: 1px solid var(--nsv-steel-line); padding-bottom: 2px; }
-@media (hover: hover) { .a-foot__nsv a:hover { border-bottom-color: currentColor; } }
-
-/* ===========================================================================
-   Narrow screens — a different composition, not a thinner one
+   Narrow screens — recomposed, not stacked
    =========================================================================== */
 @media (max-width: 1023px) {
-  .a-hero__in { grid-template-columns: 1fr; }
-  .a-hero__mark, .a-hero__say { grid-column: 1; }
-  .a-hero__say { padding-bottom: 0; }
-  .a-cols, .a-pub__in { grid-template-columns: 1fr; }
-  .a-pub__obj { max-width: 340px; }
+  .ark--hero {
+    position: static;
+    translate: none;
+    width: min(62%, 300px);
+    margin-top: clamp(26px, 5vh, 54px);
+  }
+  .act-arms-ink .arms-says { padding-left: 0; }
+  .arms-brace { display: none; }
 }
 @media (max-width: 767px) {
-  .a-body { --a-step: clamp(52px, 8vh, 90px); }
-  .a-kicker__sep { display: none; }
-  .a-kicker { gap: .5em 1.1em; }
-  .a-hero__mark { max-width: 100%; }
-  .a-say__t, .a-say--r .a-say__t { max-width: none; text-align: left; }
-  .a-say--r { justify-items: start; }
-  .a-index__list { grid-template-columns: 1fr; }
-  .a-idx { min-height: 0; gap: clamp(20px, 5vh, 40px); }
-  .a-q { grid-template-columns: 2.4em 1fr; }
-  .a-foot__in { grid-template-columns: 1fr; }
-  .a-foot__mark { max-width: 180px; }
-}
-
-/* ===========================================================================
-   Reduced motion — base.css already stands every [data-reveal] up; these are
-   the microsite's own moving parts.
-   =========================================================================== */
-@media (prefers-reduced-motion: reduce) {
-  .js [data-a-draw] .a-blk,
-  .js [data-a-draw] ~ .a-hero__say .a-wordmark span {
-    animation: none !important;
-    clip-path: none !important;
-    opacity: 1 !important;
-  }
-  .js [data-a-draw] .a-mark__brace path {
-    animation: none !important;
-    stroke-dashoffset: 0 !important;
-  }
+  .arms-hero__where { justify-items: start; text-align: left; }
+  .act-arms-ink .arms-say--sm,
+  .act-arms-paper .arms-say--sm { justify-self: start; text-align: left; }
+  .arms-say--lg, .arms-say--xl { max-width: none; }
+  .index__note { display: none; }
+  .arms-foot__grid { justify-content: flex-start; gap: var(--space-2); }
 }
