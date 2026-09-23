@@ -267,39 +267,121 @@
   transform: translateY(-.1em);
   margin: 0;
 }
-/* The publication is the one of these that is not waiting. It keeps the line
-   exactly — same tab, same step under the label — and only stops being quiet,
-   because a place to go should read as one. On the green field the tab takes
-   the field's own foreground; a green mark on green is no mark at all. */
-.arms-get { color: inherit; }
-.on-arms-green .arms-prep .tab { background: currentColor; }
+/* --- The publication, as a printed mark ------------------------------------
+   The one thing in this chapter that can be taken away, so it is the one thing
+   set as an object rather than as a line of type. A single brush stroke in the
+   site's own paper, laid on the green, with the words knocked out of it — one
+   ink, which is how this whole chapter is printed. Not a button: no border, no
+   radius, no fill behind the fill, and the only curves are the ones a brush
+   makes on its own.
 
-/* The resources keep the site's index row exactly, with the green tab. */
-/* These are sentences, not labels: the site's meta treatment (uppercase, wide
-   tracking) is for labels, and reading a description in it is work. Same size
-   and colour, normal case. */
-.index__note {
-  margin-left: auto;
-  padding-left: var(--space-3);
-  font-family: var(--font-display);
-  font-size: var(--fs-small);
-  line-height: 1.35;
-  color: var(--nsv-steel);
-  text-align: right;
-  max-width: 30ch;
+   The mark is the target, not the words on it. The stroke keeps the proportion
+   it was drawn at and the type is measured against the mark's own width, so
+   the two scale as one drawing from the phone to the widest column and the
+   words never drift off the paint. */
+.arms-get {
+  --get-w: 340px;
+  display: block;
+  position: relative;
+  width: min(var(--get-w), 100%);
+  aspect-ratio: 320 / 104;
+  container-type: inline-size;
+  margin-top: var(--space-3);
+  color: var(--nsv-arms-green);        /* the words, knocked out of the paint */
+  text-decoration: none;
 }
-@media (max-width: 1023px) { .index__note { max-width: 22ch; } }
-.index__row--static { cursor: default; }
-.arms-res .tab { background: var(--nsv-arms-green); }
+.arms-get__brush {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  fill: var(--nsv-paper);
+  transform-origin: 8% 50%;            /* it spreads from where the brush landed */
+  transition: transform var(--t-ui) var(--ease-editorial);
+}
+/* The row inside the paint is the row this site uses everywhere it offers
+   somewhere to go: the name at one end, the mark that answers it at the other. */
+.arms-get__in {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: space-between;
+  /* The stroke thins and turns in toward its lower right, so the mark that
+     answers the name has to stand well clear of that edge — at rest and at the
+     length it reaches when it is pointed at. */
+  padding-inline: 8.5cqw 15.5cqw;
+  transition: transform var(--t-ui) var(--ease-editorial);
+}
+.arms-get__say { display: grid; gap: .42em; }
+.arms-get__do {
+  font-family: var(--font-display);
+  font-size: 7.6cqw;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: .01em;
+  text-transform: uppercase;
+}
+.arms-get__n {
+  font-family: var(--font-display);
+  font-size: 3.7cqw;
+  line-height: 1;
+  letter-spacing: var(--track-meta);
+  text-transform: uppercase;
+}
+/* The index rows answer with a rule that lengthens when it is pointed at. This
+   is the same mark and the same gesture, turned a quarter, because what this
+   row offers goes down rather than across. */
+.arms-get__go {
+  flex: 0 0 auto;
+  position: relative;
+  width: var(--rule-thin);
+  height: 5.6cqw;
+  background: currentColor;
+  transition: height var(--t-ui) var(--ease-editorial);
+}
+.arms-get__go::after {
+  content: "";
+  position: absolute; left: 50%; bottom: 0;
+  width: 2.3cqw; height: 2.3cqw;
+  border-left: var(--rule-thin) solid currentColor;
+  border-bottom: var(--rule-thin) solid currentColor;
+  transform: translate(-50%, 0) rotate(-45deg);
+  transform-origin: 50% 100%;
+}
 
-/* ===========================================================================
-   Publication — a title set the way this site sets titles
-   =========================================================================== */
-/* The stacks take their type from the host's .jstack, as every other stack on
-   the site does; these only place them. */
-.arms-pub__t { margin-top: clamp(20px, 4vh, 54px); }
-.arms-pub__foot { margin-top: clamp(26px, 5vh, 64px); align-items: start; }
-.arms-pub__parts { list-style: none; margin: 0; padding: 0; display: grid; gap: .5em; }
+/* One gesture, not three: the paint spreads from where it landed, what is
+   written on it travels with it, and the mark reaches further down. */
+@media (hover: hover) {
+  .arms-get:hover .arms-get__brush { transform: scale(1.026, 1.05); }
+  .arms-get:hover .arms-get__in { transform: translateX(3px); }
+  .arms-get:hover .arms-get__go { height: 8.4cqw; }
+}
+.arms-get:focus-visible { outline: none; }
+.arms-get:focus-visible .arms-get__brush { transform: scale(1.026, 1.05); }
+.arms-get:focus-visible .arms-get__go { height: 8.4cqw; }
+/* Focus has to be legible against the paint, so it is drawn on the paint. */
+.arms-get:focus-visible .arms-get__say {
+  outline: 2px solid var(--nsv-arms-green);
+  outline-offset: 7px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .arms-get__brush, .arms-get__in, .arms-get__go { transition: none; }
+  .arms-get:hover .arms-get__brush,
+  .arms-get:focus-visible .arms-get__brush,
+  .arms-get:hover .arms-get__in { transform: none; }
+}
+/* A thumb asks for more than a pointer does, and below this the column is
+   narrower than the mark's natural width, so the mark takes the column. */
+@media (max-width: 899px) {
+  .arms-get { --get-w: 460px; }
+}
+/* Between the phone and the desktop the grid is still twelve columns wide and
+   this one is four of them — 225px on a 768 tablet. That was room enough for
+   the two words of quiet type that used to stand here and is not room for the
+   mark: at that width it reads as a sticker beside the title rather than as
+   the thing to take away. So in this band alone the two halves of the row
+   stand one above the other, which is what they already do on a phone. Above
+   it nothing moves; the desktop composition is exactly as it was. */
+@media (min-width: 768px) and (max-width: 899px) {
+  .arms-pub__foot > * { grid-column: 1 / -1; }
+  .arms-pub__foot > * + * { margin-top: var(--space-3); }
+}
 
 /* ===========================================================================
    Closing and footer

@@ -303,6 +303,48 @@ def plate():
 PUB_STEM = "arms-30-predloga-za-roditelja"
 PUB_PAGES = 40
 
+# One pass of a loaded flat brush, drawn on purpose rather than generated.
+# What makes it a brush and not a cut shape is that both ends lean the same
+# way: a flat brush is held at an angle and keeps that angle from the moment
+# it lands to the moment it lifts. It thins as it travels, because the hand
+# rises, and the lower edge is the uneven one, because that is the edge the
+# bristles drag. Earlier drawings gave it a split tail; at the size this is
+# actually printed, a split reads as an arrowhead and pulls the eye to the
+# wrong end, so the mark stays quiet and lets the words be the thing.
+# It carries currentColor so the field decides what it is painted in.
+PUB_BRUSH = (
+    '<svg class="arms-get__brush" viewBox="0 0 320 104" aria-hidden="true" '
+    'focusable="false">'
+    '<path d="M20 16 L112 13 L204 16 L272 12 C296 14 305 18 303 24 L300 48'
+    ' L297 77 C297 82 292 84 284 84 L232 86 L198 83 L152 90 L104 86 L44 89'
+    ' C26 88 16 85 14 80 L13 50 Z"/>'
+    '</svg>')
+
+
+def pub_get():
+    """The way out of the page: the publication itself.
+
+    It had been a line of the site's quietest type, which is what the section
+    uses to say a thing is not ready — the wrong voice for the one place here
+    that is ready. It is now a painted mark with the words knocked out of it,
+    which is the register the rest of this chapter is set in: a printed mark,
+    not a button. The whole mark is the target, not the words inside it.
+    """
+    return (
+        '<a class="arms-get" href="/assets/media/%s.pdf?v=%s" download '
+        'data-cursor="Preuzmi" '
+        'aria-label="Preuzmi publikaciju 30 predloga za roditelja maloletnog '
+        'sportiste, PDF, %d strana">'
+        '%s'
+        '<span class="arms-get__in">'
+        '<span class="arms-get__say">'
+        '<span class="arms-get__do">preuzmi PDF</span>'
+        '<span class="arms-get__n">%d strana</span>'
+        '</span>'
+        '<i class="arms-get__go" aria-hidden="true"></i>'
+        '</span></a>'
+        % (PUB_STEM, media_v(PUB_STEM), PUB_PAGES, PUB_BRUSH, PUB_PAGES))
+
 
 def publication():
     """A publication on a green field, its title set the way this site sets a
@@ -320,8 +362,7 @@ def publication():
         <ul class="arms-pub__parts">%(parts)s</ul>
       </div>
       <div class="c4 s8" data-reveal="up" data-delay="80">
-        <span class="meta meta--quiet">PDF</span>
-        %(prep)s
+        %(get)s
       </div>
     </div>
   </div>
@@ -334,13 +375,7 @@ def publication():
         "stack": jstack(PUB_TITLE, jmax=92, cls="jstack arms-pub__t"),
         "parts": "".join('<li><span class="meta">%s</span></li>' % esc(p)
                          for p in PUB_PARTS),
-        # The same line the category uses while it waits, with the same tab and
-        # the same step below the label — only now it is somewhere to go.
-        "prep": ('<p class="arms-prep arms-get">'
-                 '<i class="tab" aria-hidden="true"></i>'
-                 '<a class="tlink tlink--invert" href="/assets/media/%s.pdf?v=%s" '
-                 'data-cursor="Preuzmi" download>preuzmi &middot; %d strana</a></p>'
-                 % (PUB_STEM, media_v(PUB_STEM), PUB_PAGES)),
+        "get": pub_get(),
     }
 
 
