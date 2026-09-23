@@ -397,6 +397,49 @@ figure { margin: 0; }
    Not an overlay sliding over the page: the viewport becomes a second
    typographic canvas, wiped in by a clip from the top edge. */
 .menu-panel {
+  /* --- How the list is sized ------------------------------------------------
+     The type used to follow the window's width alone, which is right until the
+     window is wide and short. Measured at 1440x600: the width rule asks for
+     105px a line, the seven names then stand 785 tall, and the band between
+     the masthead and the legal line is 480. The list ran 153px past the legal
+     line and the panel itself scrolled by 99, so the last name was reachable
+     only by scrolling a menu that looks like it has nowhere to scroll.
+
+     The height is now part of the same expression. --menu-fit is the largest
+     line that still lets every row stand inside the band:
+
+         (visible height - the panel's own chrome - the gaps) / (rows x leading)
+
+     chrome is measured, not guessed, and it is written as the parts it is made
+     of rather than as one number: the panel's own top padding, which follows
+     the window; the masthead row at 40 and the legal row at 18; the panel's
+     bottom padding; and twelve pixels of air, so the first and last names
+     never come to rest against the rule above or the legal line below.
+
+     Rows are declared per menu, because this panel serves two of them — and
+     the count is what the rows actually cost, so a row set smaller than the
+     list counts as the fraction it occupies.
+
+     It is the third term of a min(), so on any window tall enough the width
+     rule still wins and the menu is exactly what it was. What changed at the
+     1440x900 reference is the seventh name: with six the width rule still
+     decides and the menu is untouched, and with seven the same rule put the
+     last name's ink 8px into the legal line. The fit now takes that line from
+     105 to 103 and leaves 3px of air above and below. */
+  --menu-rows: 7;
+  --menu-gap: clamp(2px, .4vh, 10px);
+  --menu-chrome: calc(clamp(14px, 1.5vw, 26px) + 58px + var(--space-3) + 12px);
+  --menu-fit: calc((100svh - var(--menu-chrome)
+                    - (var(--menu-rows) - 1) * var(--menu-gap))
+                   / (var(--menu-rows) * 1.044));
+  /* The longest name in the list decides how wide a line may be. For this
+     menu that is WORKSHOPS, and a tenth of the page has always been its
+     measure; a menu with longer names declares its own. */
+  --menu-word: calc(var(--vw, 100vw) / 10);
+  /* One size for the list, declared once so a row that sits at a different
+     level in the hierarchy can be a fraction of it rather than a new number. */
+  --menu-fs: min(clamp(34px, 7.4vw, 108px), var(--menu-word), var(--menu-fit));
+
   position: fixed; inset: 0;
   z-index: var(--z-menu);
   background: var(--nsv-yellow);
@@ -429,7 +472,7 @@ figure { margin: 0; }
 /* The nav fills the middle band so the list can actually sit in the centre
    of the viewport rather than at the top of its own content box. */
 .menu-panel > nav { display: grid; align-content: center; min-height: 0; }
-.menu-list { display: grid; align-content: center; gap: clamp(2px, .4vh, 10px); }
+.menu-list { display: grid; align-content: center; gap: var(--menu-gap); }
 .menu-list li { overflow: clip; }
 .menu-list a {
   display: flex; align-items: baseline; gap: var(--space-2);
@@ -442,8 +485,8 @@ figure { margin: 0; }
      the size by the page's own width, so the longest name always fits. It is
      only ever the smaller of the two below ~340px; every wider screen is set
      exactly as before. */
-  font-size: min(clamp(34px, 7.4vw, 108px), calc(var(--vw, 100vw) / 10));
-  line-height: 1.04;
+  font-size: var(--menu-fs);
+  line-height: 1.044;
   letter-spacing: var(--track-display);
   text-transform: uppercase;
   transform: translateY(105%);

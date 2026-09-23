@@ -77,7 +77,11 @@ RESOURCES = (
 PUB_TITLE = ("30 PREDLOGA", "ZA RODITELJA", "MALOLETNOG", "SPORTISTE")
 PUB_PARTS = ("šta znati (10)", "šta raditi (10)", "šta ne raditi (10)")
 
-MENU_ROWS = [("arms", "#ciljevi",    "ciljevi",              False),
+# The first row belongs to the house, not to the association: same list, same
+# type, one level up — smaller, with the arrow the microsite already uses for
+# its way back, and set apart by space rather than by a rule or a box.
+MENU_ROWS = [(None,   "/",            "newsportvision",       False, True),
+             ("arms", "#ciljevi",    "ciljevi",              False),
              ("arms", "#aktivnosti", "aktivnosti",           False),
              ("arms", "#clanstvo",   "članstvo",             False),
              ("arms", "#odeljenja",  "odeljenja po sportovima", False),
@@ -392,10 +396,11 @@ def shell(lang, title, description, body):
     """The host's head, exactly: same boot script, same four stylesheets, same
     justification engine and behaviour script, same versioning. arms.css is a
     fifth sheet that adds ARMS's surfaces and takes nothing away."""
+    # The way back is now a destination in the list itself, so the legal row
+    # keeps only what it is for.
     menu_foot = (
-        '<a class="meta tlink tlink--invert" href="%s">newsportvision</a>'
-        '<a class="meta tlink tlink--invert" href="mailto:office@newsportvision.com">'
-        'office@newsportvision.com</a>' % esc(url(lang, "/")))
+        '<a class="meta tlink tlink--invert" '
+        'href="mailto:office@newsportvision.com">office@newsportvision.com</a>')
     return """<!doctype html>
 <html lang="sr-Latn">
 <head>

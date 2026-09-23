@@ -17,6 +17,60 @@
    field and an edge only.
    =========================================================================== */
 
+/* --- The menu, one level up ------------------------------------------------
+   The association's index is the list; the house it belongs to sits above it,
+   in the same face, the same weight and the same case — only smaller, with the
+   arrow this microsite already uses to point home, and separated by space
+   rather than by a rule or a box. Its row is counted in --menu-rows, so the
+   height that sizes the list accounts for it too. */
+/* Six names plus the house above them; the house's row is set at .42 of the
+   list, so it counts as a little over half a row. */
+.arms .menu-panel { --menu-rows: 6.6; }
+
+/* ODELJENJA PO SPORTOVIMA is this list's longest name and the one that decides
+   its measure. Measured, not guessed: set in the menu's face and tracking it
+   runs 14.84em, and it has to clear the tab and the gap beside it. Above 900px
+   that keeps it on one line at every width. */
+@media (min-width: 900px) {
+  .arms .menu-panel {
+    --menu-word: calc((var(--content) - clamp(38px, 3.8vw, 64px) - var(--space-2)) / 14.9);
+  }
+}
+/* Below that, twenty-three characters cannot be one readable line, so the name
+   takes two — deliberately. The row is counted in --menu-rows and the list
+   opens up, so the second line reads as the same entry rather than the next
+   one. */
+@media (max-width: 899px) {
+  .arms .menu-panel { --menu-rows: 7.7; --menu-gap: clamp(9px, .26em, 22px); }
+}
+/* The size sits on the row, not just on the link, so the row's own line box
+   shrinks with it; left on the link, the row still reserved a full line of the
+   big face and quietly cost the list an entire entry of height. */
+.arms .menu-list .menu-up {
+  font-size: calc(var(--menu-fs) * .42);
+  margin-bottom: calc(var(--menu-gap) * 3 + var(--menu-fs) * .18);
+}
+.arms .menu-list .menu-up a {
+  font-size: inherit;
+  gap: var(--space-1);
+  align-items: center;
+}
+.menu-up__arrow {
+  flex: 0 0 auto;
+  width: 1.1em; height: 1px;
+  background: currentColor;
+  position: relative;
+  transition: width var(--t-ui) var(--ease-enter);
+}
+.menu-up__arrow::before {
+  content: ""; position: absolute; left: 0; top: 50%;
+  width: .34em; height: .34em;
+  border-left: 1px solid currentColor; border-bottom: 1px solid currentColor;
+  transform: translateY(-50%) rotate(45deg);
+}
+@media (hover: hover) { .menu-list .menu-up a:hover .menu-up__arrow { width: 1.7em; } }
+.menu-list .menu-up a:focus-visible .menu-up__arrow { width: 1.7em; }
+
 /* --- The acts breathe like the host's ------------------------------------
    Every act on this site is padded with --act; these were relying on their
    contents' own margins, so a coloured field began at its first letter. The

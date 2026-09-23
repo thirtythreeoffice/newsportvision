@@ -306,12 +306,19 @@ def menu_panel(lang, path, active, rows=None, foot=None):
     rows = rows if rows is not None else [
         (ax, url(lang, href), labels[lang], active == key)
         for key, href, labels, ax in NAV]
-    for ax, href, label, cur in rows:
+    for row in rows:
+        ax, href, label, cur = row[:4]
+        # a fifth value marks a row that belongs one level up from the list
+        up = len(row) > 4 and row[4]
         items.append(
-            '<li%s><a href="%s"%s><i class="tab menu-tab" aria-hidden="true"></i>'
+            '<li%s%s><a href="%s"%s>%s'
             '<span class="mword">%s</span></a></li>'
-            % (' data-axis="%s"' % ax if ax else '',
-               esc(href), ' aria-current="page"' if cur else '', esc(label))
+            % (' class="menu-up"' if up else '',
+               ' data-axis="%s"' % ax if ax else '',
+               esc(href), ' aria-current="page"' if cur else '',
+               '<i class="menu-up__arrow" aria-hidden="true"></i>' if up
+               else '<i class="tab menu-tab" aria-hidden="true"></i>',
+               esc(label))
         )
     return (
         '<div class="menu-panel" id="menu" aria-hidden="true">'
