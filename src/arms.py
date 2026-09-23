@@ -25,7 +25,7 @@ column to the centre of the other.
 """
 
 from render import (ASSET_V, INLINE_BOOT, BASE, esc, site_header,
-                    menu_panel, url)                                # noqa: E402
+                    menu_panel, url, media_v)                       # noqa: E402
 
 # ---------------------------------------------------------------------------
 # Words — transcribed, never written
@@ -139,8 +139,11 @@ def mark(cls=""):
     alt = ("A.R.M.S. — asocijacija roditelja maloletnih sportista. "
            "Udruženje građana, Beograd, Srbija, 2025. NewSportVision koncept. "
            "Tok pozitivne energije.")
-    return ('<img class="ark %s" src="/assets/media/arms-mark.svg" alt="%s" '
-            'width="1701" height="1701" decoding="async">' % (cls, esc(alt)))
+    # Media here is served for a year, so the mark arrives under a URL that
+    # changes when the artwork does — the same rule every photograph follows.
+    return ('<img class="ark %s" src="/assets/media/arms-mark.svg?v=%s" alt="%s" '
+            'width="1701" height="1701" decoding="async">'
+            % (cls, media_v("arms-mark"), esc(alt)))
 
 
 # ---------------------------------------------------------------------------
@@ -295,11 +298,17 @@ def plate():
 </section>""" % mark("ark--plate")
 
 
+# The publication itself, as supplied. Forty pages, the three parts the list
+# below names, and the file the visitor actually leaves with.
+PUB_STEM = "arms-30-predloga-za-roditelja"
+PUB_PAGES = 40
+
+
 def publication():
     """A publication on a green field, its title set the way this site sets a
     title: justified to the measure. The link is a link — this site does not
-    use pill buttons, and a download that does not exist yet is not dressed up
-    as one that does."""
+    use pill buttons, and now that the file exists the line says what it is
+    and how long it is rather than that it is coming."""
     return """
 <section class="act-arms-pub on-arms-green" data-field="ink" aria-labelledby="arms-pub">
   <div class="wrap">
@@ -325,7 +334,13 @@ def publication():
         "stack": jstack(PUB_TITLE, jmax=92, cls="jstack arms-pub__t"),
         "parts": "".join('<li><span class="meta">%s</span></li>' % esc(p)
                          for p in PUB_PARTS),
-        "prep": prep("Publikacija se priprema za preuzimanje."),
+        # The same line the category uses while it waits, with the same tab and
+        # the same step below the label — only now it is somewhere to go.
+        "prep": ('<p class="arms-prep arms-get">'
+                 '<i class="tab" aria-hidden="true"></i>'
+                 '<a class="tlink tlink--invert" href="/assets/media/%s.pdf?v=%s" '
+                 'data-cursor="Preuzmi" download>preuzmi &middot; %d strana</a></p>'
+                 % (PUB_STEM, media_v(PUB_STEM), PUB_PAGES)),
     }
 
 

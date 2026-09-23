@@ -267,6 +267,12 @@
   transform: translateY(-.1em);
   margin: 0;
 }
+/* The publication is the one of these that is not waiting. It keeps the line
+   exactly — same tab, same step under the label — and only stops being quiet,
+   because a place to go should read as one. On the green field the tab takes
+   the field's own foreground; a green mark on green is no mark at all. */
+.arms-get { color: inherit; }
+.on-arms-green .arms-prep .tab { background: currentColor; }
 
 /* The resources keep the site's index row exactly, with the green tab. */
 /* These are sentences, not labels: the site's meta treatment (uppercase, wide
