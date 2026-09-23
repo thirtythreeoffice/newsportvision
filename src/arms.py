@@ -321,6 +321,23 @@ PUB_BRUSH = (
     '</svg>')
 
 
+# What a download is, drawn from the two marks this site is already made of: a
+# line, and a rule under it. The rule is the tray the file lands on, and it is
+# what makes the mark read as download at a glance rather than as next or
+# scroll. Square caps and mitred joins, because nothing here is rounded.
+# It had been built from hairlines, at the weight the site rules its long
+# horizontals at — right across a whole row, far too little for a mark of this
+# size standing beside a word set at 700.
+PUB_ARROW = (
+    '<svg class="arms-get__go" viewBox="0 0 24 26" aria-hidden="true" '
+    'focusable="false" fill="none" stroke="currentColor" stroke-width="2.4">'
+    '<g class="arms-get__fall">'
+    '<path d="M12 2V15.5"/><path d="M5.5 10L12 16.5L18.5 10"/>'
+    '</g>'
+    '<path d="M3 24H21"/>'
+    '</svg>')
+
+
 def pub_get():
     """The way out of the page: the publication itself.
 
@@ -341,9 +358,10 @@ def pub_get():
         '<span class="arms-get__do">preuzmi PDF</span>'
         '<span class="arms-get__n">%d strana</span>'
         '</span>'
-        '<i class="arms-get__go" aria-hidden="true"></i>'
+        '%s'
         '</span></a>'
-        % (PUB_STEM, media_v(PUB_STEM), PUB_PAGES, PUB_BRUSH, PUB_PAGES))
+        % (PUB_STEM, media_v(PUB_STEM), PUB_PAGES, PUB_BRUSH, PUB_PAGES,
+           PUB_ARROW))
 
 
 def publication():

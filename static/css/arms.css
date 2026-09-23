@@ -304,7 +304,7 @@
   display: flex; align-items: center; justify-content: space-between;
   /* The stroke thins and turns in toward its lower right, so the mark that
      answers the name has to stand well clear of that edge — at rest and at the
-     length it reaches when it is pointed at. */
+     depth the arrow reaches when it is pointed at. */
   padding-inline: 8.5cqw 15.5cqw;
   transition: transform var(--t-ui) var(--ease-editorial);
 }
@@ -324,44 +324,48 @@
   letter-spacing: var(--track-meta);
   text-transform: uppercase;
 }
-/* The index rows answer with a rule that lengthens when it is pointed at. This
-   is the same mark and the same gesture, turned a quarter, because what this
-   row offers goes down rather than across. */
+/* The mark is drawn to the word beside it, not to the site's rule weight: it
+   stands as tall as PREUZMI PDF is set, and its stroke is a little under half
+   that word's own, so it reads as a companion to the type rather than as a
+   hairline that happens to be nearby. */
 .arms-get__go {
   flex: 0 0 auto;
-  position: relative;
-  width: var(--rule-thin);
-  height: 5.6cqw;
-  background: currentColor;
-  transition: height var(--t-ui) var(--ease-editorial);
+  width: 6.6cqw;
+  height: auto;
+  overflow: visible;
+  stroke-linecap: square;
+  stroke-linejoin: miter;
+  /* It stands on the centre of the two lines. Pulling it up onto the first
+     line reads better at the desktop size, but the step that would do it can
+     only be written against the gap between the lines, and that gap is set in
+     the inherited text size rather than in the mark's own — 3.2 of the mark's
+     hundredths at 1440 and 1.6 at 768 — so a single step cannot hold at both.
+     Centred is true at every width, which is worth more than the half-line. */
+  align-self: center;
 }
-.arms-get__go::after {
-  content: "";
-  position: absolute; left: 50%; bottom: 0;
-  width: 2.3cqw; height: 2.3cqw;
-  border-left: var(--rule-thin) solid currentColor;
-  border-bottom: var(--rule-thin) solid currentColor;
-  transform: translate(-50%, 0) rotate(-45deg);
-  transform-origin: 50% 100%;
-}
+/* Only the arrow falls. The rule it falls toward stays where it is, so the
+   movement is the file landing rather than the whole mark sliding. */
+.arms-get__fall { transition: transform 260ms var(--ease-editorial); }
 
 /* One gesture, not three: the paint spreads from where it landed, what is
    written on it travels with it, and the mark reaches further down. */
 @media (hover: hover) {
   .arms-get:hover .arms-get__brush { transform: scale(1.026, 1.05); }
   .arms-get:hover .arms-get__in { transform: translateX(3px); }
-  .arms-get:hover .arms-get__go { height: 8.4cqw; }
+  .arms-get:hover .arms-get__fall { transform: translateY(3px); }
 }
 .arms-get:focus-visible { outline: none; }
 .arms-get:focus-visible .arms-get__brush { transform: scale(1.026, 1.05); }
-.arms-get:focus-visible .arms-get__go { height: 8.4cqw; }
+.arms-get:focus-visible .arms-get__fall { transform: translateY(3px); }
 /* Focus has to be legible against the paint, so it is drawn on the paint. */
 .arms-get:focus-visible .arms-get__say {
   outline: 2px solid var(--nsv-arms-green);
   outline-offset: 7px;
 }
 @media (prefers-reduced-motion: reduce) {
-  .arms-get__brush, .arms-get__in, .arms-get__go { transition: none; }
+  .arms-get__brush, .arms-get__in, .arms-get__fall { transition: none; }
+  .arms-get:hover .arms-get__fall,
+  .arms-get:focus-visible .arms-get__fall { transform: none; }
   .arms-get:hover .arms-get__brush,
   .arms-get:focus-visible .arms-get__brush,
   .arms-get:hover .arms-get__in { transform: none; }
