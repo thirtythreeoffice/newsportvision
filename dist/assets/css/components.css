@@ -416,22 +416,26 @@ figure { margin: 0; }
      bottom padding; and twelve pixels of air, so the first and last names
      never come to rest against the rule above or the legal line below.
 
-     Rows are declared per menu, because this panel serves two of them — and
-     the count is what the rows actually cost, so a row set smaller than the
-     list counts as the fraction it occupies.
+     The row count is not written here. The builder counts the list it just
+     wrote and puts the total on the panel, so a name added or taken away
+     re-sizes the type on its own and no number here can fall behind the menu.
+     A row set smaller than the list counts as the fraction it occupies. The
+     value below is only what applies if that attribute is ever missing.
+     --menu-extra is for a name that takes a second line at a given width:
+     the line is real, so the count has to know about it.
 
      It is the third term of a min(), so on any window tall enough the width
-     rule still wins and the menu is exactly what it was. What changed at the
-     1440x900 reference is the seventh name: with six the width rule still
-     decides and the menu is untouched, and with seven the same rule put the
-     last name's ink 8px into the legal line. The fit now takes that line from
-     105 to 103 and leaves 3px of air above and below. */
-  --menu-rows: 7;
+     rule still wins and the menu is exactly what it was — at the 1440x900
+     reference the six names are set by width, at 105px, exactly as approved,
+     and the fit only takes over as the window gets shorter. */
+  --menu-rows: 6;
+  --menu-extra: 0;
+  --menu-tally: calc(var(--menu-rows) + var(--menu-extra));
   --menu-gap: clamp(2px, .4vh, 10px);
   --menu-chrome: calc(clamp(14px, 1.5vw, 26px) + 58px + var(--space-3) + 12px);
   --menu-fit: calc((100svh - var(--menu-chrome)
-                    - (var(--menu-rows) - 1) * var(--menu-gap))
-                   / (var(--menu-rows) * 1.044));
+                    - (var(--menu-tally) - 1) * var(--menu-gap))
+                   / (var(--menu-tally) * 1.044));
   /* The longest name in the list decides how wide a line may be. For this
      menu that is WORKSHOPS, and a tenth of the page has always been its
      measure; a menu with longer names declares its own. */

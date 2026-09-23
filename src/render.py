@@ -45,9 +45,12 @@ NAV = [
     ("about",     "/about/",     {"en": "About Us",   "it": "Chi siamo"}, "culture"),
     ("workshops", "/workshops/", {"en": "Workshops",  "it": "Laboratori"}, "culture"),
     ("help-desk", "/help-desk/", {"en": "Help Desk",  "it": "Help Desk"}, "sport"),
-    # A concept of the house, and the menu says so in the house's own voice.
-    ("arms",      "/arms/",      {"en": "A.R.M.S.",   "it": "A.R.M.S."},  "arms"),
 ]
+# A.R.M.S. is not one of these. It is a concept the house offers, reached
+# through SERVICES, where it is listed with the rest of what the house does —
+# and from the home page's own index of them. This menu stays the house's
+# sections; the way in is the content that is about it.
+
 
 # The three links the live site keeps in its header bar, in its own order.
 HEADER_LINKS = ["services", "products", "about"]
@@ -306,6 +309,13 @@ def menu_panel(lang, path, active, rows=None, foot=None):
     rows = rows if rows is not None else [
         (ax, url(lang, href), labels[lang], active == key)
         for key, href, labels, ax in NAV]
+    # What the list costs in rows, counted from the list itself so that adding
+    # or removing a name re-sizes the type without anyone editing a number. A
+    # row set one level up is smaller and costs less than a whole one; .6 is
+    # what it measures, its own line plus the space that sets it apart.
+    cost = 0.0
+    for row in rows:
+        cost += .6 if (len(row) > 4 and row[4]) else 1
     for row in rows:
         ax, href, label, cur = row[:4]
         # a fifth value marks a row that belongs one level up from the list
@@ -321,7 +331,7 @@ def menu_panel(lang, path, active, rows=None, foot=None):
                esc(label))
         )
     return (
-        '<div class="menu-panel" id="menu" aria-hidden="true">'
+        '<div class="menu-panel" id="menu" aria-hidden="true" style="--menu-rows:%s">'
         '<div class="wrap header-inner">'
         '%s'
         '<nav class="header-nav">'
@@ -332,7 +342,8 @@ def menu_panel(lang, path, active, rows=None, foot=None):
         '</button></nav></div>'
         '<nav class="wrap" aria-label="%s"><ul class="menu-list">%s</ul></nav>'
         '<div class="wrap menu-foot">%s</div></div>'
-    ) % (masthead(lang, tag="span"),
+    ) % (("%.2f" % cost).rstrip("0").rstrip("."),
+         masthead(lang, tag="span"),
          "" if rows is not None else lang_switch(lang, path),
          esc(ui["close"]),
          esc(ui["menu"]), "".join(items),

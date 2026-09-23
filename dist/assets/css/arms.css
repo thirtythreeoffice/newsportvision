@@ -23,10 +23,6 @@
    arrow this microsite already uses to point home, and separated by space
    rather than by a rule or a box. Its row is counted in --menu-rows, so the
    height that sizes the list accounts for it too. */
-/* Six names plus the house above them; the house's row is set at .42 of the
-   list, so it counts as a little over half a row. */
-.arms .menu-panel { --menu-rows: 6.6; }
-
 /* ODELJENJA PO SPORTOVIMA is this list's longest name and the one that decides
    its measure. Measured, not guessed: set in the menu's face and tracking it
    runs 14.84em, and it has to clear the tab and the gap beside it. Above 900px
@@ -41,7 +37,7 @@
    opens up, so the second line reads as the same entry rather than the next
    one. */
 @media (max-width: 899px) {
-  .arms .menu-panel { --menu-rows: 7.7; --menu-gap: clamp(9px, .26em, 22px); }
+  .arms .menu-panel { --menu-extra: 1.1; --menu-gap: clamp(9px, .26em, 22px); }
 }
 /* The size sits on the row, not just on the link, so the row's own line box
    shrinks with it; left on the link, the row still reserved a full line of the
