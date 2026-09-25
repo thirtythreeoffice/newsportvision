@@ -34,8 +34,27 @@
 
   var state = { who: "", sport: "", topic: "", step: 1 };
 
+  /* Every answer this instrument accepts is one of its own buttons. The
+     values arrive from the address bar, where anything can be typed, so they
+     are looked up among the buttons rather than written into a selector: a
+     quote in a hand-edited link used to throw on load, and since the bad value
+     stayed in the state, every tap after it threw again. All 172 legacy links
+     into this page name values that are buttons, so none of them is refused. */
+  var byGroup = Object.create(null);
+  Array.prototype.forEach.call(root.querySelectorAll(".opt[data-group]"), function (b) {
+    var g = byGroup[b.dataset.group] || (byGroup[b.dataset.group] = Object.create(null));
+    g[b.dataset.value] = b;
+  });
+
+  function option(group, value) {
+    var g = byGroup[group];
+    return (g && value && g[value]) || null;
+  }
+
+  function known(group, value) { return option(group, value) ? value : ""; }
+
   function labelFor(group, value) {
-    var btn = root.querySelector('.opt[data-group="' + group + '"][data-value="' + value + '"]');
+    var btn = option(group, value);
     return btn ? btn.querySelector(".opt__name").textContent.trim() : value;
   }
 
@@ -106,9 +125,9 @@
 
   function readUrl() {
     var p = new URLSearchParams(location.search);
-    state.who = p.get("who") || "";
-    state.sport = p.get("sport") || "";
-    state.topic = p.get("topic") || "";
+    state.who = known("who", p.get("who"));
+    state.sport = known("sport", p.get("sport"));
+    state.topic = known("topic", p.get("topic"));
 
     /* A legacy link that named a sport but no audience was, by definition, a
        person asking about that sport. */

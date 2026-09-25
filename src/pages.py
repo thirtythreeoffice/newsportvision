@@ -456,6 +456,15 @@ CHAPTER_GRID = [
     ("c6 s1", "c5 s8",  "on-ink",   "ink"),
 ]
 
+# How wide a chapter's photograph is drawn, by the columns it spans, so the
+# browser picks the file it actually needs. Measured at the desktop reference:
+# six columns draw at 44.7vw and five at 37.1vw; each carries a little
+# headroom. All four used to say 47vw, which is right for the first chapter
+# and a quarter too wide for the other three — on a high-density screen that
+# was the 1600px file where the 1200px one was enough.
+CHAPTER_SIZES = {6: "(max-width:767px) 100vw, 47vw",
+                 5: "(max-width:767px) 100vw, 39vw"}
+
 
 def about(lang):
     a = ABOUT[lang]
@@ -526,7 +535,8 @@ def about(lang):
             "year": esc(ch["year"]), "tcls": tcls, "icls": icls,
             "label": esc(ch["label"]),
             "body": body_html,
-            "fig": figure(mkey, lang, cls=fcls, sizes="(max-width:767px) 100vw, 47vw",
+            "fig": figure(mkey, lang, cls=fcls,
+                          sizes=CHAPTER_SIZES[int(icls.split()[0][1:])],
                           axis=cax),
         })
 

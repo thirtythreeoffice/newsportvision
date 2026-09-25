@@ -50,9 +50,10 @@
           * A browser hands a fresh navigation a restored offset anyway.
 
         The correction is made before the first frame is painted, and again
-        once after load for a browser that restores late. It is never made
-        on a timer, and it stands down for good the moment the reader
-        touches the page, so it cannot pull them back up from under a
+        once after load for a browser that restores late — on the next frame
+        that is actually drawn, and only if the page is being looked at. It is
+        never made on a timer, and it stands down for good the moment the
+        reader touches the page, so it cannot pull them back up from under a
         scroll they have already begun.
      ========================================================================= */
   function jump() {
@@ -90,7 +91,16 @@
 
     top();
     document.addEventListener("DOMContentLoaded", top);
-    window.addEventListener("load", function () { requestAnimationFrame(top); });
+    window.addEventListener("load", function () {
+      /* A frame requested by a page nobody is looking at — one opened in a
+         background tab — is not drawn until the tab is shown, which can be
+         any time later. The correction would then run at that moment, find the
+         page wherever it had been moved since, and pull it back to the top: a
+         timer after all, of unknown length. A hidden page has no reader whose
+         place could be lost and no restored offset to undo, so it is left. */
+      if (document.visibilityState === "hidden") return;
+      requestAnimationFrame(top);
+    });
   }
 
   arrival();
@@ -138,22 +148,33 @@
   function sweep(vh) {
     if (!pending.length) return;
     var trigger = vh * 0.94;
+    var tops = [];
     var i = 0, misses = 0;
     /* The list runs down the page, so the first element still below the line
        ends the search — with a couple of elements of slack, since a grid can
-       place a later element beside an earlier one. */
+       place a later element beside an earlier one.
+       Every position this frame needs is read here, before anything is
+       written. It used to be read a second time between writes, and a class
+       added between two reads makes the next read recompute style first — on
+       a flick that reveals the whole page at once, once per element. */
     while (i < pending.length && misses < 3) {
-      if (pending[i].getBoundingClientRect().top < trigger) { i++; misses = 0; }
-      else { misses++; i++; }
+      var top = pending[i].getBoundingClientRect().top;
+      tops.push(top);
+      misses = top < trigger ? 0 : misses + 1;
+      i++;
     }
     i -= misses;
     if (i <= 0) return;
     var hit = pending.splice(0, i);
+    var late = [];
     for (var k = 0; k < hit.length; k++) {
-      if (hit[k].getBoundingClientRect().top < trigger) hit[k].classList.add("is-in");
-      else pending.push(hit[k]);
+      if (tops[k] < trigger) hit[k].classList.add("is-in");
+      else late.push(hit[k]);
     }
-    if (misses) orderReveals();
+    /* What was passed over still comes before everything left on the list, so
+       putting it back at the front keeps the list in page order — no need to
+       measure the whole list again straight after writing to it. */
+    if (late.length) pending = late.concat(pending);
   }
 
   /* The axis strokes are painted on, left to right, once. */
@@ -285,6 +306,7 @@
      5. Menu
      ========================================================================= */
   var closeMenu = function () {};
+  var restCursor = function () {};
 
   function menu() {
     var btn = document.querySelector(".menu-btn[aria-controls]");
@@ -476,10 +498,18 @@
         el.classList.toggle("has-label", !!want);
       }
     }, { passive: true });
-    document.documentElement.addEventListener("pointerleave", function () {
+    function rest() {
       el.style.opacity = "0";
       placed = false;
-    });
+      if (raf) { cancelAnimationFrame(raf); raf = 0; }
+    }
+    document.documentElement.addEventListener("pointerleave", rest);
+    /* A page restored by the back button comes back exactly as it was left:
+       with the rule still drawn where the pointer clicked the link, although
+       the pointer is now on the browser's own button — and the first move
+       after that would sweep the rule across the screen from the old spot. It
+       waits, hidden, and arrives where the pointer next is. */
+    restCursor = rest;
   }
 
   /* =========================================================================
@@ -654,12 +684,14 @@
     });
 
     /* Returning through the back button restores the page as it was left —
-       including a panel caught mid-close or a footer still lit by a pointer
-       that is no longer there. Put it back to rest. */
+       including a panel caught mid-close, a footer still lit by a pointer
+       that is no longer there, or the cursor's rule standing where the pointer
+       used to be. Put it back to rest. */
     window.addEventListener("pageshow", function (e) {
       if (!e.persisted) return;
       each(document.querySelectorAll(".menu-list .is-going"), function (x) { x.classList.remove("is-going"); });
       closeMenu({ instant: true, navigating: true });
+      restCursor();
       if (footerCanvas) footerCanvas.classList.remove("is-lit");
       relayout();
     });
