@@ -761,19 +761,23 @@ def helpdesk(lang):
         <div class="hd-panel" data-panel="4" hidden>
           <h2 class="h3 hd-q">%(form_head)s</h2>
           <p class="hd-summary meta" data-summary></p>
-          <form class="hd-form" method="post" action="mailto:%(email)s" enctype="text/plain"
-                data-hd-form data-sent="%(f_sent)s" novalidate>
+          <form class="hd-form" method="post" action="/api/help-desk/"
+                data-hd-form data-sending="%(f_sending)s" data-sent="%(f_sent)s"
+                data-failed="%(f_failed)s" data-busy="%(f_busy)s" novalidate>
             <div class="field-row">
               <p class="field"><label class="meta" for="hd-name">%(f_name)s</label>
-                 <input id="hd-name" name="name" type="text" autocomplete="given-name" required></p>
+                 <input id="hd-name" name="name" type="text" autocomplete="given-name"
+                        maxlength="80" required></p>
               <p class="field"><label class="meta" for="hd-surname">%(f_surname)s</label>
-                 <input id="hd-surname" name="surname" type="text" autocomplete="family-name"></p>
+                 <input id="hd-surname" name="surname" type="text" autocomplete="family-name"
+                        maxlength="80" required></p>
             </div>
             <div class="field-row">
               <p class="field"><label class="meta" for="hd-email">%(f_email)s</label>
-                 <input id="hd-email" name="email" type="email" autocomplete="email" required></p>
+                 <input id="hd-email" name="email" type="email" autocomplete="email"
+                        maxlength="254" required></p>
               <p class="field"><label class="meta" for="hd-phone">%(f_phone)s</label>
-                 <input id="hd-phone" name="phone" type="tel" autocomplete="tel"></p>
+                 <input id="hd-phone" name="phone" type="tel" autocomplete="tel" maxlength="40"></p>
             </div>
             <p class="field"><label class="meta" for="hd-ins">%(f_insurance)s</label>
               <select id="hd-ins" name="insurance">
@@ -782,7 +786,9 @@ def helpdesk(lang):
                 <option value="no">No</option>
               </select></p>
             <p class="field"><label class="meta" for="hd-msg">%(f_message)s</label>
-               <textarea id="hd-msg" name="message"></textarea></p>
+               <textarea id="hd-msg" name="message" maxlength="5000" required></textarea></p>
+            <p class="hd-hp" aria-hidden="true"><label for="hd-website">Website</label>
+               <input id="hd-website" name="website" type="text" tabindex="-1" autocomplete="off"></p>
             <p class="check"><input id="hd-terms" name="terms" type="checkbox" required>
                <label for="hd-terms">%(f_terms)s —
                  <a class="tlink" href="%(privacy)s">%(privacy_label)s</a></label></p>
@@ -820,6 +826,8 @@ def helpdesk(lang):
         "f_name": esc(h["f_name"]), "f_surname": esc(h["f_surname"]),
         "f_email": esc(h["f_email"]), "f_phone": esc(h["f_phone"]),
         "f_insurance": esc(h["f_insurance"]), "f_choose": esc(h["f_choose"]),
+        "f_sending": esc(h["f_sending"]), "f_failed": esc(h["f_failed"]),
+        "f_busy": esc(h["f_busy"]),
         "f_message": esc(h["f_message"]), "f_terms": esc(h["f_terms"]),
         "f_send": esc(h["f_send"]),
         "f_sent": esc(h["f_sent"]),

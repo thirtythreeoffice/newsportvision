@@ -274,7 +274,8 @@ def build(host="netlify"):
            # style attributes carry the grid and the painted fields
            "style-src 'self' 'unsafe-inline'; "
            "script-src 'self' 'sha256-%s'; "
-           "form-action 'self' mailto:; "
+           # the Help Desk posts to this site's own endpoint, nowhere else
+           "form-action 'self'; "
            "base-uri 'self'; "
            "frame-ancestors 'self'; "
            "object-src 'none'") % digest

@@ -169,6 +169,10 @@
     render();
     writeUrl(true);
     settledAt = Date.now();
+    /* A line about the last send belongs to the answers it was sent with;
+       once the visitor changes an answer it is no longer true. Never while
+       a send is still on its way — that line is the only sign of it. */
+    if (!sending) say("");
     focusPanel();
   }
 
@@ -204,53 +208,117 @@
     resetBtn.addEventListener("click", function () {
       state = { who: "", sport: "", topic: "", step: 1 };
       if (form) form.reset();
-      if (status) status.textContent = "";
+      forget();
+      say("");
       go();
     });
   }
 
   /* ---------------------------------------------------------------------
      Submission.
-     There is no back end behind this build, and inventing one that silently
-     drops enquiries would be worse than none. The form therefore composes the
-     message and hands it to the visitor's mail client, addressed to the same
-     address the site already publishes. Swap this one function for a POST when
-     an endpoint exists; nothing else has to change.
+     The answers and the form go to this site's own Help Desk endpoint, which
+     checks them again and hands them to Resend for the office. The page says
+     the message has gone only when the endpoint says Resend has taken it.
+     Anything else keeps every word the visitor typed and lets them send
+     again; nothing is kept anywhere once the page is closed.
      --------------------------------------------------------------------- */
+  var ENDPOINT = form ? form.getAttribute("action") : "";
+  var openedAt = Date.now();
+  var sending = false;
+  var lastBody = "", lastKey = "";
+  var submit = form ? form.querySelector('button[type="submit"]') : null;
+
+  function say(to) {
+    if (!form) return;
+    if (to) form.setAttribute("data-state", to); else form.removeAttribute("data-state");
+    if (status) status.textContent = to ? (form.getAttribute("data-" + to) || "") : "";
+    var busy = to === "sending";
+    form.setAttribute("aria-busy", busy ? "true" : "false");
+    if (submit) submit.disabled = busy;
+  }
+
+  function forget() { lastBody = ""; lastKey = ""; }
+
+  function newKey() {
+    var c = window.crypto;
+    if (c && c.randomUUID) return c.randomUUID();
+    var bytes = new Uint8Array(16);
+    c.getRandomValues(bytes);
+    return Array.prototype.map.call(bytes, function (b) { return (b + 256).toString(16).slice(1); }).join("");
+  }
+
   if (form) {
     form.addEventListener("submit", function (e) {
       e.preventDefault();
+      if (sending) return;                       // a second press while the first is on its way
       if (!form.reportValidity()) return;
 
       var d = new FormData(form);
-      var lines = [];
-      ["who", "sport", "topic"].forEach(function (k) {
-        if (state[k]) lines.push(k.toUpperCase() + ": " + labelFor(k, state[k]));
-      });
-      lines.push("");
-      [["name", "Name"], ["surname", "Surname"], ["email", "Email"],
-       ["phone", "Phone"], ["insurance", "Polizza"]].forEach(function (pair) {
-        var v = (d.get(pair[0]) || "").toString().trim();
-        if (v) lines.push(pair[1] + ": " + v);
-      });
-      var msg = (d.get("message") || "").toString().trim();
-      if (msg) { lines.push(""); lines.push(msg); }
+      var field = function (k) { return (d.get(k) || "").toString(); };
+      var answer = {
+        who: state.who, sport: state.sport, topic: state.topic,
+        name: field("name"), surname: field("surname"), email: field("email"),
+        phone: field("phone"), insurance: field("insurance"), message: field("message"),
+        terms: !!(form.elements.terms && form.elements.terms.checked),
+        website: field("website"),
+        lang: document.documentElement.lang === "it" ? "it" : "en"
+      };
+      /* Sent again unchanged — after a dropped connection, say — a request
+         keeps its key, so if the first attempt did reach Resend the second
+         cannot deliver the message twice. A changed request is a new one. */
+      var body = JSON.stringify(answer);
+      if (body !== lastBody) { lastBody = body; lastKey = newKey(); }
+      answer.key = lastKey;
+      answer.page = location.href;
+      answer.elapsed = Date.now() - openedAt;
 
-      var subject = "NSV Help Desk — " +
-        ["who", "sport", "topic"].filter(function (k) { return state[k]; })
-          .map(function (k) { return labelFor(k, state[k]); }).join(" / ");
+      sending = true;
+      say("sending");
+      var abort = "AbortController" in window ? new AbortController() : null;
+      var timer = abort ? setTimeout(function () { abort.abort(); }, 20000) : 0;
 
-      var href = "mailto:office@newsportvision.com?subject=" +
-        encodeURIComponent(subject) + "&body=" + encodeURIComponent(lines.join("\n"));
+      fetch(ENDPOINT, {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(answer),
+        credentials: "same-origin",
+        signal: abort ? abort.signal : undefined
+      })
+        .then(function (res) {
+          return res.json()
+            .catch(function () { return {}; })
+            .then(function (r) {
+              return { ok: res.ok && !!r && r.ok === true, error: r && r.error };
+            });
+        })
+        .catch(function () { return { ok: false, error: "network" }; })
+        .then(function (r) {
+          clearTimeout(timer);
+          sending = false;
+          if (r.ok) {
+            /* Only now: the office has it. The fields empty so the same words
+               cannot be sent twice by accident; the answers above stay, so the
+               visitor can see what the message was about. */
+            form.reset();
+            forget();
+            say("sent");
+          } else {
+            say(r.error === "busy" ? "busy" : "failed");
+          }
+        });
+    });
 
-      if (status) status.textContent = form.dataset.sent || "";
-      window.location.href = href;
+    /* A line about the last attempt stops being true the moment the visitor
+       starts on the next one. */
+    form.addEventListener("input", function () {
+      if (!sending && form.hasAttribute("data-state")) say("");
     });
   }
 
   window.addEventListener("popstate", function () {
     readUrl();
     render();
+    if (!sending) say("");
     settledAt = Date.now();
     focusPanel();
   });

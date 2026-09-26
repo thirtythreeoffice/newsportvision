@@ -492,6 +492,14 @@
 .check { display: flex; gap: 12px; align-items: flex-start; }
 .check input { width: 22px; height: 22px; flex: 0 0 auto; accent-color: var(--nsv-blue); margin-top: 2px; }
 .hd-summary { border-left: var(--rule-bar) solid var(--nsv-blue); padding-left: var(--space-2); }
+/* A field no person sees or reaches with the keyboard. Out of the flow, so the
+   grid above does not give it a row or a gap. */
+.hd-hp { position: absolute; left: -10000px; top: auto; width: 1px; height: 1px; overflow: hidden; }
+/* While a message is on its way the button stays where it is and says so by
+   stepping back; it cannot be pressed twice. */
+.hd-form .action:disabled { color: inherit; }
+.hd-form[aria-busy="true"] .action { opacity: .45; cursor: progress;
+  transition: opacity var(--t-micro) linear; }
 
 /* ===========================================================================
    PRIVACY — legal typography. Wide margins, quiet, obviously readable.

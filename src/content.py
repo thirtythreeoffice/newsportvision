@@ -646,7 +646,11 @@ HELPDESK = {
         "f_message": "Messaggio",
         "f_terms": "Accetto termini e condizioni",
         "f_send": "send",
+        "f_sending": "Sending…",
         "f_sent": "The message has been delivered. You will be contacted soon.",
+        "f_failed": ("The message could not be sent. Everything you wrote is still here — "
+                     "please try again, or write to office@newsportvision.com."),
+        "f_busy": "Too many messages in a short time. Please wait a few minutes and try again.",
     },
     "it": {
         "title": "HELP DESK | newsportvision",
@@ -696,7 +700,11 @@ HELPDESK = {
         "f_message": "Messaggio",
         "f_terms": "Accetto termini e condizioni",
         "f_send": "send",
+        "f_sending": "Sending…",
         "f_sent": "The message has been delivered. You will be contacted soon.",
+        "f_failed": ("The message could not be sent. Everything you wrote is still here — "
+                     "please try again, or write to office@newsportvision.com."),
+        "f_busy": "Too many messages in a short time. Please wait a few minutes and try again.",
     },
 }
 
