@@ -134,7 +134,8 @@ def vercel_json(redirects, secure, immutable, revalidate):
 
     with open(os.path.join(HERE, ".vercelignore"), "w", encoding="utf-8") as f:
         f.write("# Uploaded to Vercel: the sources the build needs, nothing else.\n"
-                "__pycache__/\n*.pyc\n.DS_Store\ntools/\n*.zip\nnetlify.toml\n")
+                "__pycache__/\n*.pyc\n.DS_Store\ntools/\n*.zip\nnetlify.toml\n"
+                "design-review/\nDESIGN-NOTES.md\n")
 
 
 def write_help_desk_options():

@@ -1004,111 +1004,134 @@ def _tr(d, lang):
     return (d or {}).get(lang) or (d or {}).get("en") or ""
 
 
+def _fsf_size(name):
+    n = os.path.getsize(_fsf_file(name))
+    return "%d KB" % round(n / 1024.0) if n < 1024 * 1024 else "%.1f MB" % (n / 1048576.0)
+
+
 def fsf2026(lang):
+    from arms import PUB_BRUSH, PUB_ARROW
+    from render import masthead
     t = FSF2026[lang]
     ui = UI[lang]
+    first, rest = t["manifesto"].split(". ", 1)
 
-    # ---- 01 sky: the event, and the tree ------------------------------------
+    # ---- 01 the sky: it happened -------------------------------------------
+    # ---- 02 the tree, standing in that sky, and SPORT on the line below ----
     sky = """
-<section class="fsf-sky on-fsf-sky" data-field="ink" aria-labelledby="fsf-h">
-  <div class="wrap">
-    <div class="kicker fsf-kicker"><i class="tab" aria-hidden="true"></i>%(rule)s<span class="meta">%(eyebrow)s</span></div>
-    %(title)s
-    <div class="grid fsf-facts">
-      <dl class="datarow datarow--2 c5">
-        <div><dt class="meta">%(l_date)s</dt><dd>%(date)s</dd></div>
-        <div><dt class="meta">%(l_place)s</dt><dd>%(place)s</dd></div>
-      </dl>
-      <p class="fsf-lead c6 s7">%(lead)s</p>
+<section class="fsf-sky" data-field="ink" aria-labelledby="fsf-h">
+  <div class="wrap fsf-hero">
+    <div class="fsf-eyebrow" data-reveal="fade">
+      <span class="meta"><i class="tab" aria-hidden="true"></i>%(el)s</span>%(rule)s<span class="meta">%(er)s</span>
     </div>
-    <figure class="fsf-tree" data-reveal="up">
+    %(title)s
+    <p class="fsf-held" data-reveal="up">%(held)s</p>
+  </div>
+  <div class="fsf-ground">
+    <figure class="fsf-plate">
       <img src="%(tree_s)s" srcset="%(tree_s)s 820w, %(tree_l)s 1642w"
-           sizes="(max-width: 767px) 100vw, min(1100px, 82vw)"
+           sizes="(max-width: 767px) 100vw, min(1180px, 86vw)"
            width="1642" height="896" alt="%(tree_alt)s" decoding="async" fetchpriority="high">
     </figure>
   </div>
+  <div class="fsf-edge"><h2 class="fsf-sport">%(sport)s</h2></div>
 </section>""" % {
-        "rule": rule(), "eyebrow": esc(t["eyebrow"]),
-        "title": jstack(t["name"], tag="h1", cls="statement-stack fsf-title", jmax="210",
+        "el": esc(t["eyebrow_l"]), "er": esc(t["eyebrow_r"]), "rule": rule(),
+        "title": jstack(t["name"], tag="h1", cls="statement-stack fsf-title", jmax="240",
                         extra=' id="fsf-h"'),
-        "l_date": esc(t["l_date"]), "date": esc(t["date"]),
-        "l_place": esc(t["l_place"]), "place": esc(t["place"]),
-        "lead": esc(t["lead"]),
-        "tree_s": _fsf_url("tree-of-sport-820.jpg"), "tree_l": _fsf_url("tree-of-sport-1642.jpg"),
-        "tree_alt": esc(t["tree_alt"]),
+        "held": "<br>".join(esc(l) for l in t["held"]),
+        "tree_s": _fsf_url("tree-820.jpg"), "tree_l": _fsf_url("tree-1642.jpg"),
+        "tree_alt": esc(t["tree_alt"]), "sport": esc(t["sport"]),
     }
 
-    # ---- 02 the hill: SPORT, and the manifesto ------------------------------
+    # ---- 03 the hill: the manifesto, set as a page of reading ---------------
+    size = _fsf_size(t["pdf_file"])
     manifesto = """
-<section class="fsf-hill on-fsf-green" data-field="ink" aria-labelledby="fsf-sport">
-  <div class="wrap">
-    <h2 class="fsf-sport" id="fsf-sport">%(sport)s</h2>
-    %(shead)s
-    <p class="fsf-text" data-reveal="up">%(text)s</p>
-  </div>
-</section>""" % {"sport": esc(t["sport"]), "shead": shead(t["tree_label"]),
-                 "text": esc(t["manifesto"])}
-
-    # ---- 03 the root: CULTURE ----------------------------------------------
-    root = """
-<section class="fsf-root on-ink" data-field="ink">
-  <div class="wrap">
-    <p class="fsf-culture" aria-label="%(word)s" data-reveal="fade">%(letters)s</p>
-    <p class="fsf-idea" data-reveal="up">%(idea)s</p>
+<section class="fsf-hill on-fsf-green" data-field="ink" aria-label="%(label)s">
+  <div class="wrap grid">
+    <p class="meta fsf-hill__label" data-reveal="fade"><i class="tab" aria-hidden="true"></i>%(label)s</p>
+    <div class="fsf-hill__text">
+      <p class="fsf-lead" data-reveal="up">%(first)s.</p>
+      <p class="fsf-body" data-reveal="up" data-delay="80">%(rest)s</p>
+    </div>
+    <p class="fsf-hill__get" data-reveal="up">
+      <a class="arms-get fsf-get" href="%(pdf)s" download data-cursor="PDF" aria-label="%(aria)s">
+        %(brush)s<span class="arms-get__in"><span class="arms-get__say">
+        <span class="arms-get__do">%(do)s</span><span class="arms-get__n">%(n)s</span></span>%(arrow)s</span></a></p>
   </div>
 </section>""" % {
-        "word": esc(t["culture"]),
-        "letters": "".join('<span aria-hidden="true">%s</span>' % esc(ch) for ch in t["culture"]),
-        "idea": "<br>".join(esc(l) for l in t["idea"]),
+        "label": esc(t["manifesto_label"]), "first": esc(first), "rest": esc(rest),
+        "pdf": _fsf_url(t["pdf_file"]), "aria": esc(t["pdf_aria"] % size),
+        "do": esc(t["pdf_do"]), "n": esc(t["pdf_n"] % size),
+        "brush": PUB_BRUSH, "arrow": PUB_ARROW,
     }
 
-    # ---- 04 the steps -------------------------------------------------------
+    # ---- 04 the five words, stepping down one line --------------------------
     steps = """
-<section class="fsf-stairs on-paper" data-field="paper">
+<section class="fsf-stairs on-paper" data-field="paper" aria-label="%(label)s">
   <div class="wrap">
     %(shead)s
-    <ol class="fsf-steps" data-reveal="up">%(items)s</ol>
-    <p class="fsf-pdf"><a class="meta tlink" href="%(pdf)s" data-cursor="PDF" download>%(pdf_label)s</a></p>
+    <div class="fsf-stair" data-reveal="fade" data-fsf-stair>
+      <svg class="fsf-stair__line" viewBox="0 0 5 5" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+        <path d="M0 1H1V2H2V3H3V4H4V5H5" vector-effect="non-scaling-stroke"/></svg>
+      <ol class="fsf-steps">%(items)s</ol>
+    </div>
   </div>
 </section>""" % {
-        "shead": shead(t["steps_label"]),
+        "label": esc(t["steps_label"]), "shead": shead(t["steps_label"]),
         "items": "".join('<li style="--i:%d">%s</li>' % (i, esc(w)) for i, w in enumerate(t["steps"])),
-        "pdf": _fsf_url(t["pdf_file"]), "pdf_label": esc(t["pdf"]),
     }
 
-    # ---- 05 the declaration -------------------------------------------------
-    def line(field, label, ghost, auto):
+    # ---- 05 at the root: CULTURE, and the declaration signed there ----------
+    def line(field, label, ghost, auto, after=""):
         return ('<span class="fsf-line"><label class="visually-hidden" for="fsf-%s">%s</label>'
                 '<input id="fsf-%s" name="%s" type="text" placeholder="%s" autocomplete="%s" '
-                'maxlength="80" required></span>'
-                % (field, esc(label), field, field, esc(ghost), auto))
-    sign = """
-<section class="fsf-sign on-paper" data-field="paper" id="support" aria-labelledby="fsf-sign-h">
+                'maxlength="80" required>%s</span>'
+                % (field, esc(label), field, field, esc(ghost), auto, after))
+    seal = '<span class="fsf-seal%s" aria-hidden="true">' + masthead(lang, tag="span") + '</span>'
+    root = """
+<section class="fsf-root on-ink" data-field="ink" id="support" aria-labelledby="fsf-sign-h">
   <div class="wrap">
-    %(shead)s
-    <div class="grid">
-      <h2 class="h3 fsf-sign__h c4" id="fsf-sign-h">%(head)s</h2>
-      <form class="fsf-form c7 s6" method="post" action="/api/support/" data-fsf-form
+    <p class="fsf-culture" aria-label="%(word)s" data-reveal="fade">%(letters)s</p>
+    <div class="grid fsf-root__row">
+      <div class="c4 fsf-root__side">
+        <p class="meta" data-reveal="fade"><i class="tab" aria-hidden="true"></i>%(root_label)s</p>
+        <p class="fsf-idea" data-reveal="up">%(idea)s</p>
+      </div>
+      <form class="fsf-doc c7 s6" method="post" action="/api/support/" data-fsf-form data-reveal="up"
             data-missing="%(missing)s" data-sending="%(sending)s" data-sent="%(sent)s"
             data-failed="%(failed)s" data-busy="%(busy)s" novalidate>
-        <p class="fsf-decl">%(a)s %(name)s %(b)s %(place)s%(c)s</p>
-        <p class="check"><input id="fsf-consent" name="consent" type="checkbox" required>
-           <label for="fsf-consent">%(consent)s —
-             <a class="tlink" href="%(privacy)s">%(privacy_label)s</a></label></p>
-        <p class="hd-hp" aria-hidden="true"><label for="fsf-website">Website</label>
-           <input id="fsf-website" name="website" type="text" tabindex="-1" autocomplete="off"></p>
-        <p><button type="submit" class="action" style="border:0;padding:0">
-          <span class="action__label">%(submit)s</span>
-          <span class="action__arrow" aria-hidden="true"></span></button></p>
-        <p class="annot" data-fsf-status role="status" aria-live="polite"></p>
+        <div class="fsf-doc__top"><span class="meta">%(doc_meta)s</span>%(seal)s</div>
+        %(head)s
+        <p class="fsf-decl">%(a)s %(name)s %(b)s %(place)s %(c)s</p>
+        <p class="fsf-signed" data-fsf-signed hidden><span class="meta">%(signed_on)s <span data-fsf-date></span></span>%(stamp)s</p>
+        <div class="fsf-doc__act">
+          <p class="check"><input id="fsf-consent" name="consent" type="checkbox" required>
+             <label for="fsf-consent">%(consent)s —
+               <a class="tlink" href="%(privacy)s">%(privacy_label)s</a></label></p>
+          <p class="fsf-hp" aria-hidden="true"><label for="fsf-website">Website</label>
+             <input id="fsf-website" name="website" type="text" tabindex="-1" autocomplete="off"></p>
+          <button type="submit" class="fsf-cta"><span>%(submit)s</span><i aria-hidden="true"></i></button>
+        </div>
+        <p class="annot fsf-doc__status" data-fsf-status role="status" aria-live="polite"></p>
+        <p class="fsf-doc__foot meta" aria-hidden="true"><span>%(foot_l)s</span><span>%(foot_r)s</span></p>
       </form>
     </div>
   </div>
 </section>""" % {
-        "shead": shead(t["sign_label"]), "head": esc(t["sign_head"]),
-        "a": esc(t["decl"][0]), "b": esc(t["decl"][1]), "c": esc(t["decl"][2]),
+        "word": esc(t["culture"]),
+        "letters": "".join('<span aria-hidden="true" style="--i:%d">%s</span>' % (i, esc(ch))
+                           for i, ch in enumerate(t["culture"])),
+        "root_label": esc(t["root_label"]),
+        "idea": "<br>".join(esc(l) for l in t["idea"]),
+        "doc_meta": esc(t["doc_meta"]), "seal": seal % "", "stamp": seal % " fsf-seal--stamp",
+        "head": jstack(t["sign_head"], tag="h2", cls="statement-stack fsf-doc__h", jmax="120",
+                       extra=' id="fsf-sign-h"'),
+        "a": esc(t["decl"][0]), "b": esc(t["decl"][1]), "c": esc(t["decl"][2].lstrip(", ")),
         "name": line("name", t["f_name"], t["ghost_name"], "name"),
-        "place": line("from", t["f_from"], t["ghost_from"], "off"),
+        "place": line("from", t["f_from"], t["ghost_from"], "off", ","),
+        "signed_on": esc(t["signed_on"]),
+        "foot_l": esc(t["doc_foot"][0]), "foot_r": esc(t["doc_foot"][1]),
         "consent": esc(t["f_consent"]),
         "privacy": url(lang, "/privacy/"), "privacy_label": esc(ui["privacy"]),
         "submit": esc(t["f_submit"]),
@@ -1116,31 +1139,19 @@ def fsf2026(lang):
         "failed": esc(t["f_failed"]), "busy": esc(t["f_busy"]),
     }
 
-    # ---- 06 the day ---------------------------------------------------------
-    if _fm.CHAPTERS:
-        chapters = "".join(
-            '<li class="fsf-ch" data-reveal="up"><span class="fsf-ch__time meta">%s</span>'
-            '<h3 class="fsf-ch__t">%s</h3>%s</li>'
-            % (esc(ch.get("time", "")), esc(_tr(ch.get("title"), lang)),
-               ('<p class="fsf-ch__p">%s</p>' % esc(_tr(ch.get("text"), lang))) if ch.get("text") else "")
-            for ch in _fm.CHAPTERS)
-    else:
-        chapters = "".join(
-            '<li class="fsf-ch fsf-ch--empty"><span class="fsf-ch__time meta">—</span>'
-            '<p class="fsf-ph meta">%s</p></li>' % esc(t["ph_chapter"])
-            for _ in range(_fm.PLACEHOLDER_CHAPTERS))
-    day = """
-<section class="fsf-day on-ink" data-field="ink" aria-labelledby="fsf-day-h">
-  <div class="wrap">
-    %(shead)s
-    <h2 class="h3 fsf-day__h" id="fsf-day-h">%(head)s</h2>
-    <ol class="fsf-chs">%(chapters)s</ol>
-  </div>
-</section>""" % {"shead": shead(t["day_label"]), "head": esc(t["day_head"]), "chapters": chapters}
+    # ---- 06 the day: an archive in preparation, or the archive itself -------
+    timeline = ""
+    if _fm.CHAPTERS:     # programme facts come only from this list; none, no timeline
+        timeline = '<h3 class="h3 fsf-day__h">%s</h3><ol class="fsf-chs">%s</ol>' % (
+            esc(t["day_head"]),
+            "".join('<li class="fsf-ch" data-reveal="up"><span class="fsf-ch__time meta">%s</span>'
+                    '<h4 class="fsf-ch__t">%s</h4>%s</li>'
+                    % (esc(ch.get("time", "")), esc(_tr(ch.get("title"), lang)),
+                       ('<p class="fsf-ch__p">%s</p>' % esc(_tr(ch.get("text"), lang))) if ch.get("text") else "")
+                    for ch in _fm.CHAPTERS))
 
-    # ---- 07 photographs and videos -----------------------------------------
     shots = []
-    for i, ph in enumerate(_fm.PHOTOS):
+    for n, ph in enumerate(_fm.PHOTOS):
         w, h = _image_size(_fsf_file(ph["src"]))
         alt = _tr(ph.get("alt"), lang)
         if not alt:
@@ -1151,14 +1162,9 @@ def fsf2026(lang):
             '<a href="%s" data-fsf-shot="%d" data-w="%d" data-h="%d" data-srcset="%s" data-caption="%s" '
             'data-cursor="%s"><img src="%s" srcset="%s" sizes="(max-width:767px) 50vw, (max-width:1279px) 33vw, 25vw" '
             'width="%d" height="%d" alt="%s" loading="lazy" decoding="async"></a>%s</figure>'
-            % (_fsf_url(ph["src"]), i, w, h, esc(_fsf_srcset(ph["src"], w)), esc(cap), esc(ui["view"]),
+            % (_fsf_url(ph["src"]), n, w, h, esc(_fsf_srcset(ph["src"], w)), esc(cap), esc(ui["view"]),
                _fsf_url(ph["src"]), esc(_fsf_srcset(ph["src"], w)), w, h, esc(alt),
                ('<figcaption class="meta">%s</figcaption>' % esc(cap)) if cap else ""))
-    if not shots:
-        ratios = ("4/3", "3/4", "1/1", "4/3", "1/1", "3/4")
-        shots = ['<figure class="fsf-shot fsf-shot--empty" style="aspect-ratio:%s">'
-                 '<span class="fsf-ph meta">%s</span></figure>' % (ratios[i % len(ratios)], esc(t["ph_photo"]))
-                 for i in range(_fm.PLACEHOLDER_PHOTOS)]
 
     films = []
     for v in _fm.VIDEOS:
@@ -1183,30 +1189,49 @@ def fsf2026(lang):
                 '<i class="fsf-play__mark" aria-hidden="true"></i></button>%s</figure>'
                 % (host, esc(v[host]), esc(t["play"]), (": " + esc(title)) if title else "",
                    pw, ph_, _fsf_url(poster), pw, ph_, cap))
-    if not films:
-        films = ['<figure class="fsf-film fsf-film--empty"><span class="fsf-ph meta">%s</span></figure>'
-                 % esc(t["ph_video"]) for _ in range(_fm.PLACEHOLDER_VIDEOS)]
 
-    gallery = """
-<section class="fsf-gallery on-paper" data-field="paper" aria-labelledby="fsf-gal-h">
+    has_media = bool(shots or films)
+    archive = """
+<section class="fsf-day on-paper" data-field="paper" aria-labelledby="fsf-day-h">
   <div class="wrap">
     %(shead)s
-    <h2 class="h3 fsf-gal__h" id="fsf-gal-h">%(head)s</h2>
-    <div class="fsf-films">%(films)s</div>
-    <div class="fsf-grid">%(shots)s</div>
+    <div class="grid fsf-day__row">
+      %(head)s
+      %(aside)s
+    </div>
+    %(timeline)s%(films)s%(grid)s
   </div>
-  <dialog class="fsf-lb" data-fsf-lb aria-label="%(lb_label)s">
-    <button type="button" class="fsf-lb__x meta" data-lb-close>%(close)s</button>
-    <button type="button" class="fsf-lb__nav fsf-lb__nav--prev" data-lb-prev aria-label="%(prev)s"><i aria-hidden="true"></i></button>
-    <figure class="fsf-lb__fig"><img alt="" data-lb-img><figcaption class="meta" data-lb-cap></figcaption></figure>
-    <button type="button" class="fsf-lb__nav fsf-lb__nav--next" data-lb-next aria-label="%(next)s"><i aria-hidden="true"></i></button>
-  </dialog>
+  %(lightbox)s
 </section>""" % {
-        "shead": shead(t["gallery_label"]), "head": esc(t["gallery_head"]),
-        "films": "".join(films), "shots": "".join(shots),
-        "lb_label": esc(t["lb_label"]), "close": esc(t["lb_close"]),
-        "prev": esc(t["lb_prev"]), "next": esc(t["lb_next"]),
+        "shead": shead(t["archive_label"]),
+        "head": jstack(t["archive_head"], tag="h2", cls="statement-stack fsf-day__t c8", jmax="150",
+                       extra=' id="fsf-day-h"'),
+        # What is not here yet is named, once, in the house's own index rows —
+        # no boxes standing in for pictures. A row leaves when its material
+        # arrives in src/fsf2026_media.py.
+        "aside": "" if (shots and films) else (
+            '<div class="fsf-day__wait c8 s5"><p class="visually-hidden">%s</p><ul class="fsf-wait">%s</ul></div>'
+            % (esc(t["archive_line"]),
+               "".join('<li class="fsf-wait__row" data-reveal="up" aria-hidden="true"><span class="fsf-wait__n">%s</span>'
+                       '<span class="meta">%s</span></li>' % (esc(name), esc(t["archive_state"]))
+                       for name, have in zip(t["archive_rows"], (shots, films)) if not have))),
+        "timeline": timeline,
+        "films": ('<div class="fsf-films">%s</div>' % "".join(films)) if films else "",
+        "grid": ('<div class="fsf-grid">%s</div>' % "".join(shots)) if shots else "",
+        "lightbox": ("""<dialog class="fsf-lb" data-fsf-lb aria-label="%s">
+    <button type="button" class="fsf-lb__x meta" data-lb-close>%s</button>
+    <button type="button" class="fsf-lb__nav fsf-lb__nav--prev" data-lb-prev aria-label="%s"><i aria-hidden="true"></i></button>
+    <figure class="fsf-lb__fig"><img alt="" data-lb-img><figcaption class="meta" data-lb-cap></figcaption></figure>
+    <button type="button" class="fsf-lb__nav fsf-lb__nav--next" data-lb-next aria-label="%s"><i aria-hidden="true"></i></button>
+  </dialog>""" % (esc(t["lb_label"]), esc(t["lb_close"]), esc(t["lb_prev"]), esc(t["lb_next"]))) if shots else "",
     }
+
+    # ---- 07 the closing line, set as the house sets its own ------------------
+    closing = """
+<section class="fsf-close on-yellow" data-field="yellow" aria-label="%s">
+  <div class="wrap">%s</div>
+</section>""" % (esc(" ".join(t["closing"]).lower()),
+                 jstack(t["closing"], jmax=190, cls="jstack statement-stack fsf-close__t"))
 
     # A past date is how a finished event is said in schema.org: it has no
     # "completed" status, and "scheduled" with a date gone by is the form
@@ -1219,7 +1244,7 @@ def fsf2026(lang):
         "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
         "inLanguage": lang, "description": t["description"],
         "url": SITE["domain"] + url(lang, "/fsf2026/"),
-        "image": SITE["domain"] + "/assets/media/fsf2026/tree-of-sport-1642.jpg",
+        "image": SITE["domain"] + "/assets/media/fsf2026/tree-1642.jpg",
         "location": {"@type": "Place", "name": "Belgrade",
                      "address": {"@type": "PostalAddress", "addressLocality": "Belgrade",
                                  "addressCountry": "RS"}},
@@ -1228,9 +1253,9 @@ def fsf2026(lang):
     head_extra = ('<script type="application/ld+json">%s</script>\n'
                   % _json.dumps(ld, ensure_ascii=False).replace("</", "<\\/"))
 
-    body = sky + manifesto + root + steps + sign + day + gallery
+    body = sky + manifesto + steps + root + archive + closing
     return page(lang, "/fsf2026/", t["title"], t["description"], body,
                 footer_html=footer(lang, "/fsf2026/", HOME[lang]["contact_invite"],
                                    HOME[lang]["got_idea"]),
-                og_image="fsf2026/tree-of-sport-1642.jpg",
-                css=("fsf.css",), scripts=("fsf2026.js",), head_extra=head_extra)
+                og_image="fsf2026/tree-1642.jpg", body_class="fsf", chapter=t["crumb"],
+                css=("arms.css", "fsf.css"), scripts=("fsf2026.js",), head_extra=head_extra)

@@ -36,10 +36,11 @@ THE DAY
             "text":  {"en": "...", "it": "..."}}
     time and text are optional.
 
-While a list is empty the page shows marked placeholder frames in its place,
-so the layout can be judged before the material exists. They disappear the
-moment the first real entry is added. Nothing here is invented: no schedule,
-speaker, number or quotation appears on the page unless it is written below.
+While PHOTOS and VIDEOS are both empty the page shows a finished "archive in
+preparation" passage instead of a gallery, and while CHAPTERS is empty it
+shows no timeline at all. Each part switches on by itself with its first real
+entry. Nothing here is invented: no schedule, speaker, number or quotation
+appears on the page unless it is written below.
 """
 
 CHAPTERS = [
@@ -50,8 +51,3 @@ PHOTOS = [
 
 VIDEOS = [
 ]
-
-# How many placeholder frames stand in for an empty list.
-PLACEHOLDER_PHOTOS = 6
-PLACEHOLDER_VIDEOS = 1
-PLACEHOLDER_CHAPTERS = 3

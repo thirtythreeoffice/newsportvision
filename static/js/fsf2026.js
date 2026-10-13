@@ -8,6 +8,34 @@
 (function () {
   "use strict";
 
+  /* --- The staircase -----------------------------------------------------
+     The line is one path through five treads and four risers. It is redrawn
+     here in the page's own pixels — a stretched drawing has no honest length,
+     and Safari will not dash one — so that it can be drawn along as the
+     section arrives. Without this the stair is simply there. */
+  var stair = document.querySelector("[data-fsf-stair]");
+  if (stair) {
+    var svg = stair.querySelector("svg"), path = svg && svg.querySelector("path");
+    var lastW = 0, lastH = 0;
+    var draw = function () {
+      var w = svg.clientWidth, h = svg.clientHeight;
+      if (!w || !h || (w === lastW && h === lastH)) return;
+      lastW = w; lastH = h;
+      var sx = w / 5, sy = h / 5, d = "M0 " + sy, i;
+      for (i = 1; i <= 5; i++) d += "H" + (sx * i) + (i < 5 ? "V" + (sy * (i + 1)) : "");
+      svg.setAttribute("viewBox", "0 0 " + w + " " + h);
+      path.removeAttribute("vector-effect");
+      path.setAttribute("d", d);
+      path.style.setProperty("--len", Math.ceil(path.getTotalLength()) + 1);
+      path.setAttribute("data-len", "");
+    };
+    if (path) {
+      draw();
+      if ("ResizeObserver" in window) new ResizeObserver(draw).observe(svg);
+      else window.addEventListener("resize", draw);
+    }
+  }
+
   /* --- The declaration ---------------------------------------------------
      It goes to this site's own endpoint, which checks it again and passes it
      to the office. The page says it has gone only when that is confirmed;
@@ -18,7 +46,7 @@
     var status = form.querySelector("[data-fsf-status]");
     var submit = form.querySelector('button[type="submit"]');
     var openedAt = Date.now();
-    var sending = false, lastBody = "", lastKey = "";
+    var sending = false, done = false, lastBody = "", lastKey = "";
 
     var say = function (to) {
       if (to) form.setAttribute("data-state", to); else form.removeAttribute("data-state");
@@ -36,7 +64,7 @@
 
     form.addEventListener("submit", function (e) {
       e.preventDefault();
-      if (sending) return;
+      if (sending || done) return;
       var name = form.elements.name.value.trim();
       var from = form.elements.from.value.trim();
       if (!name || !from || !form.elements.consent.checked) {
@@ -73,12 +101,25 @@
         .then(function (r) {
           clearTimeout(timer);
           sending = false;
-          if (r.ok) { form.reset(); lastBody = ""; lastKey = ""; say("sent"); }
+          if (r.ok) {
+            /* Signed: the sheet keeps the name on its line and takes the date
+               and the seal. Nothing is cleared — this is the visitor's copy. */
+            form.elements.name.readOnly = form.elements.from.readOnly = true;
+            var signed = form.querySelector("[data-fsf-signed]");
+            var date = form.querySelector("[data-fsf-date]");
+            if (date) {
+              try { date.textContent = new Intl.DateTimeFormat(document.documentElement.lang, { dateStyle: "long" }).format(new Date()); }
+              catch (err) { date.textContent = new Date().toLocaleDateString(); }
+            }
+            if (signed) signed.hidden = false;
+            done = true;
+            say("sent");
+          }
           else say(r.error === "busy" ? "busy" : r.error === "invalid" ? "missing" : "failed");
         });
     });
     form.addEventListener("input", function () {
-      if (!sending && form.hasAttribute("data-state")) say("");
+      if (!sending && !done && form.hasAttribute("data-state")) say("");
     });
   }
 

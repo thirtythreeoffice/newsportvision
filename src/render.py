@@ -268,7 +268,7 @@ def lang_switch(lang, path, cls=""):
          esc(url("it", path)), "true" if lang == "it" else "false")
 
 
-def site_header(lang, path, active, chapter=None):
+def site_header(lang, path, active, chapter=None, chapter_lang=False):
     """chapter: when the page belongs to a concept rather than to the site's
     own spine, the masthead says which one and the section links stand down."""
     ui = UI[lang]
@@ -297,7 +297,7 @@ def site_header(lang, path, active, chapter=None):
              '<span class="chapter-of__here">%s</span></span>' % esc(chapter)
              if chapter else ""),
          esc(ui["menu"]), "".join(links),
-         "" if chapter else lang_switch(lang, path), esc(ui["menu"]))
+         "" if (chapter and not chapter_lang) else lang_switch(lang, path), esc(ui["menu"]))
 
 
 def menu_panel(lang, path, active, rows=None, foot=None):
@@ -447,7 +447,7 @@ def first_photo_now(body):
 
 def page(lang, path, title, description, body, active=None, footer_html=None,
          body_class="", og_image="skate-architecture-1600.jpg", noindex=False,
-         css=(), scripts=(), head_extra=""):
+         css=(), scripts=(), head_extra="", chapter=None):
     """css / scripts: extra files for one page, by name, so a page that needs
     its own sheet or behaviour does not make every other page carry it.
     head_extra: structured data and the like."""
@@ -523,7 +523,7 @@ def page(lang, path, title, description, body, active=None, footer_html=None,
         "locale": "en_GB" if lang == "en" else "it_IT",
         "bodycls": esc(body_class),
         "skip": esc(ui["skip"]),
-        "header": site_header(lang, path, active),
+        "header": site_header(lang, path, active, chapter=chapter, chapter_lang=True),
         "menu": menu_panel(lang, path, active),
         "body": body,
         "footer": footer_html or "",

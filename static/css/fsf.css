@@ -1,189 +1,308 @@
 /* ===========================================================================
    FSF2026 — one page's surfaces. Loaded by that page only.
    ---------------------------------------------------------------------------
-   The palette is the manifesto's own, read from the PDF and its illustration:
-   the sky it is printed on, the green of the hill, the orange of the letters
-   among the roots. Yellow stays what it is everywhere else on this site — the
-   mark and the thing to press — and is not asked to be a field here, so it
-   never has to sit against the blue or the green.
+   A chapter of the site with a palette of its own, the way A.R.M.S. is: the
+   shell, the grid, the type scale and the motion are the house's, and only
+   the fields change. Here the fields are read from the manifesto's own
+   picture — its sky, the green of its hill, the orange of the letters among
+   its roots — and the page goes down through them in that order: sky, hill,
+   paper, earth.
 
-   The green is a step deeper than the PDF's (#17A249). White text on that one
-   measures 3.3:1, which a poster can live with and a page of reading cannot;
-   on this one it is 4.7:1. The PDF's own green is kept for the line the five
-   words step down, where nothing has to be read against it.
+   Yellow is the house's and stays rare: the small mark beside a label, the
+   seal, the one thing to press, and the closing line.
+
+   Colour notes (measured, see DESIGN-NOTES.md):
+   · the sky is the illustration's own, sampled along its edges, so the page
+     continues the picture instead of framing it;
+   · ink on any part of that sky is 4.9:1 or better; white is not, so nothing
+     small is ever white on it;
+   · the green is a step deeper than the PDF's #17A249 — white on that is
+     3.3:1, on this 4.7:1 — and the PDF's own green keeps the line of the
+     staircase, where nothing is read against it.
    =========================================================================== */
+@font-face {
+  /* Nunito, for the three things born in the PDF, which is set in Apertura —
+     a face that cannot be licensed for the web. This is its nearest free
+     relative: the same rounded, open geometry. */
+  font-family: "Nunito"; font-style: normal; font-weight: 400 800; font-display: swap;
+  src: url("../fonts/nunito-normal-latin.woff2") format("woff2");
+}
 :root {
-  --fsf-sky:   #448AC9;
+  --fsf-sky-0: #4D93DD;      /* high sky, where the page opens            */
+  --fsf-sky-1: #5E9EE5;      /* the illustration's top corners            */
+  --fsf-sky-2: #7BBAF0;      /* its top centre                            */
+  --fsf-sky-3: #217BEB;      /* its foot                                  */
   --fsf-green: #11863C;
   --fsf-leaf:  #17A249;
   --fsf-root:  #ED7835;
-  --fsf-sport: clamp(72px, 15vw, 250px);
+  --fsf-accent: "Nunito", var(--font-display);
+  --fsf-sport: clamp(84px, 17vw, 290px);
+}
+.fsf .header-inner { justify-content: flex-start; }
+.fsf .header-inner > .header-nav { margin-left: auto; }
+.fsf .chapter-of, .fsf .chapter-of__here { color: inherit; }
+.fsf .tab { background: var(--nsv-yellow); }
+.fsf .meta .tab { display: inline-block; vertical-align: middle; margin-right: .9em; }
+
+/* --- 01 · 02 the sky, and the tree standing in it -------------------------- */
+.fsf-sky {
+  --fg: var(--nsv-ink); --fg-quiet: var(--nsv-ink); --rule-color: var(--nsv-ink);
+  color: var(--nsv-ink);
+  background:
+    radial-gradient(ellipse 46% 26% at 50% 100%, var(--fsf-sky-2), transparent 100%) no-repeat,
+    linear-gradient(to bottom, var(--fsf-sky-0), var(--fsf-sky-1));
+}
+.fsf-sky :focus-visible { outline-color: var(--nsv-ink); }
+.fsf-hero { position: relative; z-index: 1; padding-top: clamp(140px, 19vh, 260px); padding-bottom: var(--space-5); }
+.fsf-eyebrow { display: flex; align-items: baseline; gap: var(--space-2); margin-bottom: var(--space-3); }
+.fsf-eyebrow .rule { flex: 1 1 auto; }
+.fsf-eyebrow .meta { white-space: nowrap; }
+@media (max-width: 767px) {
+  .fsf-eyebrow { flex-direction: column; gap: 6px; }
+  .fsf-eyebrow .rule { display: none; }
+}
+.fsf-title { color: var(--nsv-ink); }
+.fsf-held {
+  margin: var(--space-4) 0 0;
+  font-family: var(--font-display); font-weight: 700; font-size: var(--fs-h3);
+  line-height: 1.04; letter-spacing: var(--track-display);
+}
+/* The picture is not framed. Its sky runs out into the page's own on three
+   sides — the band behind it repeats the picture's edge, stop for stop, and
+   the picture itself thins to nothing before its edge is reached — so there
+   is no rectangle to find, only a tree standing in the sky. On a wide screen
+   it rises beside the opening statement rather than waiting below it. */
+.fsf-ground {
+  background: linear-gradient(to bottom,
+    rgba(99, 162, 231, 0) 0%, #63A2E7 25%, #64A5E7 50%, #4D95E7 72%, #2F85E8 85%, var(--fsf-sky-3) 99%);
+}
+.fsf-plate { margin: 0 auto; width: min(1180px, 100%); }
+.fsf-plate img {
+  display: block; width: 100%; height: auto;
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 9%, #000 91%, transparent),
+                      linear-gradient(to bottom, transparent, #000 14%, #000 95%, transparent);
+          mask-image: linear-gradient(to right, transparent, #000 9%, #000 91%, transparent),
+                      linear-gradient(to bottom, transparent, #000 14%, #000 95%, transparent);
+  -webkit-mask-composite: source-in; mask-composite: intersect;
+}
+@media (min-width: 1360px) {
+  .fsf-hero { padding-bottom: 0; }
+  .fsf-held { max-width: 9.2em; }
+  .fsf-ground { margin-top: clamp(-190px, -11vw, -120px); }
+}
+/* SPORT stands on the line where the sky ends and the hill begins. */
+.fsf-edge { background: linear-gradient(to bottom, var(--fsf-sky-3) 50%, var(--fsf-green) 50%); }
+.fsf-sport {
+  margin: 0; text-align: center; color: var(--nsv-white);
+  font-family: var(--font-display); font-weight: 800; font-size: var(--fsf-sport);
+  line-height: .86; letter-spacing: var(--track-display);
 }
 
-/* Ink on the sky is 4.6:1; white is 3.7:1, enough for the display line and
-   for nothing smaller, so everything small here is ink. */
-.on-fsf-sky {
-  --bg: var(--fsf-sky); --fg: var(--nsv-ink); --fg-quiet: var(--nsv-ink);
-  --rule-color: var(--nsv-ink);
-  background: var(--bg); color: var(--fg);
-}
+/* --- 03 the hill ----------------------------------------------------------- */
 .on-fsf-green {
-  --bg: var(--fsf-green); --fg: var(--nsv-white); --fg-quiet: #E6F3EA;
-  --rule-color: var(--nsv-white);
+  --bg: var(--fsf-green); --fg: var(--nsv-white); --fg-quiet: #E6F3EA; --rule-color: var(--nsv-white);
   background: var(--bg); color: var(--fg);
 }
 .on-fsf-green :focus-visible { outline-color: var(--nsv-yellow); }
-.on-fsf-sky :focus-visible { outline-color: var(--nsv-ink); }
-
-/* --- 01 the sky ------------------------------------------------------------ */
-.fsf-sky {
-  padding-top: clamp(140px, 19vh, 260px);
-  /* room for the upper half of SPORT, which stands on the line below */
-  padding-bottom: calc(var(--fsf-sport) * .5 + var(--space-4));
+.fsf-hill { padding-top: var(--space-5); padding-bottom: var(--act); }
+.fsf-hill > .grid { row-gap: var(--space-3); }
+.fsf-hill__label { margin: .5em 0 0; grid-column: 1 / -1; }
+.fsf-hill__text, .fsf-hill__get { grid-column: 1 / -1; margin: 0; }
+@media (min-width: 1024px) {
+  .fsf-hill > .grid { grid-template-rows: auto 1fr; }
+  .fsf-hill__label { grid-column: 1 / span 4; grid-row: 1; }
+  .fsf-hill__text { grid-column: 5 / span 8; grid-row: 1 / span 2; }
+  .fsf-hill__get { grid-column: 1 / span 4; grid-row: 2; align-self: end; }
 }
-.fsf-kicker { display: flex; align-items: baseline; gap: var(--space-2); margin-bottom: var(--space-3); }
-.fsf-kicker .rule { flex: 1 1 auto; }
-.fsf-kicker .tab { background: var(--nsv-yellow); }
-.fsf-title { color: var(--nsv-white); }
-.fsf-facts { margin-top: var(--space-4); align-items: end; row-gap: var(--space-3); }
-.fsf-facts .meta { color: var(--nsv-ink); }
-.fsf-lead { margin: 0; font-family: var(--font-text); font-size: var(--fs-lead); line-height: 1.34; }
-/* The illustration is 1642px wide and is shown as the plate it is, never
-   stretched to the screen's edge. */
-.fsf-tree { margin: var(--space-5) auto 0; max-width: min(980px, 100%); }
-.fsf-tree img { display: block; width: 100%; height: auto; }
-
-/* --- 02 the hill ----------------------------------------------------------- */
-.fsf-hill { padding-bottom: var(--act); }
-.fsf-sport {
-  margin: 0; position: relative; z-index: 1;
-  /* half in the sky, half on the hill, as it is printed */
-  margin-top: calc(var(--fsf-sport) * -.41);
-  font-family: var(--font-display); font-weight: 800;
-  font-size: var(--fsf-sport); line-height: .8; letter-spacing: var(--track-display);
-  text-align: center; color: var(--nsv-white);
+.fsf-lead {
+  margin: 0; max-width: 21ch;
+  font-family: var(--font-display); font-weight: 700; font-size: var(--fs-h3);
+  line-height: 1.06; letter-spacing: var(--track-display);
 }
-.fsf-hill .shead { margin-top: var(--space-5); }
-.fsf-text {
+.fsf-body {
   margin: var(--space-4) 0 0; max-width: 64ch;
-  font-family: var(--font-text); font-size: var(--fs-lead); line-height: 1.5;
+  font-family: var(--font-text); font-size: clamp(18px, .5vw + 15px, 23px); line-height: 1.62;
 }
-@media (min-width: 900px) { .fsf-text { margin-left: calc(var(--span-2) + var(--gutter)); } }
+.fsf-get { color: var(--fsf-green); }
+@media (max-width: 1023px) { .fsf-hill__get { margin-top: var(--space-3); } }
+.fsf-get:focus-visible .arms-get__say { outline-color: var(--fsf-green); }
 
-/* --- 03 the root ----------------------------------------------------------- */
+/* --- 04 the five words ----------------------------------------------------- */
+.fsf-stairs { padding-top: var(--act); padding-bottom: var(--act); }
+/* A staircase, drawn as one: tread, riser, tread. Five columns by five rows,
+   and each word stands on its own tread a step further along and a step
+   further down, so word and line meet by construction rather than by eye. On
+   a narrow screen the treads shorten and the stair turns steep; the words
+   keep their size and stand out over the drop. */
+.fsf-stair {
+  --row: clamp(64px, 7.4vw, 118px); --step: 20%;
+  position: relative; margin-top: var(--space-4);
+}
+.fsf-stair__line {
+  position: absolute; left: 0; top: 0; overflow: visible;
+  width: calc(var(--step) * 5); height: calc(var(--row) * 5);
+}
+.fsf-stair__line path {
+  fill: none; stroke: var(--fsf-leaf); stroke-width: 3; stroke-linejoin: miter;
+}
+/* The script redraws the stair in the page's own pixels, so its length is a
+   real length and the line can be drawn along it; without the script it is
+   simply there. */
+.fsf-stair__line path[data-len] {
+  stroke-dasharray: var(--len); stroke-dashoffset: 0;
+  transition: stroke-dashoffset 1700ms var(--ease-editorial) 150ms;
+}
+.fsf-steps { list-style: none; margin: 0; padding: 0; position: relative; }
+.fsf-steps li {
+  height: var(--row); margin-left: calc(var(--i) * var(--step));
+  display: flex; align-items: flex-end; padding: 0 0 .3em .22em; white-space: nowrap;
+  font-family: var(--fsf-accent); font-weight: 400; font-size: clamp(27px, 2.9vw, 50px); line-height: 1;
+  transition: opacity 500ms var(--ease-enter), transform 500ms var(--ease-enter);
+  transition-delay: calc(var(--i) * 300ms + 250ms);
+}
+.fsf-steps li:first-child { font-weight: 800; }
+.js .fsf-stair:not(.is-in) .fsf-stair__line path[data-len] { stroke-dashoffset: var(--len); }
+.js .fsf-stair:not(.is-in) .fsf-steps li { opacity: 0; transform: translateY(-10px); }
+@media (max-width: 767px) { .fsf-stair { --step: 9%; --row: 66px; } }
+
+/* --- 05 the root ----------------------------------------------------------- */
 .fsf-root { padding-top: var(--act); padding-bottom: var(--act); }
-/* The seven letters lie among the roots the way they do in the picture: the
-   outer ones high, the middle ones deep. */
+/* The seven letters lie among the roots as they do in the picture — the outer
+   ones high, the middle ones deep — and settle there one after another. */
 .fsf-culture {
   margin: 0; display: flex; justify-content: space-between; align-items: flex-start;
-  font-family: var(--font-display); font-weight: 800;
-  font-size: clamp(38px, 9.4vw, 160px); line-height: 1; color: var(--fsf-root);
-  padding-bottom: .62em;
+  font-family: var(--fsf-accent); font-weight: 800; font-size: clamp(44px, 10.6vw, 184px);
+  line-height: 1; color: var(--fsf-root); padding-bottom: .7em;
 }
-.fsf-culture span:nth-child(2), .fsf-culture span:nth-child(6) { transform: translateY(.34em); }
-.fsf-culture span:nth-child(3), .fsf-culture span:nth-child(5) { transform: translateY(.54em); }
-.fsf-culture span:nth-child(4) { transform: translateY(.62em); }
+.fsf-culture span { --drop: 0em; transform: translateY(var(--drop));
+  transition: opacity 600ms var(--ease-enter), transform 900ms var(--ease-editorial);
+  transition-delay: calc(var(--i) * 95ms + 120ms); }
+.fsf-culture span:nth-child(2), .fsf-culture span:nth-child(6) { --drop: .34em; }
+.fsf-culture span:nth-child(3), .fsf-culture span:nth-child(5) { --drop: .56em; }
+.fsf-culture span:nth-child(4) { --drop: .64em; }
+.js .fsf-culture:not(.is-in) span { opacity: 0; transform: translateY(calc(var(--drop) - .5em)); }
+.fsf-root__row { margin-top: var(--space-5); row-gap: var(--space-4); align-items: start; }
+.fsf-root__side .meta { margin: 0; }
+@media (min-width: 1024px) { .fsf-root__side { position: sticky; top: clamp(110px, 16vh, 170px); } }
 .fsf-idea {
-  margin: var(--space-5) 0 0;
-  font-family: var(--font-display); font-weight: 700; font-size: var(--fs-h3); line-height: 1.08;
+  margin: var(--space-3) 0 0;
+  font-family: var(--font-display); font-weight: 700; font-size: var(--fs-h3); line-height: 1.04;
   letter-spacing: var(--track-display);
 }
 
-/* --- 04 the steps ---------------------------------------------------------- */
-.fsf-stairs { padding-top: var(--act); padding-bottom: var(--act); }
-.fsf-steps {
-  --step: 17%;
-  list-style: none; margin: var(--space-5) 0 0; padding: 0 0 3.1em;
-  position: relative;
-  font-family: var(--font-display); font-size: clamp(21px, 2.7vw, 44px); line-height: 1.9;
+/* The declaration is a sheet of the house's paper lying on the dark ground:
+   margins, a seal, a title, and a sentence with two lines to sign on. No
+   border, no shadow, no corner — a sheet has none. */
+.fsf-doc {
+  --fg: var(--nsv-ink); --fg-quiet: #5F5E58; --rule-color: var(--nsv-ink);
+  background: var(--nsv-paper); color: var(--nsv-ink);
+  padding: clamp(26px, 4.6vw, 80px);
 }
-/* One line, corner to corner, under the words: each word stands a little
-   further along it and a little further down. */
-.fsf-steps::before {
-  /* it starts under the first word and ends under the last, so no word is
-     struck through on its way down */
-  content: ""; position: absolute; inset: 2.15em 0 0 0; pointer-events: none;
-  /* stops run along the other diagonal, so the stripe at their middle lies
-     from the top left to the bottom right */
-  background: linear-gradient(to top right,
-    transparent calc(50% - 1px), var(--fsf-leaf) calc(50% - 1px),
-    var(--fsf-leaf) calc(50% + 1px), transparent calc(50% + 1px));
+.fsf-doc :focus-visible { outline-color: var(--nsv-ink); }
+.fsf-doc__top { display: flex; justify-content: space-between; align-items: flex-start; gap: var(--space-2); }
+.fsf-seal {
+  flex: 0 0 auto; display: grid; place-items: center;
+  width: clamp(64px, 6.4vw, 96px); aspect-ratio: 1; background: var(--nsv-yellow); color: var(--nsv-ink);
 }
-.fsf-steps li { margin-left: calc(var(--i) * var(--step)); position: relative; }
-.fsf-steps li:first-child { font-weight: 800; }
-.fsf-pdf { margin: var(--space-5) 0 0; }
-@media (max-width: 767px) { .fsf-steps { --step: 11%; } }
-
-/* --- 05 the declaration ---------------------------------------------------- */
-.fsf-sign { padding-bottom: var(--act); }
-.fsf-sign .grid { margin-top: var(--space-4); row-gap: var(--space-3); }
-.fsf-sign__h { margin: 0; }
-.fsf-form { display: grid; gap: var(--space-3); }
-.fsf-decl { margin: 0; font-family: var(--font-text); font-size: var(--fs-lead); line-height: 1.75; }
+.fsf-seal .mast { transform: scale(.78); transform-origin: center; }
+.fsf-doc__h { margin-top: var(--space-4); }
+.fsf-decl { margin: var(--space-4) 0 0; font-family: var(--font-text); font-size: var(--fs-lead); line-height: 1.62; max-width: 36em; }
 /* A line to sign on, in the sentence itself. What is written on it is set in
    the text face's italic — a hand, but one anybody can read. Until then a
    faint example lies on the line, and is never sent. */
-.fsf-line { display: inline-block; max-width: 100%; vertical-align: baseline; }
+.fsf-line { display: inline-block; max-width: 100%; vertical-align: baseline; white-space: nowrap; }
+.fsf-line:last-of-type input { width: 4.7em; min-width: 4.5em; }
 .fsf-line input {
   field-sizing: content;
-  width: 11.5em; min-width: 7.5em; max-width: 100%;
+  width: 9.1em; min-width: 6em; max-width: calc(100% - .5em);
   background: transparent; border: 0; border-radius: 0;
   border-bottom: var(--rule-thin) solid var(--nsv-ink);
   padding: 0 .12em .02em; margin: 0 .1em;
-  font-family: var(--font-text); font-style: italic; font-size: 1.16em; line-height: 1.2;
+  font-family: var(--font-text); font-style: italic; font-size: 1.18em; line-height: 1.2;
   color: var(--nsv-ink);
   transition: border-color var(--t-micro) linear;
 }
-.fsf-line input::placeholder { color: var(--nsv-ink); opacity: .26; font-weight: 300; }
+.fsf-line input::placeholder { color: var(--nsv-ink); opacity: .38; font-weight: 300; }
 .fsf-line input:focus { outline: none; border-bottom-color: var(--nsv-blue); box-shadow: 0 1px 0 var(--nsv-blue); }
-.fsf-form[data-state="missing"] .fsf-line input:invalid,
-.fsf-form[data-state="missing"] .check input:invalid { border-bottom-color: #B3261E; outline: 2px solid #B3261E; outline-offset: 2px; }
-.fsf-form .action:disabled { color: inherit; }
-.fsf-form[aria-busy="true"] .action { opacity: .45; cursor: progress; transition: opacity var(--t-micro) linear; }
+.fsf-doc[data-state="missing"] .fsf-line input:invalid { border-bottom-color: #B3261E; box-shadow: 0 1px 0 #B3261E; }
+.fsf-doc[data-state="missing"] .check input:invalid { outline: 2px solid #B3261E; outline-offset: 2px; }
+.fsf-doc__act { margin-top: var(--space-4); display: grid; gap: var(--space-3); }
+.fsf-doc__act .check { margin: 0; font-size: .92em; max-width: 46em; align-items: flex-start; }
+.fsf-doc__act .check input {
+  -webkit-appearance: none; appearance: none; flex: 0 0 auto; width: 24px; height: 24px; margin: 1px 4px 0 0;
+  border: var(--rule-thin) solid var(--nsv-ink); border-radius: 0; background: transparent; cursor: pointer;
+  display: grid; place-items: center;
+}
+.fsf-doc__act .check input::after { content: ""; width: 12px; height: 12px; background: var(--nsv-ink);
+  transform: scale(0); transition: transform var(--t-micro) var(--ease-editorial); }
+.fsf-doc__act .check input:checked::after { transform: scale(1); }
+.fsf-hp { position: absolute; left: -10000px; top: auto; width: 1px; height: 1px; overflow: hidden; }
+/* The one thing to press on the page, in the one colour that means it. */
+.fsf-cta {
+  display: flex; align-items: center; justify-content: space-between; gap: var(--space-2);
+  width: 100%; border: 0; border-radius: 0; cursor: pointer;
+  background: var(--nsv-yellow); color: var(--nsv-ink);
+  padding: clamp(20px, 1.8vw, 30px) clamp(20px, 2.2vw, 36px);
+  font-family: var(--font-display); font-weight: 800; text-transform: uppercase;
+  font-size: clamp(16px, .55vw + 12.5px, 22px); letter-spacing: .02em; text-align: left;
+}
+.fsf-cta i { flex: 0 0 auto; position: relative; width: 34px; height: 2px; background: currentColor;
+             transition: width var(--t-ui) var(--ease-editorial); }
+.fsf-cta i::after { content: ""; position: absolute; right: 0; top: 50%; width: 9px; height: 9px;
+  border-top: 2px solid currentColor; border-right: 2px solid currentColor; transform: translateY(-50%) rotate(45deg); }
+@media (hover: hover) { .fsf-cta:hover i { width: 64px; } }
+.fsf-cta:focus-visible { outline: 2px solid var(--nsv-ink); outline-offset: 3px; }
+.fsf-cta:focus-visible i { width: 64px; }
+.fsf-cta:disabled { opacity: .5; cursor: progress; }
+.fsf-doc__status { margin: var(--space-2) 0 0; min-height: 1.4em; }
+.fsf-doc__status:empty { margin: 0; min-height: 0; }
+/* The foot of the sheet, as a printed form has one: what the paper is, and
+   in the declaration's own three words, what kind of act signing it is. */
+.fsf-doc__foot {
+  margin: var(--space-4) 0 0; padding-top: var(--space-2); border-top: var(--rule-thin) solid var(--nsv-ink);
+  display: flex; justify-content: space-between; flex-wrap: wrap; gap: 6px var(--space-2);
+}
+/* Signed: the same sheet, with the name on its line, the date, and the seal
+   brought down on it. */
+.fsf-signed { margin: var(--space-4) 0 0; display: flex; justify-content: space-between; align-items: flex-end; gap: var(--space-2); }
+.fsf-signed[hidden] { display: none; }
+.fsf-seal--stamp { transform: rotate(-7deg); }
+.fsf-doc[data-state="sent"] .fsf-seal--stamp { animation: fsf-stamp 520ms var(--ease-editorial) both; }
+@keyframes fsf-stamp { from { opacity: 0; transform: rotate(-16deg) scale(1.7); } to { opacity: 1; transform: rotate(-7deg) scale(1); } }
+.fsf-doc[data-state="sent"] .fsf-doc__act { display: none; }
+.fsf-doc[data-state="sent"] .fsf-line input { pointer-events: none; }
 
 /* --- 06 the day ------------------------------------------------------------ */
 .fsf-day { padding-top: var(--act); padding-bottom: var(--act); }
-.fsf-day__h, .fsf-gal__h { margin: var(--space-4) 0 0; }
-.fsf-chs { list-style: none; margin: var(--space-4) 0 0; padding: 0; }
-.fsf-ch {
-  display: grid; grid-template-columns: minmax(64px, var(--span-2)) minmax(0, 1fr);
-  column-gap: var(--gutter); align-items: baseline;
+.fsf-day__row { margin-top: var(--space-4); row-gap: var(--space-5); }
+.fsf-wait { list-style: none; margin: 0; padding: 0; }
+.fsf-wait__row {
+  display: flex; justify-content: space-between; align-items: baseline; gap: var(--space-2);
   padding: var(--space-3) 0; border-top: var(--rule-thin) solid var(--rule-color);
 }
+.fsf-wait__row:last-child { border-bottom: var(--rule-thin) solid var(--rule-color); }
+.fsf-wait__n {
+  font-family: var(--font-display); font-weight: 700; font-size: var(--fs-h3); line-height: 1;
+  letter-spacing: var(--track-display);
+}
+.fsf-day__h { margin: var(--space-5) 0 0; }
+.fsf-chs { list-style: none; margin: var(--space-3) 0 0; padding: 0; }
+.fsf-ch { display: grid; grid-template-columns: minmax(64px, var(--span-2)) minmax(0, 1fr);
+  column-gap: var(--gutter); align-items: baseline;
+  padding: var(--space-3) 0; border-top: var(--rule-thin) solid var(--rule-color); }
 .fsf-ch:last-child { border-bottom: var(--rule-thin) solid var(--rule-color); }
 .fsf-ch__t { margin: 0; font-family: var(--font-display); font-weight: 700; font-size: var(--fs-h3); line-height: 1.05; }
 .fsf-ch__p { grid-column: 2; margin: var(--space-1) 0 0; max-width: 60ch; font-family: var(--font-text); }
-
-/* What stands in for material that has not arrived: a dashed frame and a
-   label that says so. Never a stock picture, never an invented line. */
-.fsf-ph { margin: 0; opacity: .75; }
-.fsf-ch--empty { border-top-style: dashed; }
-.fsf-ch--empty:last-child { border-bottom-style: dashed; }
-.fsf-shot--empty, .fsf-film--empty {
-  display: grid; place-items: center; text-align: center; padding: var(--space-2);
-  border: var(--rule-thin) dashed var(--nsv-steel);
-  background: repeating-linear-gradient(135deg, transparent 0 14px, rgba(29,29,27,.035) 14px 15px);
-}
-
-/* --- 07 photographs and videos -------------------------------------------- */
-.fsf-gallery { padding-top: var(--act); padding-bottom: var(--act); }
-.fsf-films { display: grid; gap: var(--space-4); margin-top: var(--space-4); max-width: 980px; }
+.fsf-films { display: grid; gap: var(--space-4); margin-top: var(--space-5); max-width: var(--span-9); }
 .fsf-film { margin: 0; }
 .fsf-film video, .fsf-film iframe { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; border: 0; background: var(--nsv-ink); }
-.fsf-film--empty { aspect-ratio: 16 / 9; }
 .fsf-film figcaption, .fsf-shot figcaption { margin-top: 10px; }
 .fsf-play { display: block; position: relative; width: 100%; padding: 0; border: 0; background: var(--nsv-ink); cursor: pointer; overflow: hidden; }
 .fsf-play img { display: block; width: 100%; height: 100%; object-fit: cover; transition: opacity var(--t-ui) var(--ease-enter); }
-.fsf-play__mark {
-  position: absolute; left: var(--space-2); bottom: var(--space-2);
-  width: 64px; height: 64px; background: var(--nsv-yellow);
-}
-.fsf-play__mark::after {
-  content: ""; position: absolute; left: 50%; top: 50%; transform: translate(-36%, -50%);
-  border-left: 18px solid var(--nsv-ink); border-top: 11px solid transparent; border-bottom: 11px solid transparent;
-}
+.fsf-play__mark { position: absolute; left: var(--space-2); bottom: var(--space-2); width: 64px; height: 64px; background: var(--nsv-yellow); }
+.fsf-play__mark::after { content: ""; position: absolute; left: 50%; top: 50%; transform: translate(-36%, -50%);
+  border-left: 18px solid var(--nsv-ink); border-top: 11px solid transparent; border-bottom: 11px solid transparent; }
 @media (hover: hover) { .fsf-play:hover img { opacity: .82; } }
-
 .fsf-grid { margin-top: var(--space-5); columns: 4; column-gap: var(--gutter); }
 @media (max-width: 1279px) { .fsf-grid { columns: 3; } }
 @media (max-width: 767px)  { .fsf-grid { columns: 2; column-gap: 12px; } }
@@ -191,11 +310,8 @@
 @media (max-width: 767px) { .fsf-shot { margin-bottom: 12px; } }
 .fsf-shot a { display: block; background: var(--nsv-steel-line); }
 .fsf-shot img { display: block; width: 100%; height: auto; }
-
-.fsf-lb {
-  width: 100vw; height: 100dvh; max-width: none; max-height: none; margin: 0; padding: 0; border: 0;
-  background: rgba(29, 29, 27, .97); color: var(--nsv-paper);
-}
+.fsf-lb { width: 100vw; height: 100dvh; max-width: none; max-height: none; margin: 0; padding: 0; border: 0;
+  background: rgba(29, 29, 27, .97); color: var(--nsv-paper); }
 .fsf-lb::backdrop { background: rgba(29, 29, 27, .97); }
 .fsf-lb[open] { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; }
 .fsf-lb__fig { margin: 0; display: grid; justify-items: center; gap: 12px; padding: 56px 0 24px; touch-action: pan-y; }
@@ -206,3 +322,6 @@
 .fsf-lb__nav--next i { transform: rotate(-135deg); }
 .fsf-lb__nav[hidden] { visibility: hidden; display: grid; }
 .fsf-lb :focus-visible { outline: 2px solid var(--nsv-yellow); outline-offset: 2px; }
+
+/* --- 07 the closing line --------------------------------------------------- */
+.fsf-close { padding-block: calc(var(--act) * 1.35); }

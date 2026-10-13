@@ -1184,21 +1184,20 @@ for _slug in ("active-benessere-sport-advisor", "formula-salute-sport-advisor",
 FSF2026 = {
     "en": {
         "title": "FSF2026 | FutureSportFuture 2026, Belgrade | newsportvision",
-        "description": "FutureSportFuture 2026 took place in Belgrade on 3 October 2026. "
-                       "The Tree of Sport manifesto, the declaration of support for "
-                       "the values, and the photographs and videos of the day.",
-        "eyebrow": "took place",
+        "description": "FutureSportFuture 2026 was held in Belgrade on 3 October 2026. "
+                       "The Tree of Sport manifesto, and the declaration of support "
+                       "for the values it stands for.",
+        "crumb": "FSF 26",
+        "eyebrow_l": "a newsportvision concept",
+        "eyebrow_r": "belgrade / serbia · 03.10.2026",
         # two lines of eleven characters: they justify into one block
         "name": ["FUTURESPORT", "FUTURE 2026"],
-        "l_date": "Date", "date": "3 October 2026",
-        "l_place": "Place", "place": "Belgrade (Serbia)",
-        "lead": "On 3 October 2026, in Belgrade, FutureSportFuture took place. "
-                "This is what it left behind.",
+        "held": ["Held in Belgrade.", "3 October 2026."],
         "tree_alt": "The Tree of Sport: a tree in full leaf against a blue sky, its roots "
                     "spreading below the horizon, with the letters of the word CULTURE "
                     "set among the roots.",
-        "tree_label": "the tree of sport",
         "sport": "SPORT",
+        "manifesto_label": "the tree of sport",
         "manifesto": (
             "In our life, which can be imagined as a perfect ecosystem, Sport has a very "
             "prominent place. We can see it as one magnificent tree on a very visible hill. "
@@ -1212,14 +1211,17 @@ FSF2026 = {
             "blinding by momentary interest or greed. And our life, that is, the ecosystem to "
             "which we belong, needs that healthy tree, free from any form of our "
             "misunderstanding or disrespect for culture as the basic source of social survival."),
-        "culture": "CULTURE",
-        "idea": ["SPORT is the crown.", "CULTURE is the root and the trunk."],
+        "pdf_do": "the manifesto, PDF",
+        "pdf_n": "1 page · %s",
+        "pdf_aria": "Download the Tree of Sport manifesto, PDF, %s",
+        "pdf_file": "sport-manifest-en.pdf",
         "steps_label": "what this is",
         "steps": ["manifest", "announcement", "declaration", "call", "message"],
-        "pdf": "The original, as a PDF",
-        "pdf_file": "sport-manifest-en.pdf",
-        "sign_label": "support for the values",
-        "sign_head": "SUPPORT FOR THE VALUES",
+        "culture": "CULTURE",
+        "root_label": "at the root",
+        "idea": ["Sport is the crown.", "Culture is the root and the trunk."],
+        "doc_meta": "FSF 26 · Belgrade · 03.10.2026",
+        "sign_head": ["SUPPORT", "TO VALUES"],
         "decl": ["I,", "from",
                  ", without any institutional formality, with no obligation to pay anything "
                  "and without committing myself to any action, knowingly and with enthusiasm "
@@ -1235,39 +1237,40 @@ FSF2026 = {
         "ghost_from": "Belgrade",
         "f_consent": "I agree that NewSportVision may keep my name and where I am from "
                      "as a record of this support",
-        "f_submit": "I support",
+        "f_submit": "Sign the declaration",
         "f_missing": "Write your name and where you are from, and tick the box.",
-        "f_sending": "Sending…",
-        "f_sent": "Thank you. Your support has reached NewSportVision.",
+        "f_sending": "Signing…",
+        "f_sent": "Signed. Thank you — your support has reached NewSportVision.",
         "f_failed": "It could not be sent. What you wrote is still here — please try again.",
         "f_busy": "Too many in a short time. Please wait a few minutes and try again.",
-        "day_label": "how it unfolded",
-        "day_head": "THE DAY",
-        "gallery_label": "photos & videos",
-        "gallery_head": "PHOTOS & VIDEOS FROM FSF2026",
-        "ph_chapter": "To be added",
-        "ph_photo": "Photograph to come",
-        "ph_video": "Video to come",
+        "signed_on": "Signed on",
+        "archive_label": "the day",
+        "archive_head": ["FROM BELGRADE,", "3 OCTOBER 2026"],
+        "archive_line": "Photographs and films from the day are being prepared.",
+        "archive_rows": ["Photographs", "Films"],
+        "archive_state": "in preparation",
+        "doc_foot": ["Declaration of support", "symbolic · declarative · voluntary"],
+        "day_head": "HOW IT UNFOLDED",
         "play": "Play video",
         "lb_close": "Close", "lb_prev": "Previous", "lb_next": "Next",
         "lb_label": "Photograph",
+        "closing": ["SPORT WITHOUT", "CULTURE HAS", "NO FUTURE."],
     },
     "it": {
         "title": "FSF2026 | FutureSportFuture 2026, Belgrado | newsportvision",
-        "description": "FutureSportFuture 2026 si è tenuto a Belgrado il 3 ottobre 2026. "
-                       "Il manifesto dell'Albero dello Sport, la dichiarazione di sostegno "
-                       "ai valori, le fotografie e i video della giornata.",
-        "eyebrow": "si è tenuto",
+        "description": "FutureSportFuture 2026 si è svolto a Belgrado il 3 ottobre 2026. "
+                       "Il manifesto dell'Albero dello Sport e la dichiarazione di "
+                       "sostegno ai valori che rappresenta.",
+        "crumb": "FSF 26",
+        "eyebrow_l": "un concetto di newsportvision",
+        "eyebrow_r": "belgrado / serbia · 03.10.2026",
         "name": ["FUTURESPORT", "FUTURE 2026"],
-        "l_date": "Data", "date": "3 Ottobre 2026",
-        "l_place": "Luogo", "place": "BELGRADO (Serbia)",
-        "lead": "Il 3 ottobre 2026, a Belgrado, si è tenuto FutureSportFuture. "
-                "Questo è ciò che ha lasciato.",
+        "held": ["Si è svolto a Belgrado.", "3 ottobre 2026."],
         "tree_alt": "L'Albero dello Sport: un albero in piena chioma su un cielo azzurro, "
                     "le radici che si allargano sotto l'orizzonte, con le lettere della "
                     "parola CULTURE disposte tra le radici.",
-        "tree_label": "l'albero dello sport",
         "sport": "SPORT",
+        "manifesto_label": "l'albero dello sport",
         "manifesto": (
             "Nella nostra vita, che può essere immaginata come un ecosistema perfetto, lo "
             "Sport occupa un posto di grande rilievo. Possiamo vederlo come un magnifico "
@@ -1283,14 +1286,17 @@ FSF2026 = {
             "E la nostra vita, cioè l’ecosistema a cui apparteniamo, ha bisogno di "
             "quell’albero sano, libero da ogni forma di incomprensione o mancanza di rispetto "
             "per la cultura come fonte fondamentale di sopravvivenza sociale."),
-        "culture": "CULTURE",
-        "idea": ["Lo SPORT è la chioma.", "La CULTURA è la radice e il tronco."],
+        "pdf_do": "il manifesto, PDF",
+        "pdf_n": "1 pagina · %s",
+        "pdf_aria": "Scarica il manifesto dell'Albero dello Sport, PDF, %s",
+        "pdf_file": "sport-manifest-it.pdf",
         "steps_label": "che cos'è",
         "steps": ["manifesto", "dichiarazione", "posizione", "appello", "messaggio"],
-        "pdf": "L'originale, in PDF",
-        "pdf_file": "sport-manifest-it.pdf",
-        "sign_label": "sostegno ai valori",
-        "sign_head": "SOSTEGNO AI VALORI",
+        "culture": "CULTURE",
+        "root_label": "alla radice",
+        "idea": ["Lo sport è la chioma.", "La cultura è la radice e il tronco."],
+        "doc_meta": "FSF 26 · Belgrado · 03.10.2026",
+        "sign_head": ["SOSTEGNO", "AI VALORI"],
         "decl": ["Io,", "di",
                  ", senza alcuna formalità istituzionale, senza alcun obbligo di pagamento e "
                  "senza assumere alcun impegno operativo, consapevolmente e con entusiasmo "
@@ -1306,21 +1312,23 @@ FSF2026 = {
         "ghost_from": "Belgrado",
         "f_consent": "Acconsento a che NewSportVision conservi il mio nome e la mia "
                      "provenienza come testimonianza di questo sostegno",
-        "f_submit": "Sostengo",
+        "f_submit": "Firma la dichiarazione",
         "f_missing": "Scrivi il tuo nome e la tua provenienza, e spunta la casella.",
-        "f_sending": "Invio in corso…",
-        "f_sent": "Grazie. Il tuo sostegno è arrivato a NewSportVision.",
+        "f_sending": "Firma in corso…",
+        "f_sent": "Firmato. Grazie: il tuo sostegno è arrivato a NewSportVision.",
         "f_failed": "Non è stato possibile inviarlo. Ciò che hai scritto è ancora qui: riprova.",
         "f_busy": "Troppi invii in poco tempo. Attendi qualche minuto e riprova.",
-        "day_label": "com'è andata",
-        "day_head": "LA GIORNATA",
-        "gallery_label": "foto e video",
-        "gallery_head": "FOTO E VIDEO DA FSF2026",
-        "ph_chapter": "Da aggiungere",
-        "ph_photo": "Fotografia in arrivo",
-        "ph_video": "Video in arrivo",
+        "signed_on": "Firmato il",
+        "archive_label": "la giornata",
+        "archive_head": ["DA BELGRADO,", "3 OTTOBRE 2026"],
+        "archive_line": "Le fotografie e i filmati della giornata sono in preparazione.",
+        "archive_rows": ["Fotografie", "Filmati"],
+        "archive_state": "in preparazione",
+        "doc_foot": ["Dichiarazione di sostegno", "simbolico · dichiarativo · volontario"],
+        "day_head": "COM'È ANDATA",
         "play": "Riproduci il video",
         "lb_close": "Chiudi", "lb_prev": "Precedente", "lb_next": "Successiva",
         "lb_label": "Fotografia",
+        "closing": ["LO SPORT SENZA", "CULTURA NON HA", "FUTURO."],
     },
 }
