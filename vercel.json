@@ -1170,7 +1170,7 @@
         },
         {
           "key": "Content-Security-Policy",
-          "value": "default-src 'self'; img-src 'self' data:; font-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'sha256-RlzB6Nms8U9fychC5JuJqvLYQDcaCsG/JJEOfRhyDbE='; form-action 'self' mailto:; base-uri 'self'; frame-ancestors 'self'; object-src 'none'"
+          "value": "default-src 'self'; img-src 'self' data:; font-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'sha256-RlzB6Nms8U9fychC5JuJqvLYQDcaCsG/JJEOfRhyDbE='; form-action 'self' mailto:; frame-src https://www.youtube-nocookie.com https://player.vimeo.com; base-uri 'self'; frame-ancestors 'self'; object-src 'none'"
         }
       ]
     },
@@ -1365,6 +1365,24 @@
     },
     {
       "source": "/it/work-in-progress/",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=0, must-revalidate"
+        }
+      ]
+    },
+    {
+      "source": "/fsf2026/",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=0, must-revalidate"
+        }
+      ]
+    },
+    {
+      "source": "/it/fsf2026/",
       "headers": [
         {
           "key": "Cache-Control",

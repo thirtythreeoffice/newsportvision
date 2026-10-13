@@ -147,6 +147,7 @@ def home(lang):
         </dl>
         <div class="prose measure" style="margin-top:var(--space-3)" data-reveal="up"><p>%(body)s</p></div>
         <p class="event-close" style="margin-top:var(--space-4)" data-reveal="up">%(close)s</p>
+        <div style="margin-top:var(--space-4)" data-reveal="up">%(cta)s</div>
       </div>
     </div>
   </div>
@@ -165,6 +166,7 @@ def home(lang):
         "place": esc(c["event_place"]),
         "body": esc(c["event_body"]),
         "close": "<br>".join(esc(l) for l in c["event_close"]),
+        "cta": action(url(lang, "/fsf2026/"), c["event_cta"], lang, cursor=ui["view"]),
     }
 
     # ---- 03 products -------------------------------------------------------
@@ -914,3 +916,321 @@ def not_found(lang):
     # canonical of its own and its language switch goes to the other home.
     return page(lang, "/", "404 | newsportvision", "Page not found", body, noindex=True,
                 footer_html=footer(lang, "/", HOME[lang]["contact_invite"], HOME[lang]["got_idea"]))
+
+
+# ===========================================================================
+# FSF2026 — the event, once it has happened.
+#
+# The page reads downward the way the manifesto's picture does: the crown in
+# the sky (SPORT), the text on the green of the hill, the root in the dark
+# (CULTURE), then the five words stepping down a line onto paper. After that
+# come the two things a visitor can do — sign, and look.
+# ===========================================================================
+import os
+import hashlib as _hashlib
+import json as _json
+import struct as _struct
+import fsf2026_media as _fm
+from content import FSF2026
+
+_FSF_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "static", "media", "fsf2026")
+
+
+def _image_size(path):
+    """Width and height from the file's own header, so a photograph can be
+    added by name alone and still hold its place before it loads."""
+    with open(path, "rb") as f:
+        head = f.read(32)
+        if head[:8] == b"\x89PNG\r\n\x1a\n":
+            return _struct.unpack(">II", head[16:24])
+        if head[:4] == b"RIFF" and head[8:12] == b"WEBP":
+            f.seek(0); data = f.read(64)
+            if data[12:16] == b"VP8X":
+                return (1 + int.from_bytes(data[24:27], "little"),
+                        1 + int.from_bytes(data[27:30], "little"))
+            if data[12:16] == b"VP8 ":
+                w, h = _struct.unpack("<HH", data[26:30]); return (w & 0x3FFF, h & 0x3FFF)
+            if data[12:16] == b"VP8L":
+                b = int.from_bytes(data[21:25], "little")
+                return ((b & 0x3FFF) + 1, ((b >> 14) & 0x3FFF) + 1)
+        if head[:2] == b"\xff\xd8":
+            f.seek(2)
+            while True:
+                marker = f.read(2)
+                if len(marker) < 2 or marker[0] != 0xFF:
+                    break
+                while marker[1] == 0xFF:
+                    marker = bytes([0xFF]) + f.read(1)
+                size = _struct.unpack(">H", f.read(2))[0]
+                if 0xC0 <= marker[1] <= 0xCF and marker[1] not in (0xC4, 0xC8, 0xCC):
+                    f.read(1); h, w = _struct.unpack(">HH", f.read(4)); return (w, h)
+                f.seek(size - 2, 1)
+    raise ValueError("cannot read the size of %s" % os.path.basename(path))
+
+
+def _fsf_file(name):
+    path = os.path.join(_FSF_DIR, name)
+    if not os.path.isfile(path):
+        raise SystemExit("FSF2026: %s is named in src/fsf2026_media.py but is not in "
+                         "static/media/fsf2026/" % name)
+    return path
+
+
+_fsf_v = {}
+
+
+def _fsf_url(name):
+    """Media is served for a year, so each file's address carries a mark of its
+    own content: replace the file and the address changes with it."""
+    if name not in _fsf_v:
+        with open(_fsf_file(name), "rb") as f:
+            _fsf_v[name] = _hashlib.sha1(f.read()).hexdigest()[:8]
+    return "/assets/media/fsf2026/%s?v=%s" % (name, _fsf_v[name])
+
+
+def _fsf_srcset(name, full_w):
+    """The lighter copies gen_fsf2026.py writes, if they are there."""
+    stem, ext = name.rsplit(".", 1)
+    out = []
+    for w in (480, 800, 1200):
+        small = "%s-%d.%s" % (stem, w, ext)
+        if w < full_w and os.path.isfile(os.path.join(_FSF_DIR, small)):
+            out.append("%s %dw" % (_fsf_url(small), w))
+    out.append("%s %dw" % (_fsf_url(name), full_w))
+    return ", ".join(out)
+
+
+def _tr(d, lang):
+    return (d or {}).get(lang) or (d or {}).get("en") or ""
+
+
+def fsf2026(lang):
+    t = FSF2026[lang]
+    ui = UI[lang]
+
+    # ---- 01 sky: the event, and the tree ------------------------------------
+    sky = """
+<section class="fsf-sky on-fsf-sky" data-field="ink" aria-labelledby="fsf-h">
+  <div class="wrap">
+    <div class="kicker fsf-kicker"><i class="tab" aria-hidden="true"></i>%(rule)s<span class="meta">%(eyebrow)s</span></div>
+    %(title)s
+    <div class="grid fsf-facts">
+      <dl class="datarow datarow--2 c5">
+        <div><dt class="meta">%(l_date)s</dt><dd>%(date)s</dd></div>
+        <div><dt class="meta">%(l_place)s</dt><dd>%(place)s</dd></div>
+      </dl>
+      <p class="fsf-lead c6 s7">%(lead)s</p>
+    </div>
+    <figure class="fsf-tree" data-reveal="up">
+      <img src="%(tree_s)s" srcset="%(tree_s)s 820w, %(tree_l)s 1642w"
+           sizes="(max-width: 767px) 100vw, min(1100px, 82vw)"
+           width="1642" height="896" alt="%(tree_alt)s" decoding="async" fetchpriority="high">
+    </figure>
+  </div>
+</section>""" % {
+        "rule": rule(), "eyebrow": esc(t["eyebrow"]),
+        "title": jstack(t["name"], tag="h1", cls="statement-stack fsf-title", jmax="210",
+                        extra=' id="fsf-h"'),
+        "l_date": esc(t["l_date"]), "date": esc(t["date"]),
+        "l_place": esc(t["l_place"]), "place": esc(t["place"]),
+        "lead": esc(t["lead"]),
+        "tree_s": _fsf_url("tree-of-sport-820.jpg"), "tree_l": _fsf_url("tree-of-sport-1642.jpg"),
+        "tree_alt": esc(t["tree_alt"]),
+    }
+
+    # ---- 02 the hill: SPORT, and the manifesto ------------------------------
+    manifesto = """
+<section class="fsf-hill on-fsf-green" data-field="ink" aria-labelledby="fsf-sport">
+  <div class="wrap">
+    <h2 class="fsf-sport" id="fsf-sport">%(sport)s</h2>
+    %(shead)s
+    <p class="fsf-text" data-reveal="up">%(text)s</p>
+  </div>
+</section>""" % {"sport": esc(t["sport"]), "shead": shead(t["tree_label"]),
+                 "text": esc(t["manifesto"])}
+
+    # ---- 03 the root: CULTURE ----------------------------------------------
+    root = """
+<section class="fsf-root on-ink" data-field="ink">
+  <div class="wrap">
+    <p class="fsf-culture" aria-label="%(word)s" data-reveal="fade">%(letters)s</p>
+    <p class="fsf-idea" data-reveal="up">%(idea)s</p>
+  </div>
+</section>""" % {
+        "word": esc(t["culture"]),
+        "letters": "".join('<span aria-hidden="true">%s</span>' % esc(ch) for ch in t["culture"]),
+        "idea": "<br>".join(esc(l) for l in t["idea"]),
+    }
+
+    # ---- 04 the steps -------------------------------------------------------
+    steps = """
+<section class="fsf-stairs on-paper" data-field="paper">
+  <div class="wrap">
+    %(shead)s
+    <ol class="fsf-steps" data-reveal="up">%(items)s</ol>
+    <p class="fsf-pdf"><a class="meta tlink" href="%(pdf)s" data-cursor="PDF" download>%(pdf_label)s</a></p>
+  </div>
+</section>""" % {
+        "shead": shead(t["steps_label"]),
+        "items": "".join('<li style="--i:%d">%s</li>' % (i, esc(w)) for i, w in enumerate(t["steps"])),
+        "pdf": _fsf_url(t["pdf_file"]), "pdf_label": esc(t["pdf"]),
+    }
+
+    # ---- 05 the declaration -------------------------------------------------
+    def line(field, label, ghost, auto):
+        return ('<span class="fsf-line"><label class="visually-hidden" for="fsf-%s">%s</label>'
+                '<input id="fsf-%s" name="%s" type="text" placeholder="%s" autocomplete="%s" '
+                'maxlength="80" required></span>'
+                % (field, esc(label), field, field, esc(ghost), auto))
+    sign = """
+<section class="fsf-sign on-paper" data-field="paper" id="support" aria-labelledby="fsf-sign-h">
+  <div class="wrap">
+    %(shead)s
+    <div class="grid">
+      <h2 class="h3 fsf-sign__h c4" id="fsf-sign-h">%(head)s</h2>
+      <form class="fsf-form c7 s6" method="post" action="/api/support/" data-fsf-form
+            data-missing="%(missing)s" data-sending="%(sending)s" data-sent="%(sent)s"
+            data-failed="%(failed)s" data-busy="%(busy)s" novalidate>
+        <p class="fsf-decl">%(a)s %(name)s %(b)s %(place)s%(c)s</p>
+        <p class="check"><input id="fsf-consent" name="consent" type="checkbox" required>
+           <label for="fsf-consent">%(consent)s —
+             <a class="tlink" href="%(privacy)s">%(privacy_label)s</a></label></p>
+        <p class="hd-hp" aria-hidden="true"><label for="fsf-website">Website</label>
+           <input id="fsf-website" name="website" type="text" tabindex="-1" autocomplete="off"></p>
+        <p><button type="submit" class="action" style="border:0;padding:0">
+          <span class="action__label">%(submit)s</span>
+          <span class="action__arrow" aria-hidden="true"></span></button></p>
+        <p class="annot" data-fsf-status role="status" aria-live="polite"></p>
+      </form>
+    </div>
+  </div>
+</section>""" % {
+        "shead": shead(t["sign_label"]), "head": esc(t["sign_head"]),
+        "a": esc(t["decl"][0]), "b": esc(t["decl"][1]), "c": esc(t["decl"][2]),
+        "name": line("name", t["f_name"], t["ghost_name"], "name"),
+        "place": line("from", t["f_from"], t["ghost_from"], "off"),
+        "consent": esc(t["f_consent"]),
+        "privacy": url(lang, "/privacy/"), "privacy_label": esc(ui["privacy"]),
+        "submit": esc(t["f_submit"]),
+        "missing": esc(t["f_missing"]), "sending": esc(t["f_sending"]), "sent": esc(t["f_sent"]),
+        "failed": esc(t["f_failed"]), "busy": esc(t["f_busy"]),
+    }
+
+    # ---- 06 the day ---------------------------------------------------------
+    if _fm.CHAPTERS:
+        chapters = "".join(
+            '<li class="fsf-ch" data-reveal="up"><span class="fsf-ch__time meta">%s</span>'
+            '<h3 class="fsf-ch__t">%s</h3>%s</li>'
+            % (esc(ch.get("time", "")), esc(_tr(ch.get("title"), lang)),
+               ('<p class="fsf-ch__p">%s</p>' % esc(_tr(ch.get("text"), lang))) if ch.get("text") else "")
+            for ch in _fm.CHAPTERS)
+    else:
+        chapters = "".join(
+            '<li class="fsf-ch fsf-ch--empty"><span class="fsf-ch__time meta">—</span>'
+            '<p class="fsf-ph meta">%s</p></li>' % esc(t["ph_chapter"])
+            for _ in range(_fm.PLACEHOLDER_CHAPTERS))
+    day = """
+<section class="fsf-day on-ink" data-field="ink" aria-labelledby="fsf-day-h">
+  <div class="wrap">
+    %(shead)s
+    <h2 class="h3 fsf-day__h" id="fsf-day-h">%(head)s</h2>
+    <ol class="fsf-chs">%(chapters)s</ol>
+  </div>
+</section>""" % {"shead": shead(t["day_label"]), "head": esc(t["day_head"]), "chapters": chapters}
+
+    # ---- 07 photographs and videos -----------------------------------------
+    shots = []
+    for i, ph in enumerate(_fm.PHOTOS):
+        w, h = _image_size(_fsf_file(ph["src"]))
+        alt = _tr(ph.get("alt"), lang)
+        if not alt:
+            raise SystemExit("FSF2026: %s needs an alt text in src/fsf2026_media.py" % ph["src"])
+        cap = _tr(ph.get("caption"), lang)
+        shots.append(
+            '<figure class="fsf-shot" data-reveal="up">'
+            '<a href="%s" data-fsf-shot="%d" data-w="%d" data-h="%d" data-srcset="%s" data-caption="%s" '
+            'data-cursor="%s"><img src="%s" srcset="%s" sizes="(max-width:767px) 50vw, (max-width:1279px) 33vw, 25vw" '
+            'width="%d" height="%d" alt="%s" loading="lazy" decoding="async"></a>%s</figure>'
+            % (_fsf_url(ph["src"]), i, w, h, esc(_fsf_srcset(ph["src"], w)), esc(cap), esc(ui["view"]),
+               _fsf_url(ph["src"]), esc(_fsf_srcset(ph["src"], w)), w, h, esc(alt),
+               ('<figcaption class="meta">%s</figcaption>' % esc(cap)) if cap else ""))
+    if not shots:
+        ratios = ("4/3", "3/4", "1/1", "4/3", "1/1", "3/4")
+        shots = ['<figure class="fsf-shot fsf-shot--empty" style="aspect-ratio:%s">'
+                 '<span class="fsf-ph meta">%s</span></figure>' % (ratios[i % len(ratios)], esc(t["ph_photo"]))
+                 for i in range(_fm.PLACEHOLDER_PHOTOS)]
+
+    films = []
+    for v in _fm.VIDEOS:
+        title = _tr(v.get("title"), lang)
+        poster = v.get("poster")
+        pw, ph_ = _image_size(_fsf_file(poster)) if poster else (16, 9)
+        cap = ('<figcaption class="meta">%s</figcaption>' % esc(title)) if title else ""
+        if v.get("file"):
+            _fsf_file(v["file"])
+            films.append('<figure class="fsf-film"><video controls preload="none" playsinline%s '
+                         'width="%d" height="%d"><source src="%s"></video>%s</figure>'
+                         % ((' poster="%s"' % _fsf_url(poster)) if poster else "", pw, ph_,
+                            _fsf_url(v["file"]), cap))
+        else:
+            host = "youtube" if v.get("youtube") else "vimeo"
+            if not poster:
+                raise SystemExit("FSF2026: a %s video needs a poster of your own" % host)
+            films.append(
+                '<figure class="fsf-film"><button type="button" class="fsf-play" data-%s="%s" '
+                'aria-label="%s%s" style="aspect-ratio:%d/%d">'
+                '<img src="%s" width="%d" height="%d" alt="" loading="lazy" decoding="async">'
+                '<i class="fsf-play__mark" aria-hidden="true"></i></button>%s</figure>'
+                % (host, esc(v[host]), esc(t["play"]), (": " + esc(title)) if title else "",
+                   pw, ph_, _fsf_url(poster), pw, ph_, cap))
+    if not films:
+        films = ['<figure class="fsf-film fsf-film--empty"><span class="fsf-ph meta">%s</span></figure>'
+                 % esc(t["ph_video"]) for _ in range(_fm.PLACEHOLDER_VIDEOS)]
+
+    gallery = """
+<section class="fsf-gallery on-paper" data-field="paper" aria-labelledby="fsf-gal-h">
+  <div class="wrap">
+    %(shead)s
+    <h2 class="h3 fsf-gal__h" id="fsf-gal-h">%(head)s</h2>
+    <div class="fsf-films">%(films)s</div>
+    <div class="fsf-grid">%(shots)s</div>
+  </div>
+  <dialog class="fsf-lb" data-fsf-lb aria-label="%(lb_label)s">
+    <button type="button" class="fsf-lb__x meta" data-lb-close>%(close)s</button>
+    <button type="button" class="fsf-lb__nav fsf-lb__nav--prev" data-lb-prev aria-label="%(prev)s"><i aria-hidden="true"></i></button>
+    <figure class="fsf-lb__fig"><img alt="" data-lb-img><figcaption class="meta" data-lb-cap></figcaption></figure>
+    <button type="button" class="fsf-lb__nav fsf-lb__nav--next" data-lb-next aria-label="%(next)s"><i aria-hidden="true"></i></button>
+  </dialog>
+</section>""" % {
+        "shead": shead(t["gallery_label"]), "head": esc(t["gallery_head"]),
+        "films": "".join(films), "shots": "".join(shots),
+        "lb_label": esc(t["lb_label"]), "close": esc(t["lb_close"]),
+        "prev": esc(t["lb_prev"]), "next": esc(t["lb_next"]),
+    }
+
+    # A past date is how a finished event is said in schema.org: it has no
+    # "completed" status, and "scheduled" with a date gone by is the form
+    # search engines read as "took place as planned".
+    ld = {
+        "@context": "https://schema.org", "@type": "Event",
+        "name": "FutureSportFuture 2026", "alternateName": "FSF2026",
+        "startDate": "2026-10-03", "endDate": "2026-10-03",
+        "eventStatus": "https://schema.org/EventScheduled",
+        "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+        "inLanguage": lang, "description": t["description"],
+        "url": SITE["domain"] + url(lang, "/fsf2026/"),
+        "image": SITE["domain"] + "/assets/media/fsf2026/tree-of-sport-1642.jpg",
+        "location": {"@type": "Place", "name": "Belgrade",
+                     "address": {"@type": "PostalAddress", "addressLocality": "Belgrade",
+                                 "addressCountry": "RS"}},
+        "organizer": {"@type": "Organization", "name": "NewSportVision", "url": SITE["domain"]},
+    }
+    head_extra = ('<script type="application/ld+json">%s</script>\n'
+                  % _json.dumps(ld, ensure_ascii=False).replace("</", "<\\/"))
+
+    body = sky + manifesto + root + steps + sign + day + gallery
+    return page(lang, "/fsf2026/", t["title"], t["description"], body,
+                footer_html=footer(lang, "/fsf2026/", HOME[lang]["contact_invite"],
+                                   HOME[lang]["got_idea"]),
+                og_image="fsf2026/tree-of-sport-1642.jpg",
+                css=("fsf.css",), scripts=("fsf2026.js",), head_extra=head_extra)

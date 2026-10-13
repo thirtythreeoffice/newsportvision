@@ -104,8 +104,9 @@ HOME = {
         "hero": ["QUICK", "STEPS", "INTO THE SPORTS", "FUTURE"],
         "hero_kicker": "NEW TRENDS IN SPORT",
         "hero_sub": "A NEWSPORTVISION CONCEPT",
-        "event_eyebrow": "coming next",
-        "event_about": "ABOUT THE NEXT EVENT",
+        "event_eyebrow": "took place",
+        "event_about": "ABOUT THE EVENT",
+        "event_cta": "FSF2026 — how it went",
         "event_name": "FUTURESPORTFUTURE 2026",
         "event_date": "3 October 2026",
         "event_place": "Belgrade (Serbia)",
@@ -149,7 +150,8 @@ HOME = {
         "hero": ["CELERI", "PASSI", "NELLO SPORT DEL", "FUTURO"],
         "hero_kicker": "NUOVE TENDENZE NELLO SPORT",
         "hero_sub": "UN CONCETTO DI NEWSPORTVISION",
-        "event_eyebrow": "prossimamente",
+        "event_eyebrow": "si è tenuto",
+        "event_cta": "FSF2026 — com'è andata",
         "event_about": "RIGUARDO L'ULTIMO EVENTO/",
         "event_name": "FUTURESPORTFUTURE 2026",
         "event_date": "3 Ottobre 2026",
@@ -203,7 +205,7 @@ PRODUCTS_INDEX = {
             ("guidelines",       "Guidelines",           "/guidelines"),
             ("my-12-seconds",    "My 12 Seconds",        "/work-in-progress"),
             ("books",            "Books",                "/books"),
-            ("futuresportfuture","FutureSportFuture",    "/work-in-progress"),
+            ("futuresportfuture","FutureSportFuture",    "/fsf2026"),
             ("3-balls",          "3 Balls 1 Champion",   "/work-in-progress"),
             ("camst",            "Master Course: CAMST", "/work-in-progress"),
             ("back-to-school",   "Back to School",       "/work-in-progress"),
@@ -216,7 +218,7 @@ PRODUCTS_INDEX = {
             ("guidelines",       "Guide",                "/guidelines"),
             ("my-12-seconds",    "I miei 12 secondi",    "/work-in-progress"),
             ("books",            "Libri",                "/books"),
-            ("futuresportfuture","FuturoSportFuturo",    "/work-in-progress"),
+            ("futuresportfuture","FuturoSportFuturo",    "/fsf2026"),
             ("3-balls",          "3 Palloni 1 Campione", "/work-in-progress"),
             ("camst",            "Corso Master: CAMST",  "/work-in-progress"),
             ("back-to-school",   "Back to school",       "/work-in-progress"),
@@ -1137,3 +1139,188 @@ for _slug in ("active-benessere-sport-advisor", "formula-salute-sport-advisor",
 #  6. The Italian and English "work in progress" pages carry different dates
 #     and different messages. Both are preserved.
 # ---------------------------------------------------------------------------
+
+
+# ---------------------------------------------------------------------------
+# FSF2026 — the page for the event once it has happened, the manifesto that
+# came with it, and the declaration of support.
+#
+# The manifesto is the client's own text, taken word for word from the PDF
+# "SPORT MANIFEST" (only the line-end hyphens are closed). The English carries
+# a phrase — "scaly carelessness" — that the Italian and Serbian versions show
+# to be a slip for "human carelessness"; it is published as supplied until the
+# client approves a correction.
+#
+# The Serbian page of that PDF is not published — the site is English and
+# Italian — but it is kept here as the third source:
+#
+#   U našem životu koji se može zamisliti i kao jedan savršen ekosistem Sport
+#   ima istaknuto mesto. Možemo da ga vidimo kao jedno raskošno drvo na veoma
+#   vidljivom uzvišenju. Dubok i nevidljiv koren i stablo tog divnog drveta
+#   čini ljudska kultura, onaj njen deo vezan za potrebu čoveka za fizičkim
+#   kretanjem i organizovanim takmičenjem. Bezbrojne grane i još više lišća su
+#   zapravo brojni sportovi i još brojniji sportisti svih uzrasta. To prekrasno
+#   i stalno rastuće drvo ima svoju svetlu budućnost isključivo ako čovek bude
+#   brinuo o njegovom korenu i njegovom opštem zdravlju. U suprotnom svo lišće
+#   i granje će se osušiti, opasti i završiti ko zna u kakvom bespuću ljudskog
+#   nemara i njegovom zaslepljenošću trenutnim interesom ili pohlepom. A naš
+#   život odnosno ekosistem kojem pripadamo ima potrebu za tim zdravim drvetom,
+#   slobodnim od svakog oblika našeg neshvatanja ili nepoštovanja kulture kao
+#   osnovnog izvorišta društvenog opstanka.
+#   Stepenice: manifest, objava, proglas, apel, poruka.
+#
+# The declaration exists only in Serbian; the English and Italian below are
+# translations of it (source typo "ise zalaže" read as "se zalaže"):
+#
+#   PODRŠKA VREDNOSTI. Ja, … iz … bez ikakve institucionalne formalnosti, bez
+#   obaveze bilo kakvog plaćanja i ne preuzimajući nikakvu akcionu obaveznost,
+#   svesno i s entuzijazmom podržavam vrednosti za koje se bori i koje promoviše
+#   Newsportvision. Ovu podršku činim na simboličan, deklarativan i dobrovoljan
+#   način, želeći da vrednosti za koje se zalaže Newsportvision dobiju što širi
+#   zamah i snagu. Ako ova moja deklarativna podrška pomogne realizaciji tog
+#   cilja biće jako lepo, i stvoriće kod mene osećaj zadovoljstva zbog svog
+#   doprinosa u poboljšanju sveta u kojem živimo.
+# ---------------------------------------------------------------------------
+FSF2026 = {
+    "en": {
+        "title": "FSF2026 | FutureSportFuture 2026, Belgrade | newsportvision",
+        "description": "FutureSportFuture 2026 took place in Belgrade on 3 October 2026. "
+                       "The Tree of Sport manifesto, the declaration of support for "
+                       "the values, and the photographs and videos of the day.",
+        "eyebrow": "took place",
+        # two lines of eleven characters: they justify into one block
+        "name": ["FUTURESPORT", "FUTURE 2026"],
+        "l_date": "Date", "date": "3 October 2026",
+        "l_place": "Place", "place": "Belgrade (Serbia)",
+        "lead": "On 3 October 2026, in Belgrade, FutureSportFuture took place. "
+                "This is what it left behind.",
+        "tree_alt": "The Tree of Sport: a tree in full leaf against a blue sky, its roots "
+                    "spreading below the horizon, with the letters of the word CULTURE "
+                    "set among the roots.",
+        "tree_label": "the tree of sport",
+        "sport": "SPORT",
+        "manifesto": (
+            "In our life, which can be imagined as a perfect ecosystem, Sport has a very "
+            "prominent place. We can see it as one magnificent tree on a very visible hill. "
+            "The deep and invisible root of that wonderful tree as well as its trunk is human "
+            "culture, that part of it related to man’s need for physical movement and "
+            "organized competition. Countless branches and even more leaves are actually "
+            "numerous sports and even more numerous athletes of all ages. That beautiful and "
+            "ever-growing tree has its bright future only if man takes care of its roots and "
+            "its general health. Otherwise, all the leaves and branches will dry up, fall off "
+            "and end up in who knows what kind of emptiness of scaly carelessness and his "
+            "blinding by momentary interest or greed. And our life, that is, the ecosystem to "
+            "which we belong, needs that healthy tree, free from any form of our "
+            "misunderstanding or disrespect for culture as the basic source of social survival."),
+        "culture": "CULTURE",
+        "idea": ["SPORT is the crown.", "CULTURE is the root and the trunk."],
+        "steps_label": "what this is",
+        "steps": ["manifest", "announcement", "declaration", "call", "message"],
+        "pdf": "The original, as a PDF",
+        "pdf_file": "sport-manifest-en.pdf",
+        "sign_label": "support for the values",
+        "sign_head": "SUPPORT FOR THE VALUES",
+        "decl": ["I,", "from",
+                 ", without any institutional formality, with no obligation to pay anything "
+                 "and without committing myself to any action, knowingly and with enthusiasm "
+                 "support the values NewSportVision stands up for and promotes. I give this "
+                 "support in a symbolic, declarative and voluntary way, wishing the values "
+                 "NewSportVision stands for to gain the widest possible momentum and strength. "
+                 "If this declaration of mine helps bring that about, it will be a fine thing, "
+                 "and it will leave me with the satisfaction of having contributed to improving "
+                 "the world we live in."],
+        "f_name": "Your full name",
+        "f_from": "Your city or organisation",
+        "ghost_name": "Nemanja Mladenović",
+        "ghost_from": "Belgrade",
+        "f_consent": "I agree that NewSportVision may keep my name and where I am from "
+                     "as a record of this support",
+        "f_submit": "I support",
+        "f_missing": "Write your name and where you are from, and tick the box.",
+        "f_sending": "Sending…",
+        "f_sent": "Thank you. Your support has reached NewSportVision.",
+        "f_failed": "It could not be sent. What you wrote is still here — please try again.",
+        "f_busy": "Too many in a short time. Please wait a few minutes and try again.",
+        "day_label": "how it unfolded",
+        "day_head": "THE DAY",
+        "gallery_label": "photos & videos",
+        "gallery_head": "PHOTOS & VIDEOS FROM FSF2026",
+        "ph_chapter": "To be added",
+        "ph_photo": "Photograph to come",
+        "ph_video": "Video to come",
+        "play": "Play video",
+        "lb_close": "Close", "lb_prev": "Previous", "lb_next": "Next",
+        "lb_label": "Photograph",
+    },
+    "it": {
+        "title": "FSF2026 | FutureSportFuture 2026, Belgrado | newsportvision",
+        "description": "FutureSportFuture 2026 si è tenuto a Belgrado il 3 ottobre 2026. "
+                       "Il manifesto dell'Albero dello Sport, la dichiarazione di sostegno "
+                       "ai valori, le fotografie e i video della giornata.",
+        "eyebrow": "si è tenuto",
+        "name": ["FUTURESPORT", "FUTURE 2026"],
+        "l_date": "Data", "date": "3 Ottobre 2026",
+        "l_place": "Luogo", "place": "BELGRADO (Serbia)",
+        "lead": "Il 3 ottobre 2026, a Belgrado, si è tenuto FutureSportFuture. "
+                "Questo è ciò che ha lasciato.",
+        "tree_alt": "L'Albero dello Sport: un albero in piena chioma su un cielo azzurro, "
+                    "le radici che si allargano sotto l'orizzonte, con le lettere della "
+                    "parola CULTURE disposte tra le radici.",
+        "tree_label": "l'albero dello sport",
+        "sport": "SPORT",
+        "manifesto": (
+            "Nella nostra vita, che può essere immaginata come un ecosistema perfetto, lo "
+            "Sport occupa un posto di grande rilievo. Possiamo vederlo come un magnifico "
+            "albero su una collina ben visibile. La radice profonda e invisibile di "
+            "quell’albero meraviglioso così come il suo tronco è la cultura umana, quella "
+            "parte di essa legata al bisogno dell’uomo di movimento fisico e di competizione "
+            "organizzata. Innumerevoli rami e ancor più foglie sono in realtà le numerose "
+            "discipline sportive e gli ancora più numerosi atleti di tutte le età. "
+            "Quell’albero bello e in continua crescita ha il suo luminoso futuro solo se "
+            "l’uomo si prende cura delle sue radici e della sua salute generale. Altrimenti "
+            "tutte le foglie e i rami seccheranno, cadranno e finiranno in chissà quale vuoto "
+            "di disattenzione umana e del suo accecamento per interesse o avidità momentanea. "
+            "E la nostra vita, cioè l’ecosistema a cui apparteniamo, ha bisogno di "
+            "quell’albero sano, libero da ogni forma di incomprensione o mancanza di rispetto "
+            "per la cultura come fonte fondamentale di sopravvivenza sociale."),
+        "culture": "CULTURE",
+        "idea": ["Lo SPORT è la chioma.", "La CULTURA è la radice e il tronco."],
+        "steps_label": "che cos'è",
+        "steps": ["manifesto", "dichiarazione", "posizione", "appello", "messaggio"],
+        "pdf": "L'originale, in PDF",
+        "pdf_file": "sport-manifest-it.pdf",
+        "sign_label": "sostegno ai valori",
+        "sign_head": "SOSTEGNO AI VALORI",
+        "decl": ["Io,", "di",
+                 ", senza alcuna formalità istituzionale, senza alcun obbligo di pagamento e "
+                 "senza assumere alcun impegno operativo, consapevolmente e con entusiasmo "
+                 "sostengo i valori per cui NewSportVision si batte e che promuove. Offro "
+                 "questo sostegno in modo simbolico, dichiarativo e volontario, con il "
+                 "desiderio che i valori difesi da NewSportVision acquistino lo slancio e la "
+                 "forza più ampi possibili. Se questa mia dichiarazione aiuterà a raggiungere "
+                 "tale obiettivo, sarà una cosa molto bella, e mi darà la soddisfazione di aver "
+                 "contribuito a migliorare il mondo in cui viviamo."],
+        "f_name": "Nome e cognome",
+        "f_from": "Città o organizzazione",
+        "ghost_name": "Nemanja Mladenović",
+        "ghost_from": "Belgrado",
+        "f_consent": "Acconsento a che NewSportVision conservi il mio nome e la mia "
+                     "provenienza come testimonianza di questo sostegno",
+        "f_submit": "Sostengo",
+        "f_missing": "Scrivi il tuo nome e la tua provenienza, e spunta la casella.",
+        "f_sending": "Invio in corso…",
+        "f_sent": "Grazie. Il tuo sostegno è arrivato a NewSportVision.",
+        "f_failed": "Non è stato possibile inviarlo. Ciò che hai scritto è ancora qui: riprova.",
+        "f_busy": "Troppi invii in poco tempo. Attendi qualche minuto e riprova.",
+        "day_label": "com'è andata",
+        "day_head": "LA GIORNATA",
+        "gallery_label": "foto e video",
+        "gallery_head": "FOTO E VIDEO DA FSF2026",
+        "ph_chapter": "Da aggiungere",
+        "ph_photo": "Fotografia in arrivo",
+        "ph_video": "Video in arrivo",
+        "play": "Riproduci il video",
+        "lb_close": "Chiudi", "lb_prev": "Precedente", "lb_next": "Successiva",
+        "lb_label": "Fotografia",
+    },
+}

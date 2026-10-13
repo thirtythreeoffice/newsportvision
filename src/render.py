@@ -446,7 +446,11 @@ def first_photo_now(body):
 
 
 def page(lang, path, title, description, body, active=None, footer_html=None,
-         body_class="", og_image="skate-architecture-1600.jpg", noindex=False):
+         body_class="", og_image="skate-architecture-1600.jpg", noindex=False,
+         css=(), scripts=(), head_extra=""):
+    """css / scripts: extra files for one page, by name, so a page that needs
+    its own sheet or behaviour does not make every other page carry it.
+    head_extra: structured data and the like."""
     ui = UI[lang]
     body = first_photo_now(body)
     canonical = BASE + url(lang, path)
@@ -482,7 +486,7 @@ def page(lang, path, title, description, body, active=None, footer_html=None,
 <link rel="stylesheet" href="/assets/css/base.css?v=%(v)s">
 <link rel="stylesheet" href="/assets/css/components.css?v=%(v)s">
 <link rel="stylesheet" href="/assets/css/pages.css?v=%(v)s">
-<script>%(boot)s</script>
+%(css_extra)s%(head_extra)s<script>%(boot)s</script>
 </head>
 <body class="%(bodycls)s" id="top">
 <a class="skip-link" href="#main">%(skip)s</a>
@@ -523,5 +527,9 @@ def page(lang, path, title, description, body, active=None, footer_html=None,
         "menu": menu_panel(lang, path, active),
         "body": body,
         "footer": footer_html or "",
-        "extra": '<script src="/assets/js/helpdesk.js?v=%s" defer></script>' % ASSET_V if active == "help-desk" else "",
+        "extra": "".join('<script src="/assets/js/%s?v=%s" defer></script>' % (n, ASSET_V)
+                         for n in ((("helpdesk.js",) if active == "help-desk" else ()) + tuple(scripts))),
+        "css_extra": "".join('<link rel="stylesheet" href="/assets/css/%s?v=%s">\n' % (n, ASSET_V)
+                             for n in css),
+        "head_extra": head_extra,
     }

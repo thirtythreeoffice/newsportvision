@@ -37,6 +37,7 @@ ROUTES = [
     ("/help-desk/",        pages.helpdesk),
     ("/help-desk/news/",   pages.helpdesk_news),
     ("/work-in-progress/", pages.work_in_progress),
+    ("/fsf2026/",          pages.fsf2026),
     ("/privacy/",          pages.privacy),
 ]
 
@@ -275,6 +276,9 @@ def build(host="netlify"):
            "style-src 'self' 'unsafe-inline'; "
            "script-src 'self' 'sha256-%s'; "
            "form-action 'self' mailto:; "
+           # FSF2026 may carry a YouTube or Vimeo film; the frame is created
+           # only when a visitor presses play, and only from these two.
+           "frame-src https://www.youtube-nocookie.com https://player.vimeo.com; "
            "base-uri 'self'; "
            "frame-ancestors 'self'; "
            "object-src 'none'") % digest
