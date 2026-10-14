@@ -92,6 +92,9 @@
                               rgb(var(--fsf-glow) / .08) 72%, rgb(var(--fsf-glow) / 0) 100%);
 }
 .fsf-plate .tos { display: block; width: 100%; height: auto; overflow: visible; }
+/* CULTURE, the root word, in the same cut as SPORT, the crown word: one
+   voice, two scales */
+.tos-culture { font-family: var(--font-display); font-weight: 800; }
 @media (max-width: 767px) {
   .fsf-hero { padding-bottom: var(--space-3); }
   .fsf-plate { width: 112%; margin-left: -6%; }
@@ -169,16 +172,27 @@
 @keyframes tos-sway   { from { transform: rotate(-.4deg); } to { transform: rotate(.4deg); } }
 @keyframes tos-flutter { from { transform: rotate(-.9deg); } to { transform: rotate(.8deg); } }
 
-/* SPORT stands on the line where the band ends and the hill begins, set as
-   in the PDF: white, the rounded face, regular weight, a word not a banner.
-   With line-height 1 Nunito's baseline sits 0.1714em above the foot of the
-   box (measured in Chromium, WebKit and Firefox), so the box is pulled down by
-   exactly that and the baseline is the boundary. */
-.fsf-edge { position: relative; z-index: 1; padding-top: var(--space-3); }
+/* SPORT is set as the site sets its display lines — Archivo, heavy, upper
+   case, the display tracking — and straddles the line where the sky becomes
+   the green: the optical centre of its capitals is the boundary. With
+   line-height 1, Archivo's capitals run from 0.135em to 0.835em below the top
+   of the box (measured in Chromium, WebKit and Firefox), so their centre is
+   at 0.485em; the green of this strip starts exactly there and continues into
+   the section below. The word is centred on the trunk, not on the page: the
+   trunk stands 0.55% of the drawing's width left of its middle. */
+.fsf-edge {
+  --sport: var(--fs-display);
+  --axis: calc(-0.005481 * min(1400px, 100%));
+  position: relative; z-index: 1;
+  font-size: var(--sport);
+  padding-top: var(--space-1);
+  background: linear-gradient(to bottom, transparent calc(var(--space-1) + .485em), var(--fsf-green) calc(var(--space-1) + .485em));
+}
+@media (max-width: 767px) { .fsf-edge { --axis: -0.614%; } }
 .fsf-sport {
-  margin: 0 0 -.1714em; text-align: center; color: var(--nsv-white);
-  font-family: var(--fsf-accent); font-weight: 400; font-size: clamp(30px, 3.9vw, 58px);
-  line-height: 1; letter-spacing: .01em;
+  margin: 0 0 0 calc(var(--axis) * 2 - .022em); text-align: center; color: var(--nsv-white);
+  font-family: var(--font-display); font-weight: 800; font-size: 1em; text-transform: uppercase;
+  line-height: 1; letter-spacing: -.022em;
 }
 
 /* --- 03 the hill ----------------------------------------------------------- */
@@ -187,7 +201,7 @@
   background: var(--bg); color: var(--fg);
 }
 .on-fsf-green :focus-visible { outline-color: var(--nsv-yellow); }
-.fsf-hill { padding-top: var(--space-5); padding-bottom: var(--act); }
+.fsf-hill { padding-top: var(--space-4); padding-bottom: var(--act); }
 .fsf-hill > .grid { row-gap: var(--space-3); }
 .fsf-hill__label { margin: .5em 0 0; grid-column: 1 / -1; }
 .fsf-hill__text, .fsf-hill__get { grid-column: 1 / -1; margin: 0; }

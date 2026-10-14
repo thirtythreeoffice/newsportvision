@@ -49,10 +49,17 @@ CLIPS = {"hz": (812, 583, 2700), "r1": (812, 604, 640), "r2": (812, 604, 640), "
 
 LEAF_LIGHT = "#62AA3E"           # the PDF's two greens, as it renders: yellow-green
 LEAF_DEEP = "#46903A"            # and the deeper one
-LIMB = "#8C5A3E"                 # rosy brown
-TWIG = "#966448"                 # a step lighter, for the finest work
-BARK = "#643214"                 # chocolate: trunk and roots
-BARK_SHADE = "#552910"
+# browns, from the deepest to the lightest: trunk, limbs, twigs (the PDF's
+# rosy brown); the roots a touch cooler and deeper, below the ground
+TRUNK = "#5B2C11"                # the richest chocolate
+TRUNK_LIT = "#7A4421"            # the side toward the light
+TRUNK_DEEP = "#40200B"           # the side away from it
+ROOT = "#643214"                 # the roots, as approved (the PDF's chocolate)
+JOIN = ROOT                      # the trunk's foot fades to the roots' colour
+LIMB_1 = "#764429"               # primary limbs, as they leave the bark
+LIMB = "#875438"                 # secondary limbs
+TWIG = "#946347"                 # twigs: the PDF's rosy brown
+BARK = TRUNK
 HORIZON_C = "#1E5028"
 ORANGE = "#F08C46"
 
@@ -106,7 +113,7 @@ def catmull(pts, closed=False, prec=None):
     return d
 
 
-def ribbon(pts, w0, w1):
+def ribbon(pts, w0, w1, power=.8):
     """A tapered filled limb along the polyline pts: thick at the base, thin
     at the tip, closed round the end."""
     n = len(pts)
@@ -117,7 +124,7 @@ def ribbon(pts, w0, w1):
         L = math.hypot(dx, dy) or 1
         nx, ny = -dy / L, dx / L
         t = i / (n - 1)
-        w = (w0 + (w1 - w0) * t ** .8) / 2
+        w = (w0 + (w1 - w0) * t ** power) / 2
         left.append((x + nx * w, y + ny * w))
         right.append((x - nx * w, y - ny * w))
     outline = left + right[::-1]
@@ -292,8 +299,15 @@ def svg(title="", ident="tos"):
     limbs, leaves = crown()
     rts, front = roots()
 
-    limb_grad = ('<radialGradient id="%s-limb" gradientUnits="userSpaceOnUse" cx="812" cy="470" r="190">'
-                 '<stop offset=".3" stop-color="%s"/><stop offset="1" stop-color="%s"/></radialGradient>' % (ident, BARK, LIMB))
+    limb_grad = ('<radialGradient id="%s-limb" gradientUnits="userSpaceOnUse" cx="812" cy="470" r="230">'
+                 '<stop offset=".25" stop-color="%s"/><stop offset=".7" stop-color="%s"/><stop offset="1" stop-color="%s"/></radialGradient>'
+                 # the trunk: lit on the left, deep on the right, and at its foot the colour of the roots
+                 '<linearGradient id="%s-trunk-h" gradientUnits="userSpaceOnUse" x1="730" y1="0" x2="900" y2="0">'
+                 '<stop offset="0" stop-color="%s"/><stop offset=".42" stop-color="%s"/><stop offset="1" stop-color="%s"/></linearGradient>'
+                 '<linearGradient id="%s-trunk-v" gradientUnits="userSpaceOnUse" x1="0" y1="548" x2="0" y2="606">'
+                 '<stop offset="0" stop-color="%s" stop-opacity="0"/><stop offset="1" stop-color="%s"/></linearGradient>'
+                 '' % (
+                     ident, TRUNK, LIMB_1, LIMB, ident, TRUNK_LIT, TRUNK, TRUNK_DEEP, ident, JOIN, JOIN))
     clips = "".join(
         '<clipPath id="%s-c-%s" clipPathUnits="userSpaceOnUse"><circle class="tos-clip tos-clip-%s" '
         'cx="%d" cy="%d" r="%d"/></clipPath>' % (ident, k, k, x, y, r)
@@ -316,15 +330,15 @@ def svg(title="", ident="tos"):
         cp = (' clip-path="url(#%s-c-%s)"' % (ident, clip)) if clip else ""
         return '<g id="%s-%s" class="tos-%s"%s fill="%s"><path d="%s"/></g>' % (ident, name, name, cp, fill, "".join(paths))
 
-    roots_svg = (group("roots-primary", BARK, [p for p, d in rts if d == 0], "r1") +
-                 group("roots-secondary", BARK, [p for p, d in rts if d == 1], "r2") +
-                 group("roots-tendrils", BARK, [p for p, d in rts if d >= 2], "r3"))
+    roots_svg = (group("roots-primary", ROOT, [p for p, d in rts if d == 0], "r1") +
+                 group("roots-secondary", ROOT, [p for p, d in rts if d == 1], "r2") +
+                 group("roots-tendrils", ROOT, [p for p, d in rts if d >= 2], "r3"))
 
-    trunk = ('<g id="%s-trunk" class="tos-trunk" clip-path="url(#%s-c-trunk)"><path fill="%s" d="M772 470C776 520 774 560 764 586'
-             'C756 597 738 605 716 609L908 609C886 605 868 597 860 586C850 560 848 520 852 470'
-             'C850 456 840 440 830 432C824 428 818 427 812 427C806 427 800 428 794 432C784 440 774 456 772 470Z"/>'
-             '<path fill="%s" d="M836 404C844 430 848 456 846 486C844 530 846 566 856 588C866 598 884 605 904 609'
-             'L870 609C856 598 846 584 840 560C834 520 838 470 836 404Z"/></g>' % (ident, ident, BARK, BARK_SHADE))
+    trunk_d = ('M772 470C776 520 774 560 764 586C756 597 738 605 712 610C752 614 784 618 812 618'
+               'C840 618 872 614 912 610C886 605 868 597 860 586C850 560 848 520 852 470'
+               'C850 456 840 440 830 432C824 428 818 427 812 427C806 427 800 428 794 432C784 440 774 456 772 470Z')
+    trunk = ('<g id="%s-trunk" class="tos-trunk" clip-path="url(#%s-c-trunk)"><path fill="url(#%s-trunk-h)" d="%s"/>'
+             '<path fill="url(#%s-trunk-v)" d="%s"/></g>' % (ident, ident, ident, trunk_d, ident, trunk_d))
 
     # the top of the trunk is drawn again over the primary limbs' bases, so
     # they grow out of it without a seam; it moves with the crown
@@ -349,11 +363,11 @@ def svg(title="", ident="tos"):
     crown_g = '<g id="%s-crown" class="tos-crown">%s%s</g>' % (ident, branches, leaf_groups)
 
     letters = ('<g id="%s-culture-letters" class="tos-culture" aria-label="CULTURE" fill="%s" '
-               'font-family="Nunito, Arial Rounded MT Bold, sans-serif" font-weight="800" font-size="%d" '
+               'font-family="Archivo, Helvetica Neue, Arial, sans-serif" font-weight="800" font-size="%d" '
                'text-anchor="middle">%s</g>' % (ident, ORANGE, LETTER_SIZE, "".join(
                    '<text class="tos-letter" x="%d" y="%d" style="--i:%d">%s</text>' % (x, y, i, ch)
                    for i, (ch, x, y) in enumerate(zip(LETTERS, LETTER_X, LETTER_Y)))))
-    front_g = group("roots-front", BARK, front, "r3")
+    front_g = group("roots-front", ROOT, front, "r3")
 
     return ('<svg class="tos" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 %d %d" overflow="visible" '
             'role="img" aria-labelledby="%s-t"><title id="%s-t">%s</title><defs>%s</defs>%s%s%s%s%s%s</svg>' % (
