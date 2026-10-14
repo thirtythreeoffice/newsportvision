@@ -28,18 +28,22 @@
   src: url("../fonts/nunito-normal-latin.woff2") format("woff2");
 }
 :root {
-  --fsf-sky-0: #4D93DD;      /* high sky, where the page opens            */
-  --fsf-sky-1: #5E9EE5;      /* the illustration's top corners            */
-  --fsf-sky-2: #7BBAF0;      /* its top centre                            */
-  --fsf-sky-3: #217BEB;      /* its foot                                  */
+  /* The opening is laid out as page 1 of the manifesto is: a flat blue band
+     (the PDF's own, #448AC9 as it renders), the Tree of Sport as a framed
+     panel on it — the panel carries its own sky and glow — and SPORT on the
+     line where the band meets the green. */
+  --fsf-band: #458BCA;
   --fsf-green: #11863C;
   --fsf-leaf:  #17A249;
   --fsf-root:  #ED7835;
   --fsf-accent: "Nunito", var(--font-display);
-  --fsf-sport: clamp(84px, 17vw, 290px);
 }
 .fsf .header-inner { justify-content: flex-start; }
 .fsf .header-inner > .header-nav { margin-left: auto; }
+/* The chapter's name and the language switch both live in this header; on
+   the narrowest phones the spaces between its parts close up so MENU stays
+   on the screen. */
+@media (max-width: 399px) { .fsf .header-inner { column-gap: 12px; } .fsf .header-nav { gap: 10px; } }
 .fsf .chapter-of, .fsf .chapter-of__here { color: inherit; }
 .fsf .tab { background: var(--nsv-yellow); }
 .fsf .meta .tab { display: inline-block; vertical-align: middle; margin-right: .9em; }
@@ -48,9 +52,7 @@
 .fsf-sky {
   --fg: var(--nsv-ink); --fg-quiet: var(--nsv-ink); --rule-color: var(--nsv-ink);
   color: var(--nsv-ink);
-  background:
-    radial-gradient(ellipse 46% 26% at 50% 100%, var(--fsf-sky-2), transparent 100%) no-repeat,
-    linear-gradient(to bottom, var(--fsf-sky-0), var(--fsf-sky-1));
+  background: var(--fsf-band);
 }
 .fsf-sky :focus-visible { outline-color: var(--nsv-ink); }
 .fsf-hero { position: relative; z-index: 1; padding-top: clamp(140px, 19vh, 260px); padding-bottom: var(--space-5); }
@@ -65,37 +67,44 @@
 .fsf-held {
   margin: var(--space-4) 0 0;
   font-family: var(--font-display); font-weight: 700; font-size: var(--fs-h3);
-  line-height: 1.04; letter-spacing: var(--track-display);
+  line-height: var(--lh-tight); letter-spacing: var(--track-h);
 }
-/* The picture is not framed. Its sky runs out into the page's own on three
-   sides — the band behind it repeats the picture's edge, stop for stop, and
-   the picture itself thins to nothing before its edge is reached — so there
-   is no rectangle to find, only a tree standing in the sky. On a wide screen
-   it rises beside the opening statement rather than waiting below it. */
-.fsf-ground {
-  background: linear-gradient(to bottom,
-    rgba(99, 162, 231, 0) 0%, #63A2E7 25%, #64A5E7 50%, #4D95E7 72%, #2F85E8 85%, var(--fsf-sky-3) 99%);
-}
+/* The panel, centred on the band with the band showing round it, as on the
+   PDF's first page (where it is two thirds of the page's width). */
+.fsf-ground { padding-top: var(--space-3); }
 .fsf-plate { margin: 0 auto; width: min(1180px, 100%); }
-.fsf-plate img {
-  display: block; width: 100%; height: auto;
-  -webkit-mask-image: linear-gradient(to right, transparent, #000 9%, #000 91%, transparent),
-                      linear-gradient(to bottom, transparent, #000 14%, #000 95%, transparent);
-          mask-image: linear-gradient(to right, transparent, #000 9%, #000 91%, transparent),
-                      linear-gradient(to bottom, transparent, #000 14%, #000 95%, transparent);
-  -webkit-mask-composite: source-in; mask-composite: intersect;
+.fsf-plate .tos { display: block; width: 100%; height: auto; }
+/* On a phone the panel keeps a margin of band round it, and what is written
+   in it is set larger, so it is still read rather than just seen. */
+@media (max-width: 767px) {
+  .fsf-hero { padding-bottom: var(--space-3); }
+  .fsf-plate { width: calc(100% - 2 * var(--page-x)); }
+  .tos-culture { font-size: 96px; }
+  #tos-label { font-size: 46px; }
+  #tos-label text + text { transform: translateY(16px); }
 }
-@media (min-width: 1360px) {
-  .fsf-hero { padding-bottom: 0; }
-  .fsf-held { max-width: 9.2em; }
-  .fsf-ground { margin-top: clamp(-190px, -11vw, -120px); }
+/* Arrival: the roots reach down, the leaves come in three waves from the
+   trunk outwards, the letters settle among the roots. Only opacity and
+   transform, on a handful of groups — never on single leaves. */
+.tos-roots { transform-box: view-box; transform-origin: 812px 600px; }
+.tos-roots, .tos [class^="tos-w"], .tos-letter {
+  transition: opacity 700ms var(--ease-enter), transform 1100ms var(--ease-editorial);
 }
-/* SPORT stands on the line where the sky ends and the hill begins. */
-.fsf-edge { background: linear-gradient(to bottom, var(--fsf-sky-3) 50%, var(--fsf-green) 50%); }
+.tos .tos-w1 { transition-delay: 160ms; }
+.tos-letter { transition-delay: calc(500ms + var(--i) * 70ms); }
+.js .fsf-plate:not(.is-in) .tos-roots { transform: scaleY(.2); opacity: 0; }
+.js .fsf-plate:not(.is-in) [class^="tos-w"] { opacity: 0; transform: translateY(14px); }
+.js .fsf-plate:not(.is-in) .tos-letter { opacity: 0; transform: translateY(-22px); }
+/* SPORT stands on the line where the band ends and the hill begins, set as
+   in the PDF: white, the rounded face, regular weight, a word not a banner.
+   With line-height 1 Nunito's baseline sits 0.1714em above the foot of the
+   box (measured in Chromium, WebKit and Firefox), so the box is pulled down by
+   exactly that and the baseline is the boundary. */
+.fsf-edge { position: relative; z-index: 1; padding-top: var(--space-3); }
 .fsf-sport {
-  margin: 0; text-align: center; color: var(--nsv-white);
-  font-family: var(--font-display); font-weight: 800; font-size: var(--fsf-sport);
-  line-height: .86; letter-spacing: var(--track-display);
+  margin: 0 0 -.1714em; text-align: center; color: var(--nsv-white);
+  font-family: var(--fsf-accent); font-weight: 400; font-size: clamp(30px, 3.9vw, 58px);
+  line-height: 1; letter-spacing: .01em;
 }
 
 /* --- 03 the hill ----------------------------------------------------------- */
@@ -117,37 +126,33 @@
 .fsf-lead {
   margin: 0; max-width: 21ch;
   font-family: var(--font-display); font-weight: 700; font-size: var(--fs-h3);
-  line-height: 1.06; letter-spacing: var(--track-display);
+  line-height: var(--lh-tight); letter-spacing: var(--track-h);
 }
 .fsf-body {
   margin: var(--space-4) 0 0; max-width: 64ch;
-  font-family: var(--font-text); font-size: clamp(18px, .5vw + 15px, 23px); line-height: 1.62;
+  font-family: var(--font-text); font-size: var(--fs-body); line-height: var(--lh-text);
 }
-.fsf-get { color: var(--fsf-green); }
+.fsf-get { color: var(--nsv-sport); }
 @media (max-width: 1023px) { .fsf-hill__get { margin-top: var(--space-3); } }
-.fsf-get:focus-visible .arms-get__say { outline-color: var(--fsf-green); }
+.fsf-get:focus-visible .arms-get__say { outline-color: var(--nsv-sport); }
 
 /* --- 04 the five words ----------------------------------------------------- */
 .fsf-stairs { padding-top: var(--act); padding-bottom: var(--act); }
-/* A staircase, drawn as one: tread, riser, tread. Five columns by five rows,
-   and each word stands on its own tread a step further along and a step
-   further down, so word and line meet by construction rather than by eye. On
-   a narrow screen the treads shorten and the stair turns steep; the words
-   keep their size and stand out over the drop. */
+/* The five words step down one straight line, as they do in the manifesto:
+   five columns by six rows, each word's foot on the line where its column
+   begins, so word and line meet by construction rather than by eye. */
 .fsf-stair {
-  --row: clamp(64px, 7.4vw, 118px); --step: 20%;
-  position: relative; margin-top: var(--space-4);
+  --row: clamp(56px, 6vw, 96px); --step: 20%;
+  position: relative; margin-top: var(--space-4); padding-bottom: var(--row);
 }
 .fsf-stair__line {
   position: absolute; left: 0; top: 0; overflow: visible;
-  width: calc(var(--step) * 5); height: calc(var(--row) * 5);
+  width: calc(var(--step) * 5); height: calc(var(--row) * 6);
 }
-.fsf-stair__line path {
-  fill: none; stroke: var(--fsf-leaf); stroke-width: 3; stroke-linejoin: miter;
-}
-/* The script redraws the stair in the page's own pixels, so its length is a
-   real length and the line can be drawn along it; without the script it is
-   simply there. */
+.fsf-stair__line path { fill: none; stroke: var(--fsf-leaf); stroke-width: var(--rule-thin); stroke-linecap: round; }
+/* The script redraws the line in the page's own pixels, so its length is a
+   real length and it can be drawn along; without the script it is simply
+   there. */
 .fsf-stair__line path[data-len] {
   stroke-dasharray: var(--len); stroke-dashoffset: 0;
   transition: stroke-dashoffset 1700ms var(--ease-editorial) 150ms;
@@ -155,15 +160,15 @@
 .fsf-steps { list-style: none; margin: 0; padding: 0; position: relative; }
 .fsf-steps li {
   height: var(--row); margin-left: calc(var(--i) * var(--step));
-  display: flex; align-items: flex-end; padding: 0 0 .3em .22em; white-space: nowrap;
-  font-family: var(--fsf-accent); font-weight: 400; font-size: clamp(27px, 2.9vw, 50px); line-height: 1;
+  display: flex; align-items: flex-end; padding: 0 0 .26em .1em; white-space: nowrap;
+  font-family: var(--fsf-accent); font-weight: 400; font-size: clamp(27px, 3.4vw, 58px); line-height: 1;
   transition: opacity 500ms var(--ease-enter), transform 500ms var(--ease-enter);
   transition-delay: calc(var(--i) * 300ms + 250ms);
 }
 .fsf-steps li:first-child { font-weight: 800; }
 .js .fsf-stair:not(.is-in) .fsf-stair__line path[data-len] { stroke-dashoffset: var(--len); }
 .js .fsf-stair:not(.is-in) .fsf-steps li { opacity: 0; transform: translateY(-10px); }
-@media (max-width: 767px) { .fsf-stair { --step: 9%; --row: 66px; } }
+@media (max-width: 767px) { .fsf-stair { --step: 13%; --row: 58px; } }
 
 /* --- 05 the root ----------------------------------------------------------- */
 .fsf-root { padding-top: var(--act); padding-bottom: var(--act); }
@@ -186,19 +191,21 @@
 @media (min-width: 1024px) { .fsf-root__side { position: sticky; top: clamp(110px, 16vh, 170px); } }
 .fsf-idea {
   margin: var(--space-3) 0 0;
-  font-family: var(--font-display); font-weight: 700; font-size: var(--fs-h3); line-height: 1.04;
-  letter-spacing: var(--track-display);
+  font-family: var(--font-display); font-weight: 700; font-size: var(--fs-h3); line-height: var(--lh-tight);
+  letter-spacing: var(--track-h);
 }
 
 /* The declaration is a sheet of the house's paper lying on the dark ground:
    margins, a seal, a title, and a sentence with two lines to sign on. No
    border, no shadow, no corner — a sheet has none. */
 .fsf-doc {
+  min-width: 0;
   --fg: var(--nsv-ink); --fg-quiet: #5F5E58; --rule-color: var(--nsv-ink);
   background: var(--nsv-paper); color: var(--nsv-ink);
   padding: clamp(26px, 4.6vw, 80px);
 }
 .fsf-doc :focus-visible { outline-color: var(--nsv-ink); }
+.fsf-doc__top > .meta { min-width: 0; }
 .fsf-doc__top { display: flex; justify-content: space-between; align-items: flex-start; gap: var(--space-2); }
 .fsf-seal {
   flex: 0 0 auto; display: grid; place-items: center;
@@ -206,7 +213,7 @@
 }
 .fsf-seal .mast { transform: scale(.78); transform-origin: center; }
 .fsf-doc__h { margin-top: var(--space-4); }
-.fsf-decl { margin: var(--space-4) 0 0; font-family: var(--font-text); font-size: var(--fs-lead); line-height: 1.62; max-width: 36em; }
+.fsf-decl { margin: var(--space-4) 0 0; font-family: var(--font-text); font-size: var(--fs-lead); line-height: 1.38; max-width: 36em; }
 /* A line to sign on, in the sentence itself. What is written on it is set in
    the text face's italic — a hand, but one anybody can read. Until then a
    faint example lies on the line, and is never sent. */
@@ -218,24 +225,32 @@
   background: transparent; border: 0; border-radius: 0;
   border-bottom: var(--rule-thin) solid var(--nsv-ink);
   padding: 0 .12em .02em; margin: 0 .1em;
-  font-family: var(--font-text); font-style: italic; font-size: 1.18em; line-height: 1.2;
+  font-family: var(--font-text); font-style: italic; font-size: 1em; line-height: 1.2;
   color: var(--nsv-ink);
   transition: border-color var(--t-micro) linear;
 }
 .fsf-line input::placeholder { color: var(--nsv-ink); opacity: .38; font-weight: 300; }
 .fsf-line input:focus { outline: none; border-bottom-color: var(--nsv-blue); box-shadow: 0 1px 0 var(--nsv-blue); }
 .fsf-doc[data-state="missing"] .fsf-line input:invalid { border-bottom-color: #B3261E; box-shadow: 0 1px 0 #B3261E; }
-.fsf-doc[data-state="missing"] .check input:invalid { outline: 2px solid #B3261E; outline-offset: 2px; }
-.fsf-doc__act { margin-top: var(--space-4); display: grid; gap: var(--space-3); }
-.fsf-doc__act .check { margin: 0; font-size: .92em; max-width: 46em; align-items: flex-start; }
+.fsf-doc[data-state="missing"] .check input:invalid { outline: 2px solid #B3261E; outline-offset: -8px; }
+.fsf-doc__act { margin-top: var(--space-4); display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--space-3); }
+.fsf-doc__act .check { margin: 0; font-size: var(--fs-body); line-height: var(--lh-text); max-width: 46em; align-items: flex-start; }
+/* A drawn box, 24 px to the eye, 44 px to the finger: the control is the
+   size of a fingertip and the square is painted in its middle. */
 .fsf-doc__act .check input {
-  -webkit-appearance: none; appearance: none; flex: 0 0 auto; width: 24px; height: 24px; margin: 1px 4px 0 0;
-  border: var(--rule-thin) solid var(--nsv-ink); border-radius: 0; background: transparent; cursor: pointer;
-  display: grid; place-items: center;
+  -webkit-appearance: none; appearance: none; flex: 0 0 auto; cursor: pointer;
+  width: 44px; height: 44px; margin: -9px -6px -9px -10px; border: 0; border-radius: 0;
+  background:
+    linear-gradient(var(--nsv-paper), var(--nsv-paper)) center / 20px 20px no-repeat,
+    linear-gradient(var(--nsv-ink), var(--nsv-ink)) center / 24px 24px no-repeat;
 }
-.fsf-doc__act .check input::after { content: ""; width: 12px; height: 12px; background: var(--nsv-ink);
-  transform: scale(0); transition: transform var(--t-micro) var(--ease-editorial); }
-.fsf-doc__act .check input:checked::after { transform: scale(1); }
+.fsf-doc__act .check input:checked {
+  background:
+    linear-gradient(var(--nsv-ink), var(--nsv-ink)) center / 12px 12px no-repeat,
+    linear-gradient(var(--nsv-paper), var(--nsv-paper)) center / 20px 20px no-repeat,
+    linear-gradient(var(--nsv-ink), var(--nsv-ink)) center / 24px 24px no-repeat;
+}
+.fsf-doc__act .check input:focus-visible { outline: 2px solid var(--nsv-ink); outline-offset: -8px; }
 .fsf-hp { position: absolute; left: -10000px; top: auto; width: 1px; height: 1px; overflow: hidden; }
 /* The one thing to press on the page, in the one colour that means it. */
 .fsf-cta {
@@ -243,17 +258,18 @@
   width: 100%; border: 0; border-radius: 0; cursor: pointer;
   background: var(--nsv-yellow); color: var(--nsv-ink);
   padding: clamp(20px, 1.8vw, 30px) clamp(20px, 2.2vw, 36px);
-  font-family: var(--font-display); font-weight: 800; text-transform: uppercase;
-  font-size: clamp(16px, .55vw + 12.5px, 22px); letter-spacing: .02em; text-align: left;
+  font-family: var(--font-display); font-weight: 700; text-transform: uppercase;
+  font-size: var(--fs-lead); line-height: var(--lh-tight); letter-spacing: .02em; text-align: left;
 }
-.fsf-cta i { flex: 0 0 auto; position: relative; width: 34px; height: 2px; background: currentColor;
+.fsf-cta i { flex: 0 0 auto; position: relative; width: 44px; height: var(--rule-thin); background: currentColor;
              transition: width var(--t-ui) var(--ease-editorial); }
 .fsf-cta i::after { content: ""; position: absolute; right: 0; top: 50%; width: 9px; height: 9px;
   border-top: 2px solid currentColor; border-right: 2px solid currentColor; transform: translateY(-50%) rotate(45deg); }
-@media (hover: hover) { .fsf-cta:hover i { width: 64px; } }
+@media (hover: hover) { .fsf-cta:hover i { width: 76px; } }
 .fsf-cta:focus-visible { outline: 2px solid var(--nsv-ink); outline-offset: 3px; }
-.fsf-cta:focus-visible i { width: 64px; }
+.fsf-cta:focus-visible i { width: 76px; }
 .fsf-cta:disabled { opacity: .5; cursor: progress; }
+@media (max-width: 479px) { .fsf-cta { padding-inline: 18px; } }
 .fsf-doc__status { margin: var(--space-2) 0 0; min-height: 1.4em; }
 .fsf-doc__status:empty { margin: 0; min-height: 0; }
 /* The foot of the sheet, as a printed form has one: what the paper is, and
@@ -282,8 +298,8 @@
 }
 .fsf-wait__row:last-child { border-bottom: var(--rule-thin) solid var(--rule-color); }
 .fsf-wait__n {
-  font-family: var(--font-display); font-weight: 700; font-size: var(--fs-h3); line-height: 1;
-  letter-spacing: var(--track-display);
+  font-family: var(--font-display); font-weight: 700; font-size: var(--fs-h3); line-height: var(--lh-tight);
+  letter-spacing: var(--track-h);
 }
 .fsf-day__h { margin: var(--space-5) 0 0; }
 .fsf-chs { list-style: none; margin: var(--space-3) 0 0; padding: 0; }
@@ -291,7 +307,7 @@
   column-gap: var(--gutter); align-items: baseline;
   padding: var(--space-3) 0; border-top: var(--rule-thin) solid var(--rule-color); }
 .fsf-ch:last-child { border-bottom: var(--rule-thin) solid var(--rule-color); }
-.fsf-ch__t { margin: 0; font-family: var(--font-display); font-weight: 700; font-size: var(--fs-h3); line-height: 1.05; }
+.fsf-ch__t { margin: 0; font-family: var(--font-display); font-weight: 700; font-size: var(--fs-h3); line-height: var(--lh-tight); letter-spacing: var(--track-h); }
 .fsf-ch__p { grid-column: 2; margin: var(--space-1) 0 0; max-width: 60ch; font-family: var(--font-text); }
 .fsf-films { display: grid; gap: var(--space-4); margin-top: var(--space-5); max-width: var(--span-9); }
 .fsf-film { margin: 0; }

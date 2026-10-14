@@ -32,3 +32,12 @@ Not deployed (`.vercelignore`). Full-page captures at 1440 and 390 px, WebKit.
 3. **A hard line where the picture met the flat blue under it.** → picture fades at its foot too.
 4. **Breadcrumb "FSF 26" was grey on blue (≈1.2:1).** → inherits the header's ink.
 5. **Ghost name clipped on its line; IT statement touched the crown.** → line widened; statement given a measure.
+
+## The Tree of Sport, redrawn (October 14)
+
+`tree/` holds the history of the illustration:
+- `1-three-directions.jpg`: the first three stylisations, beside the PDF, About and A.R.M.S.
+- `superseded/`: the "foliage masses" version, which was rejected as cartoon blobs.
+- `overlay-r0` … `overlay-r4`: the current redrawing, built in the PDF raster's own coordinates and checked as a 50 % overlay on the PDF render after every round (r0 = leaves fused into a mass; r1 = too few leaves and spoke-like limbs; r2 = roots formed a perfect half-ellipse fan; r4 = matched). `overlay-50pc-full.jpg` is the full-size overlay.
+
+`final-v3/` holds the page as pushed (EN/IT at 1440, 834 and 390), the opening section, the share image, and the form-test summary.

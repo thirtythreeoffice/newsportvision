@@ -34,40 +34,51 @@ colour and one accent face, nothing else.
 
 ## 3. Decisions
 
-**Palette — the picture's own, calibrated.**
-The PDF blue pasted flat was half of why v1 looked cheap. v2 samples the
-illustration's edge instead and continues it into the page:
+**The opening is page 1 of the manifesto, redrawn.** A flat blue band, the
+Tree of Sport as a framed panel on it, SPORT on the line where the band meets
+the green — the PDF's own composition, at the site's scale.
 
-| token | value | use |
+| token / colour | value | where it comes from |
 |---|---|---|
-| `--fsf-sky-0` | `#4D93DD` | where the page opens — ink on it is 4.9:1 |
-| `--fsf-sky-1/2/3` | `#5E9EE5` / `#7BBAF0` / `#217BEB` | the illustration's top corners, top centre, foot |
-| `--fsf-green` | `#11863C` | the hill. One step deeper than the PDF's `#17A249`: white on the PDF green is 3.3:1, on this 4.7:1 |
-| `--fsf-leaf` | `#17A249` | the PDF's own green, kept for the stair line, where nothing is read against it |
-| `--fsf-root` | `#ED7835` | CULTURE — 6.3:1 on ink |
+| `--fsf-band` | `#458BCA` | the PDF's band (`#448AC9` in the file, as it renders) — ink on it 4.7:1 |
+| panel sky | `#74ADDD` → `#79B2E1` → `#4186C7` + glow `#B4DCF0` | sampled down the panel of the PDF render |
+| leaves | `#4B943C`, `#5CA443` | the PDF's two greens, as rendered |
+| limbs | `#8C5A3E` | the PDF's rosy brown |
+| trunk, roots | `#643214` | the PDF's chocolate |
+| horizon | `#1E5028` | the PDF's dark green line |
+| CULTURE | `#F08C46` | the PDF's peach-orange |
+| `--fsf-green` | `#11863C` | the hill. A step deeper than the PDF's `#17A249`: white text on the PDF green is 3.1:1, on this 4.7:1 |
 
-Yellow stays the house's and stays rare: the label mark, the seal, the one
-button, the closing field.
+Colours were sampled from the PDF **render** (what a reader sees), not from the
+raw JPEG inside it, whose values read darker and duller.
 
-**Type.** Archivo carries everything, as on the rest of the site. **Nunito**
-(variable, self-hosted, 39 KB, latin) stands in for Apertura in exactly two
-places that are born in the PDF: the staircase words and CULTURE. Same rounded,
-open geometry; free licence.
+**The tree** (`src/tree_of_sport.py` → `src/gen_tree.py` → `src/tree_of_sport.svg`,
+inlined) is a redrawing, not a tracing: it is built in the PDF raster's own
+coordinates (1642 × 896) so it can be laid over the original and compared
+(`design-review/tree/overlay-*`). Measured from the raster and matched: a
+924 × ~440 crown (a 1.7:1 dome), the fork at y≈455, a trunk ~70 wide flaring to
+~108, the horizon arc (584 under the trunk), roots from x 171 to 1460, the
+letters' positions and cap height. Every shape is placed by rule from a fixed
+seed: limbs curve out of the upper trunk and divide into twigs; ~580 almond
+leaves are scattered evenly through the dome (never closer than 17 units) in
+the two greens, so the crown is lacy with sky between the leaves; the roots
+run out under the horizon and send tendrils down, with three passing in front
+of L, T and U. Each tone of leaves is one path, so the drawing is ~150 KB
+(60 KB gzipped) and about 600 elements.
+Layers: `sky`, `label`, `seal`, `roots`, `horizon`, `trunk`, `crown`,
+`culture-letters`, `roots-over`.
 
-**The tree is not framed.** Its caption and logo were painted out of the raster
-(row-wise interpolation of the sky behind them — the tree itself is untouched),
-and the image thins to nothing on all four sides over a band that repeats its
-edge colours stop for stop. Result: no rectangle, a tree standing in the page's
-sky. On screens ≥ 1360 px it rises beside the opening statement.
+**Type.** Archivo carries the page. **Nunito** (self-hosted, 39 KB) stands in
+for the PDF's Apertura — a commercial face — where the PDF uses it: CULTURE,
+SPORT (regular, white), and the staircase words.
 
-**SPORT** is live text, set across the line where sky becomes hill.
-**CULTURE** is live text at the head of the root section, in the picture's arc
-and colour. It could not be set over the roots themselves: the letters are part
-of the JPEG. With layered source artwork this becomes one composition.
+**SPORT** stands on the boundary: with line-height 1 Nunito's baseline is
+0.1714em above the foot of its box in Chromium, WebKit and Firefox, so the box
+is pulled down by exactly that and the baseline is the edge of the green.
 
-**The staircase** is one SVG path — tread, riser, tread — on a 5 × 5 grid, so a
-word and its tread meet by construction. It is drawn on arrival. On a phone the
-treads shorten and the stair turns steep; the words keep their size.
+**The staircase** is one straight diagonal under the five words, as in the PDF:
+five columns by six rows, each word's foot on the line where its column
+begins. It is drawn on arrival.
 
 **The declaration is an object**: a sheet of the house's paper on the dark
 ground, with a header line, a seal, a justified title, the sentence with two
@@ -88,7 +99,7 @@ until the brochure supplies facts.
 
 ## 5. Open
 
-- Layered/vector source of the Tree of Sport (would let CULTURE sit among the roots as live text, and stay sharp on retina above 1642 px).
+- Client approval of the redrawn Tree of Sport (an interpretation of their artwork).
 - Photographs, films, the FSF2026 brochure.
 - Native-speaker pass on the Italian.
 - Approval of the one-word correction in the EN manifesto (currently published verbatim).

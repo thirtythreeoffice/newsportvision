@@ -1009,6 +1009,23 @@ def _fsf_size(name):
     return "%d KB" % round(n / 1024.0) if n < 1024 * 1024 else "%.1f MB" % (n / 1048576.0)
 
 
+def _nw(text, tie_last=True):
+    """Escaped, with no separator starting a line (each ' · ' is tied to the
+    word before it) and, for running lines, no word left alone on the last."""
+    out = esc(text).replace(" · ", "&nbsp;· ")
+    if not tie_last:
+        return out
+    head, sep, tail = out.rpartition(" ")
+    return head + "&nbsp;" + tail if sep else out
+
+
+def _tree_svg(alt):
+    """The Tree of Sport, inline, so CULTURE among its roots is text the page
+    owns (src/gen_tree.py writes it)."""
+    with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "tree_of_sport.svg")) as fh:
+        return fh.read().replace("%%TITLE%%", esc(alt))
+
+
 def fsf2026(lang):
     from arms import PUB_BRUSH, PUB_ARROW
     from render import masthead
@@ -1028,19 +1045,15 @@ def fsf2026(lang):
     <p class="fsf-held" data-reveal="up">%(held)s</p>
   </div>
   <div class="fsf-ground">
-    <figure class="fsf-plate">
-      <img src="%(tree_s)s" srcset="%(tree_s)s 820w, %(tree_l)s 1642w"
-           sizes="(max-width: 767px) 100vw, min(1180px, 86vw)"
-           width="1642" height="896" alt="%(tree_alt)s" decoding="async" fetchpriority="high">
-    </figure>
+    <figure class="fsf-plate" data-reveal="fade">%(tree)s</figure>
   </div>
   <div class="fsf-edge"><h2 class="fsf-sport">%(sport)s</h2></div>
 </section>""" % {
         "el": esc(t["eyebrow_l"]), "er": esc(t["eyebrow_r"]), "rule": rule(),
         "title": jstack(t["name"], tag="h1", cls="statement-stack fsf-title", jmax="240",
                         extra=' id="fsf-h"'),
-        "held": "<br>".join(esc(l) for l in t["held"]),
-        "tree_s": _fsf_url("tree-820.jpg"), "tree_l": _fsf_url("tree-1642.jpg"),
+        "held": "<br>".join(_nw(l) for l in t["held"]),
+        "tree": _tree_svg(t["tree_alt"]),
         "tree_alt": esc(t["tree_alt"]), "sport": esc(t["sport"]),
     }
 
@@ -1060,9 +1073,9 @@ def fsf2026(lang):
         <span class="arms-get__do">%(do)s</span><span class="arms-get__n">%(n)s</span></span>%(arrow)s</span></a></p>
   </div>
 </section>""" % {
-        "label": esc(t["manifesto_label"]), "first": esc(first), "rest": esc(rest),
+        "label": esc(t["manifesto_label"]), "first": _nw(first), "rest": _nw(rest),
         "pdf": _fsf_url(t["pdf_file"]), "aria": esc(t["pdf_aria"] % size),
-        "do": esc(t["pdf_do"]), "n": esc(t["pdf_n"] % size),
+        "do": _nw(t["pdf_do"]), "n": _nw(t["pdf_n"] % size, False),
         "brush": PUB_BRUSH, "arrow": PUB_ARROW,
     }
 
@@ -1072,8 +1085,8 @@ def fsf2026(lang):
   <div class="wrap">
     %(shead)s
     <div class="fsf-stair" data-reveal="fade" data-fsf-stair>
-      <svg class="fsf-stair__line" viewBox="0 0 5 5" preserveAspectRatio="none" aria-hidden="true" focusable="false">
-        <path d="M0 1H1V2H2V3H3V4H4V5H5" vector-effect="non-scaling-stroke"/></svg>
+      <svg class="fsf-stair__line" viewBox="0 0 5 6" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+        <path d="M0 1L5 6" vector-effect="non-scaling-stroke"/></svg>
       <ol class="fsf-steps">%(items)s</ol>
     </div>
   </div>
@@ -1092,7 +1105,7 @@ def fsf2026(lang):
     root = """
 <section class="fsf-root on-ink" data-field="ink" id="support" aria-labelledby="fsf-sign-h">
   <div class="wrap">
-    <p class="fsf-culture" aria-label="%(word)s" data-reveal="fade">%(letters)s</p>
+    <p class="fsf-culture" data-reveal="fade"><span class="visually-hidden">%(word)s</span>%(letters)s</p>
     <div class="grid fsf-root__row">
       <div class="c4 fsf-root__side">
         <p class="meta" data-reveal="fade"><i class="tab" aria-hidden="true"></i>%(root_label)s</p>
@@ -1123,15 +1136,15 @@ def fsf2026(lang):
         "letters": "".join('<span aria-hidden="true" style="--i:%d">%s</span>' % (i, esc(ch))
                            for i, ch in enumerate(t["culture"])),
         "root_label": esc(t["root_label"]),
-        "idea": "<br>".join(esc(l) for l in t["idea"]),
-        "doc_meta": esc(t["doc_meta"]), "seal": seal % "", "stamp": seal % " fsf-seal--stamp",
+        "idea": "<br>".join(_nw(l) for l in t["idea"]),
+        "doc_meta": _nw(t["doc_meta"], False), "seal": seal % "", "stamp": seal % " fsf-seal--stamp",
         "head": jstack(t["sign_head"], tag="h2", cls="statement-stack fsf-doc__h", jmax="120",
                        extra=' id="fsf-sign-h"'),
         "a": esc(t["decl"][0]), "b": esc(t["decl"][1]), "c": esc(t["decl"][2].lstrip(", ")),
         "name": line("name", t["f_name"], t["ghost_name"], "name"),
         "place": line("from", t["f_from"], t["ghost_from"], "off", ","),
         "signed_on": esc(t["signed_on"]),
-        "foot_l": esc(t["doc_foot"][0]), "foot_r": esc(t["doc_foot"][1]),
+        "foot_l": _nw(t["doc_foot"][0]), "foot_r": _nw(t["doc_foot"][1], False),
         "consent": esc(t["f_consent"]),
         "privacy": url(lang, "/privacy/"), "privacy_label": esc(ui["privacy"]),
         "submit": esc(t["f_submit"]),
@@ -1244,7 +1257,7 @@ def fsf2026(lang):
         "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
         "inLanguage": lang, "description": t["description"],
         "url": SITE["domain"] + url(lang, "/fsf2026/"),
-        "image": SITE["domain"] + "/assets/media/fsf2026/tree-1642.jpg",
+        "image": SITE["domain"] + "/assets/media/fsf2026/og-fsf2026.jpg",
         "location": {"@type": "Place", "name": "Belgrade",
                      "address": {"@type": "PostalAddress", "addressLocality": "Belgrade",
                                  "addressCountry": "RS"}},
@@ -1257,5 +1270,5 @@ def fsf2026(lang):
     return page(lang, "/fsf2026/", t["title"], t["description"], body,
                 footer_html=footer(lang, "/fsf2026/", HOME[lang]["contact_invite"],
                                    HOME[lang]["got_idea"]),
-                og_image="fsf2026/tree-1642.jpg", body_class="fsf", chapter=t["crumb"],
+                og_image="fsf2026/og-fsf2026.jpg", body_class="fsf", chapter=t["crumb"],
                 css=("arms.css", "fsf.css"), scripts=("fsf2026.js",), head_extra=head_extra)

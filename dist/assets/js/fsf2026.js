@@ -9,7 +9,8 @@
   "use strict";
 
   /* --- The staircase -----------------------------------------------------
-     The line is one path through five treads and four risers. It is redrawn
+     One straight line falling under the five words, as in the manifesto. It
+     is redrawn
      here in the page's own pixels — a stretched drawing has no honest length,
      and Safari will not dash one — so that it can be drawn along as the
      section arrives. Without this the stair is simply there. */
@@ -21,8 +22,7 @@
       var w = svg.clientWidth, h = svg.clientHeight;
       if (!w || !h || (w === lastW && h === lastH)) return;
       lastW = w; lastH = h;
-      var sx = w / 5, sy = h / 5, d = "M0 " + sy, i;
-      for (i = 1; i <= 5; i++) d += "H" + (sx * i) + (i < 5 ? "V" + (sy * (i + 1)) : "");
+      var d = "M0 " + (h / 6) + "L" + w + " " + h;
       svg.setAttribute("viewBox", "0 0 " + w + " " + h);
       path.removeAttribute("vector-effect");
       path.setAttribute("d", d);
