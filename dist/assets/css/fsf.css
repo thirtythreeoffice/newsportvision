@@ -28,11 +28,17 @@
   src: url("../fonts/nunito-normal-latin.woff2") format("woff2");
 }
 :root {
-  /* The opening is laid out as page 1 of the manifesto is: a flat blue band
-     (the PDF's own, #448AC9 as it renders), the Tree of Sport as a framed
-     panel on it — the panel carries its own sky and glow — and SPORT on the
-     line where the band meets the green. */
-  --fsf-band: #458BCA;
+  /* The opening is one illustrated scene: a sky, the Tree of Sport standing
+     in it, and SPORT on the line where the sky meets the green. The sky is
+     the section's own, full-bleed, set once here: the PDF's blue moved into
+     the true sky-blue range for a screen (hue 202° at the top to 206° at the
+     foot — never toward violet), light above, deeper toward the horizon and
+     a little deeper again behind the roots. */
+  --fsf-sky-top:     #8FCDF1;
+  --fsf-sky-mid:     #5BB0E8;
+  --fsf-sky-horizon: #3696DA;
+  --fsf-sky-deep:    #2A86CB;
+  --fsf-glow:        232 248 255;   /* white-cyan, as rgb channels for alpha */
   --fsf-green: #11863C;
   --fsf-leaf:  #17A249;
   --fsf-root:  #ED7835;
@@ -51,8 +57,12 @@
 /* --- 01 · 02 the sky, and the tree standing in it -------------------------- */
 .fsf-sky {
   --fg: var(--nsv-ink); --fg-quiet: var(--nsv-ink); --rule-color: var(--nsv-ink);
+  position: relative; isolation: isolate; overflow: hidden; overflow: clip;
   color: var(--nsv-ink);
-  background: var(--fsf-band);
+  /* a fine grain at ~3% over the gradient, so it never shows a band */
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='.06'/%3E%3C/svg%3E"),
+    linear-gradient(to bottom, var(--fsf-sky-top) 0%, var(--fsf-sky-mid) 40%, var(--fsf-sky-horizon) 76%, var(--fsf-sky-deep) 100%);
 }
 .fsf-sky :focus-visible { outline-color: var(--nsv-ink); }
 .fsf-hero { position: relative; z-index: 1; padding-top: clamp(140px, 19vh, 260px); padding-bottom: var(--space-5); }
@@ -69,32 +79,96 @@
   font-family: var(--font-display); font-weight: 700; font-size: var(--fs-h3);
   line-height: var(--lh-tight); letter-spacing: var(--track-h);
 }
-/* The panel, centred on the band with the band showing round it, as on the
-   PDF's first page (where it is two thirds of the page's width). */
-.fsf-ground { padding-top: var(--space-3); }
-.fsf-plate { margin: 0 auto; width: min(1180px, 100%); }
-.fsf-plate .tos { display: block; width: 100%; height: auto; }
-/* On a phone the panel keeps a margin of band round it, and what is written
-   in it is set larger, so it is still read rather than just seen. */
+/* The tree stands on the sky; nothing frames it. Its light is the section's,
+   not the drawing's: a very large, very soft glow behind the crown that fades
+   to nothing long before its own edge, so it has none. */
+.fsf-ground { padding-top: var(--space-2); }
+.fsf-tree-label { margin: 0; }
+.fsf-plate { position: relative; margin: var(--space-2) auto 0; width: min(1400px, 100%); }
+.fsf-plate::before {
+  content: ""; position: absolute; z-index: -1; pointer-events: none;
+  left: 48.8%; top: 30%; width: 200%; aspect-ratio: 1.45; transform: translate(-50%, -50%);
+  background: radial-gradient(closest-side, rgb(var(--fsf-glow) / .58), rgb(var(--fsf-glow) / .26) 42%,
+                              rgb(var(--fsf-glow) / .08) 72%, rgb(var(--fsf-glow) / 0) 100%);
+}
+.fsf-plate .tos { display: block; width: 100%; height: auto; overflow: visible; }
 @media (max-width: 767px) {
   .fsf-hero { padding-bottom: var(--space-3); }
-  .fsf-plate { width: calc(100% - 2 * var(--page-x)); }
-  .tos-culture { font-size: 96px; }
-  #tos-label { font-size: 46px; }
-  #tos-label text + text { transform: translateY(16px); }
+  .fsf-plate { width: 112%; margin-left: -6%; }
+  .tos-culture { font-size: 92px; }
 }
-/* Arrival: the roots reach down, the leaves come in three waves from the
-   trunk outwards, the letters settle among the roots. Only opacity and
-   transform, on a handful of groups — never on single leaves. */
-.tos-roots { transform-box: view-box; transform-origin: 812px 600px; }
-.tos-roots, .tos [class^="tos-w"], .tos-letter {
-  transition: opacity 700ms var(--ease-enter), transform 1100ms var(--ease-editorial);
+
+/* --- the tree grows -----------------------------------------------------------
+   From culture to sport: the roots feed the tree. Played once, when the
+   opening arrives (the house's reveal sweep adds .is-in); calm, eased, about
+   3.5 s on a desktop and 2.3 s on a phone (--t). Only clip reveals, opacity
+   and transforms, on groups — the leaves grow through one inherited number
+   (--grow) that each leaf, a <use> of a <symbol>, scales by from its stalk.
+   Without script, or with reduced motion, the tree is simply there. */
+@property --grow { syntax: "<number>"; inherits: true; initial-value: 1; }
+.fsf-sky { --t: 1; --ease: cubic-bezier(.3, .02, .18, 1); --ease-leaf: cubic-bezier(.2, .75, .25, 1); }
+@media (max-width: 767px) { .fsf-sky { --t: .65; } }
+.tos-lf { transform: rotate(calc((1 - var(--grow)) * -26deg)) scale(var(--grow)); }
+
+/* Each part opens from where it grows — a circle in the drawing's own
+   coordinates (a <clipPath> in the SVG), scaled up from that point. */
+.tos-clip { transform-box: view-box; }
+.tos-clip-hz { transform-origin: 812px 583px; }
+:is(.tos-clip-r1, .tos-clip-r2, .tos-clip-r3) { transform-origin: 812px 604px; }
+.tos-clip-trunk { transform-origin: 812px 612px; }
+:is(.tos-clip-b1, .tos-clip-b2, .tos-clip-b3) { transform-origin: 812px 470px; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .js .fsf-plate:not(.is-in)::before { opacity: .55; }
+  .js .fsf-plate:not(.is-in) .tos-clip { transform: scale(0); }
+  .js .fsf-plate:not(.is-in) .tos-leaves { --grow: 0; }
+  .js .fsf-plate:not(.is-in) .tos-letter { opacity: 0; transform: translateY(12px); }
+  .js .fsf-sky:has(.fsf-plate:not(.is-in)) .fsf-sport { opacity: 0; transform: translateY(14px); }
+
+  .fsf-plate.is-in::before { animation: tos-glow calc(900ms * var(--t)) var(--ease) backwards; }
+  .fsf-plate.is-in .tos-clip-hz    { animation: tos-open calc(800ms * var(--t)) var(--ease) backwards; }
+  .fsf-plate.is-in .tos-clip-r1    { animation: tos-open calc(800ms * var(--t)) var(--ease) calc(300ms * var(--t)) backwards; }
+  .fsf-plate.is-in .tos-clip-r2    { animation: tos-open calc(800ms * var(--t)) var(--ease) calc(480ms * var(--t)) backwards; }
+  .fsf-plate.is-in .tos-clip-r3    { animation: tos-open calc(820ms * var(--t)) var(--ease) calc(640ms * var(--t)) backwards; }
+  .fsf-plate.is-in .tos-letter {
+    animation: tos-letter calc(560ms * var(--t)) var(--ease-leaf) calc((700ms + var(--i) * 100ms) * var(--t)) backwards;
+  }
+  .fsf-plate.is-in .tos-clip-trunk { animation: tos-open calc(800ms * var(--t)) var(--ease) calc(950ms * var(--t)) backwards; }
+  .fsf-plate.is-in .tos-clip-b1    { animation: tos-open calc(780ms * var(--t)) var(--ease) calc(1330ms * var(--t)) backwards; }
+  .fsf-plate.is-in .tos-clip-b2    { animation: tos-open calc(780ms * var(--t)) var(--ease) calc(1520ms * var(--t)) backwards; }
+  .fsf-plate.is-in .tos-clip-b3    { animation: tos-open calc(840ms * var(--t)) var(--ease) calc(1700ms * var(--t)) backwards; }
+  .fsf-plate.is-in .tos-leaves {
+    animation: tos-leaf calc(560ms * var(--t)) var(--ease-leaf) calc((1950ms + var(--n) * 115ms) * var(--t)) backwards;
+  }
+  .fsf-sky:has(.fsf-plate.is-in) .fsf-sport {
+    animation: tos-sport calc(650ms * var(--t)) var(--ease-leaf) calc(3100ms * var(--t)) backwards;
+  }
+
+  /* afterwards, on a desktop: a breeze in the crown, never in the roots */
+  @media (min-width: 768px) and (hover: hover) {
+    .fsf-plate.is-idle .tos-crown {
+      transform-box: view-box; transform-origin: 812px 455px;
+      animation: tos-sway 7.6s ease-in-out infinite alternate;
+    }
+    .fsf-plate.is-idle :is(.tos-leaves-6, .tos-leaves-9) {
+      transform-box: fill-box; transform-origin: 50% 70%;
+      animation: tos-flutter 4.2s ease-in-out infinite alternate;
+    }
+    .fsf-plate.is-idle .tos-leaves-8 {
+      transform-box: fill-box; transform-origin: 50% 70%;
+      animation: tos-flutter 5.1s ease-in-out -1.7s infinite alternate-reverse;
+    }
+    .fsf-plate.is-paused .tos-crown, .fsf-plate.is-paused .tos-leaves { animation-play-state: paused; }
+  }
 }
-.tos .tos-w1 { transition-delay: 160ms; }
-.tos-letter { transition-delay: calc(500ms + var(--i) * 70ms); }
-.js .fsf-plate:not(.is-in) .tos-roots { transform: scaleY(.2); opacity: 0; }
-.js .fsf-plate:not(.is-in) [class^="tos-w"] { opacity: 0; transform: translateY(14px); }
-.js .fsf-plate:not(.is-in) .tos-letter { opacity: 0; transform: translateY(-22px); }
+@keyframes tos-glow   { from { opacity: .55; } to { opacity: 1; } }
+@keyframes tos-open   { from { transform: scale(0); } to { transform: scale(1); } }
+@keyframes tos-leaf   { from { --grow: 0; } to { --grow: 1; } }
+@keyframes tos-letter { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+@keyframes tos-sport  { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+@keyframes tos-sway   { from { transform: rotate(-.4deg); } to { transform: rotate(.4deg); } }
+@keyframes tos-flutter { from { transform: rotate(-.9deg); } to { transform: rotate(.8deg); } }
+
 /* SPORT stands on the line where the band ends and the hill begins, set as
    in the PDF: white, the rounded face, regular weight, a word not a banner.
    With line-height 1 Nunito's baseline sits 0.1714em above the foot of the

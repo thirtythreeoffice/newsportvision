@@ -34,39 +34,60 @@ colour and one accent face, nothing else.
 
 ## 3. Decisions
 
-**The opening is page 1 of the manifesto, redrawn.** A flat blue band, the
-Tree of Sport as a framed panel on it, SPORT on the line where the band meets
-the green — the PDF's own composition, at the site's scale.
+**The opening is one illustrated scene.** The sky is the section's own,
+full-bleed, from under the header to the green: a vertical gradient set once
+as tokens, with a ~3% grain so it never bands, and a very large, very soft
+white-cyan glow behind the crown (a layer of the section, not of the drawing,
+so it has no edge at any width). The tree has no background and no frame; the
+horizon runs off both edges of the screen. SPORT stands on the line where the
+sky meets the green.
 
-| token / colour | value | where it comes from |
+| token | value | hue |
 |---|---|---|
-| `--fsf-band` | `#458BCA` | the PDF's band (`#448AC9` in the file, as it renders) — ink on it 4.7:1 |
-| panel sky | `#74ADDD` → `#79B2E1` → `#4186C7` + glow `#B4DCF0` | sampled down the panel of the PDF render |
-| leaves | `#4B943C`, `#5CA443` | the PDF's two greens, as rendered |
-| limbs | `#8C5A3E` | the PDF's rosy brown |
-| trunk, roots | `#643214` | the PDF's chocolate |
-| horizon | `#1E5028` | the PDF's dark green line |
-| CULTURE | `#F08C46` | the PDF's peach-orange |
-| `--fsf-green` | `#11863C` | the hill. A step deeper than the PDF's `#17A249`: white text on the PDF green is 3.1:1, on this 4.7:1 |
+| `--fsf-sky-top` | `#8FCDF1` | 202° |
+| `--fsf-sky-mid` | `#5BB0E8` | 204° |
+| `--fsf-sky-horizon` | `#3696DA` | 205° |
+| `--fsf-sky-deep` | `#2A86CB` | 206° — behind the roots, down to SPORT |
+| `--fsf-glow` | `rgb(232 248 255)` at ≤ 58% | — |
 
-Colours were sampled from the PDF **render** (what a reader sees), not from the
-raw JPEG inside it, whose values read darker and duller.
+The PDF's own blue (`#448AC9`, 208°) read violet on screen next to the leaves;
+the scale above keeps the whole sky in true sky-blue (202–206°).
 
 **The tree** (`src/tree_of_sport.py` → `src/gen_tree.py` → `src/tree_of_sport.svg`,
-inlined) is a redrawing, not a tracing: it is built in the PDF raster's own
-coordinates (1642 × 896) so it can be laid over the original and compared
-(`design-review/tree/overlay-*`). Measured from the raster and matched: a
-924 × ~440 crown (a 1.7:1 dome), the fork at y≈455, a trunk ~70 wide flaring to
-~108, the horizon arc (584 under the trunk), roots from x 171 to 1460, the
-letters' positions and cap height. Every shape is placed by rule from a fixed
-seed: limbs curve out of the upper trunk and divide into twigs; ~580 almond
-leaves are scattered evenly through the dome (never closer than 17 units) in
-the two greens, so the crown is lacy with sky between the leaves; the roots
-run out under the horizon and send tendrils down, with three passing in front
-of L, T and U. Each tone of leaves is one path, so the drawing is ~150 KB
-(60 KB gzipped) and about 600 elements.
-Layers: `sky`, `label`, `seal`, `roots`, `horizon`, `trunk`, `crown`,
-`culture-letters`, `roots-over`.
+inlined; 121 KB after SVGO, 24 paths, 6 leaf symbols, ~450 leaf uses). Hand
+constructed, no raster, no trace, built in the PDF raster's coordinates so it
+can be laid over the original (`design-review/tree-v4/overlay-*`). Groups in
+drawing order: `horizon` · `roots-primary` · `roots-secondary` ·
+`roots-tendrils` · `trunk` · `crown` (`branches-primary` · `branches-secondary`
+· `twigs` · `leaves-0…9`) · `culture-letters` · `roots-front`.
+Branches and roots are tapered filled shapes; the primary limbs carry a radial
+fill from bark to rosy brown, so they leave the trunk without a seam. Leaves
+are six drawn shapes with a midrib, set along the twigs — denser toward the
+crown's edge, sparse inside so the limbs show — in the PDF's two greens.
+`--fsf-glow`, the sky and the label "The tree of sport" belong to the page;
+the yellow seal is no longer drawn into the tree.
+
+**Growth (storyboard).** From culture to sport: the roots feed the tree.
+Plays once, when the opening arrives; 3.6 s on a desktop, ×0.65 on a phone.
+
+| time | what happens |
+|---|---|
+| 0.0–0.9 s | the glow behind the crown brightens |
+| 0.0–0.8 s | the horizon opens from the centre to both edges |
+| 0.3–1.5 s | roots grow out of the foot: primary, then secondary, then the tendrils (and the three in front of L, T, U) |
+| 0.7–1.9 s | the letters rise 12 px and fade in, C to E, as the roots reach them |
+| 0.95–1.75 s | the trunk rises from the horizon |
+| 1.33–2.54 s | limbs grow out of the trunk: primary, secondary, twigs |
+| 1.95–3.5 s | leaves open in ten waves from the heart of the crown outward: each scales from its stalk, settling a few degrees as it opens |
+| 3.1–3.75 s | SPORT settles onto the line |
+| after | desktop only: the crown sways ±0.4° round the top of the trunk on a 7.6 s breath; three leaf groups flutter out of phase. Paused off screen and in a hidden tab. |
+
+How: each part is revealed by a circle in the drawing's own coordinates (an
+SVG `<clipPath>`) scaled up from the point it grows from; the leaves grow
+through one inherited, registered number (`--grow`) that each leaf — a `<use>`
+of a `<symbol>` — scales by from its stalk. Only transforms and opacity, on
+about thirty groups. No library. The complete tree is the markup's default:
+without script, or with reduced motion, nothing moves and nothing is hidden.
 
 **Type.** Archivo carries the page. **Nunito** (self-hosted, 39 KB) stands in
 for the PDF's Apertura — a commercial face — where the PDF uses it: CULTURE,
@@ -99,7 +120,7 @@ until the brochure supplies facts.
 
 ## 5. Open
 
-- Client approval of the redrawn Tree of Sport (an interpretation of their artwork).
+- Client approval of the redrawn Tree of Sport (an interpretation of their artwork) and of the growth animation.
 - Photographs, films, the FSF2026 brochure.
 - Native-speaker pass on the Italian.
 - Approval of the one-word correction in the EN manifesto (currently published verbatim).

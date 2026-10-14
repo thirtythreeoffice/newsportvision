@@ -1197,7 +1197,8 @@ FSF2026 = {
                     "spreading below the horizon, with the letters of the word CULTURE "
                     "set among the roots.",
         "sport": "SPORT",
-        "manifesto_label": "the tree of sport",
+        "manifesto_label": "the manifesto",
+        "tree_label": "the tree of sport",
         "manifesto": (
             "In our life, which can be imagined as a perfect ecosystem, Sport has a very "
             "prominent place. We can see it as one magnificent tree on a very visible hill. "
@@ -1270,7 +1271,8 @@ FSF2026 = {
                     "le radici che si allargano sotto l'orizzonte, con le lettere della "
                     "parola CULTURE disposte tra le radici.",
         "sport": "SPORT",
-        "manifesto_label": "l'albero dello sport",
+        "manifesto_label": "il manifesto",
+        "tree_label": "l'albero dello sport",
         "manifesto": (
             "Nella nostra vita, che può essere immaginata come un ecosistema perfetto, lo "
             "Sport occupa un posto di grande rilievo. Possiamo vederlo come un magnifico "

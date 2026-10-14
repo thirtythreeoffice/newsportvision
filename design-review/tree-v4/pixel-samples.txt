@@ -1,0 +1,32 @@
+browser   width  band-step edge deltas (old box)  sky top / middle / foot (hue)
+chromium    390      81.71 []                     #81B7D6 202°  #559DCC 204°  #4294D1 205°
+chromium    768      45.27 []                     #8DC9EC 202°  #65B2E4 204°  #3E93D1 205°
+chromium   1440      39.52 [0.9]                  #8DCAEC 202°  #70B7E6 204°  #3C90CF 206°
+chromium   1920       37.4 [2.8, 1.5, 1.1]        #8DCAEC 202°  #61B0E4 204°  #358DCE 206°
+webkit      390       38.4 []                     #81B7D6 202°  #5499C6 204°  #4294D1 205°
+webkit      768      32.79 []                     #8DC9EC 202°  #65B2E4 204°  #3E93D1 205°
+webkit     1440      46.35 [0.8, 1.1]             #8DCAEC 202°  #6FB7E5 204°  #3C91CF 205°
+webkit     1920      37.35 [2.3, 1.7, 2.1]        #8DCAEC 202°  #60AFE3 204°  #358CCE 206°
+firefox     390      48.48 []                     #83BBDB 202°  #569FCF 204°  #4294D1 205°
+firefox     768      46.69 []                     #8DC9EC 202°  #65B1E5 204°  #3E93D2 206°
+firefox    1440      43.77 [0.9, 0.7]             #8DC9EC 202°  #6FB7E6 204°  #3C92D0 205°
+firefox    1920      33.69 [2.6, 0.6, 1.6]        #8DC9EC 202°  #61B0E4 204°  #368ECE 205°
+
+Sky-only bands (8 px tall, 10 px wide) down both screen margins, skipping any band
+that something drawn crosses (horizon, text). Largest step between neighbours, in
+8-bit levels:
+chromium 390: 2.12  768: 1.64  1440: 1.49  1920: 1.33
+webkit   390: 2.08  768: 1.55  1440: 1.50  1920: 1.53
+firefox  390: 2.33  768: 2.19  1440: 1.66  1920: 1.69
+"edge deltas" above compare 8 px samples just outside and just inside where the old
+panel's edges were (top edge, both sides): 0.6-2.8 levels, i.e. only the gradient.
+
+Frame rate during the growth (Chromium headless on this Mac, rAF intervals):
+390 px  CPU 1x  60 fps, median 16.7 ms, worst 16.8 ms
+390 px  CPU 4x  58.8 fps, median 16.7 ms, p95 16.8 ms, worst 33.4 ms, 0 frames > 50 ms
+1440 px CPU 4x  58.5 fps, median 16.7 ms, p95 16.8 ms, worst 33.4 ms, 0 frames > 50 ms
+1440 px idle breeze, CPU 4x: 60 fps
+
+Lighthouse, mobile, gzip (local):
+/fsf2026/    perf 75  a11y 100  LCP 4.9 s  CLS 0  TBT 60 ms  FCP 3.3 s  DOM 804
+/it/fsf2026/ perf 75  a11y 100  LCP 4.9 s  CLS 0  TBT 0 ms   FCP 3.3 s  DOM 804

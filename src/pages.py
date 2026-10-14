@@ -1045,7 +1045,8 @@ def fsf2026(lang):
     <p class="fsf-held" data-reveal="up">%(held)s</p>
   </div>
   <div class="fsf-ground">
-    <figure class="fsf-plate" data-reveal="fade">%(tree)s</figure>
+    <div class="wrap"><p class="meta fsf-tree-label"><i class="tab" aria-hidden="true"></i>%(tree_label)s</p></div>
+    <figure class="fsf-plate" data-reveal="tree">%(tree)s</figure>
   </div>
   <div class="fsf-edge"><h2 class="fsf-sport">%(sport)s</h2></div>
 </section>""" % {
@@ -1053,7 +1054,7 @@ def fsf2026(lang):
         "title": jstack(t["name"], tag="h1", cls="statement-stack fsf-title", jmax="240",
                         extra=' id="fsf-h"'),
         "held": "<br>".join(_nw(l) for l in t["held"]),
-        "tree": _tree_svg(t["tree_alt"]),
+        "tree": _tree_svg(t["tree_alt"]), "tree_label": esc(t["tree_label"]),
         "tree_alt": esc(t["tree_alt"]), "sport": esc(t["sport"]),
     }
 

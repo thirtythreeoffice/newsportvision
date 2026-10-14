@@ -8,6 +8,23 @@
 (function () {
   "use strict";
 
+  /* --- The tree --------------------------------------------------------
+     Its growth is CSS, started by the house's reveal sweep. Here only the
+     breeze afterwards: it begins when the last leaves have opened, and rests
+     whenever the tree is off screen or the tab is hidden. */
+  var plate = document.querySelector(".fsf-plate");
+  if (plate) {
+    var last = plate.querySelector(".tos-leaves-9");
+    var idle = function () { plate.classList.add("is-idle"); };
+    if (last) last.addEventListener("animationend", idle, { once: true });
+    var onScreen = true;
+    var rest = function () { plate.classList.toggle("is-paused", !onScreen || document.hidden); };
+    if ("IntersectionObserver" in window) {
+      new IntersectionObserver(function (es) { onScreen = es[0].isIntersecting; rest(); }).observe(plate);
+    }
+    document.addEventListener("visibilitychange", rest);
+  }
+
   /* --- The staircase -----------------------------------------------------
      One straight line falling under the five words, as in the manifesto. It
      is redrawn
