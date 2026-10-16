@@ -1097,12 +1097,22 @@ def fsf2026(lang):
     }
 
     # ---- 05 at the root: CULTURE, and the declaration signed there ----------
-    def line(field, label, ghost, auto, after=""):
+    def line(field, label, ghost, auto, maxlen, after=""):
         return ('<span class="fsf-line"><label class="visually-hidden" for="fsf-%s">%s</label>'
                 '<input id="fsf-%s" name="%s" type="text" placeholder="%s" autocomplete="%s" '
-                'maxlength="80" required>%s</span>'
-                % (field, esc(label), field, field, esc(ghost), auto, after))
+                'maxlength="%d" required spellcheck="false">%s</span>'
+                % (field, esc(label), field, field, esc(ghost), auto, maxlen, after))
+    def err(field, key):
+        return ('<li class="fsf-err" id="fsf-%s-err" data-for="%s" hidden><span aria-hidden="true">!</span> %s</li>'
+                % (field, field, esc(t[key])))
     seal = '<span class="fsf-seal%s" aria-hidden="true">' + masthead(lang, tag="span") + '</span>'
+    # a stretch of the horizon, with three root tendrils falling from it, to sign on
+    horizon = ('<svg class="fsf-pad__line" viewBox="0 0 600 40" preserveAspectRatio="none" aria-hidden="true" focusable="false">'
+               '<path class="fsf-pad__hz" d="M0 12Q300 2 600 12" vector-effect="non-scaling-stroke"/>'
+               '<path class="fsf-pad__root" d="M84 10C86 18 80 24 84 34M86 14C92 20 96 22 98 30M300 7C298 16 304 24 300 38'
+               'M302 12C296 20 290 22 288 30M516 10C514 18 520 24 516 34M514 14C508 20 504 22 502 30"/></svg>')
+    types = "".join('<label class="fsf-chip"><input type="radio" name="type" value="%s"><span>%s</span></label>'
+                    % (v, esc(l)) for v, l in t["signer_types"])
     root = """
 <section class="fsf-root on-ink" data-field="ink" id="support" aria-labelledby="fsf-sign-h">
   <div class="wrap">
@@ -1113,23 +1123,52 @@ def fsf2026(lang):
         <p class="fsf-idea" data-reveal="up">%(idea)s</p>
       </div>
       <form class="fsf-doc c7 s6" method="post" action="/api/support/" data-fsf-form data-reveal="up"
-            data-missing="%(missing)s" data-sending="%(sending)s" data-sent="%(sent)s"
-            data-failed="%(failed)s" data-busy="%(busy)s" novalidate>
+            data-sending="%(sending)s" data-failed="%(failed)s" data-busy="%(busy)s" data-dup="%(dup)s"
+            data-offline="%(offline)s" data-unavailable="%(unavailable)s" data-missing="%(missing)s"
+            data-seal="%(seal_t)s" data-supporter="%(supporter)s" data-sent="%(sent)s" novalidate>
         <div class="fsf-doc__top"><span class="meta">%(doc_meta)s</span>%(seal)s</div>
         %(head)s
         <p class="fsf-decl">%(a)s %(name)s %(b)s %(place)s %(c)s</p>
-        <p class="fsf-signed" data-fsf-signed hidden><span class="meta">%(signed_on)s <span data-fsf-date></span></span>%(stamp)s</p>
+        <ul class="fsf-errs">%(err_line)s</ul>
+        <div class="fsf-pad" data-fsf-pad>
+          <div class="fsf-pad__head"><span class="meta" id="fsf-pad-label">%(sig_label)s <span class="fsf-pad__opt">· %(sig_optional)s</span></span>
+            <button type="button" class="fsf-pad__clear" data-fsf-clear disabled>%(sig_clear)s</button></div>
+          <div class="fsf-pad__area"><canvas class="fsf-pad__canvas" role="img" aria-labelledby="fsf-pad-label" aria-describedby="fsf-pad-hint"></canvas>%(horizon)s</div>
+          <p class="fsf-pad__hint annot" id="fsf-pad-hint">%(sig_hint)s</p>
+          <ul class="fsf-errs">%(err_sig)s</ul>
+        </div>
+        <div class="fsf-more">
+          <p class="fsf-field"><label class="meta" for="fsf-email">%(f_email)s</label>
+            <input id="fsf-email" name="email" type="email" inputmode="email" autocomplete="email" maxlength="254"
+                   aria-describedby="fsf-email-note" spellcheck="false">
+            <span class="fsf-field__note annot" id="fsf-email-note">%(email_note)s</span></p>
+          <ul class="fsf-errs">%(err_email)s</ul>
+          <fieldset class="fsf-types"><legend class="meta">%(f_type)s <span class="fsf-pad__opt">· %(sig_optional)s</span></legend>%(types)s</fieldset>
+        </div>
         <div class="fsf-doc__act">
           <p class="check"><input id="fsf-consent" name="consent" type="checkbox" required>
              <label for="fsf-consent">%(consent)s —
                <a class="tlink" href="%(privacy)s">%(privacy_label)s</a></label></p>
+          <ul class="fsf-errs">%(err_consent)s</ul>
+          <p class="check fsf-wallopt"><input id="fsf-wall" name="wall" type="checkbox">
+             <label for="fsf-wall">%(f_wall)s</label></p>
           <p class="fsf-hp" aria-hidden="true"><label for="fsf-website">Website</label>
              <input id="fsf-website" name="website" type="text" tabindex="-1" autocomplete="off"></p>
           <button type="submit" class="fsf-cta"><span>%(submit)s</span><i aria-hidden="true"></i></button>
         </div>
         <p class="annot fsf-doc__status" data-fsf-status role="status" aria-live="polite"></p>
+        <div class="fsf-signed" data-fsf-signed hidden tabindex="-1">
+          <p class="fsf-stamp" data-fsf-stamp></p>
+          <p class="fsf-supporter" data-fsf-supporter></p>
+          %(stamp)s
+        </div>
         <p class="fsf-doc__foot meta" aria-hidden="true"><span>%(foot_l)s</span><span>%(foot_r)s</span></p>
       </form>
+    </div>
+    <div class="fsf-wall" data-fsf-wall hidden>
+      <p class="meta"><i class="tab" aria-hidden="true"></i>%(wall_head)s</p>
+      <p class="fsf-wall__note annot">%(wall_note)s</p>
+      <ol class="fsf-wall__list" data-fsf-wall-list></ol>
     </div>
   </div>
 </section>""" % {
@@ -1142,15 +1181,22 @@ def fsf2026(lang):
         "head": jstack(t["sign_head"], tag="h2", cls="statement-stack fsf-doc__h", jmax="120",
                        extra=' id="fsf-sign-h"'),
         "a": esc(t["decl"][0]), "b": esc(t["decl"][1]), "c": esc(t["decl"][2].lstrip(", ")),
-        "name": line("name", t["f_name"], t["ghost_name"], "name"),
-        "place": line("from", t["f_from"], t["ghost_from"], "off", ","),
-        "signed_on": esc(t["signed_on"]),
+        "name": line("name", t["f_name"], t["ghost_name"], "name", 80),
+        "place": line("from", t["f_from"], t["ghost_from"], "off", 120, ","),
+        "sig_label": esc(t["sig_label"]), "sig_optional": esc(t["sig_optional"]), "sig_hint": esc(t["sig_hint"]),
+        "sig_clear": esc(t["sig_clear"]), "horizon": horizon,
+        "f_email": esc(t["f_email"]), "email_note": esc(t["email_note"]), "f_type": esc(t["f_type"]), "types": types,
+        "err_line": err("name", "err_name") + err("from", "err_from"), "err_email": err("email", "err_email"),
+        "err_sig": err("signature", "err_signature"), "err_consent": err("consent", "err_consent"),
+        "f_wall": esc(t["f_wall"]), "wall_head": esc(t["wall_head"]), "wall_note": esc(t["wall_note"]),
         "foot_l": _nw(t["doc_foot"][0]), "foot_r": _nw(t["doc_foot"][1], False),
         "consent": esc(t["f_consent"]),
         "privacy": url(lang, "/privacy/"), "privacy_label": esc(ui["privacy"]),
         "submit": esc(t["f_submit"]),
         "missing": esc(t["f_missing"]), "sending": esc(t["f_sending"]), "sent": esc(t["f_sent"]),
-        "failed": esc(t["f_failed"]), "busy": esc(t["f_busy"]),
+        "failed": esc(t["f_failed"]), "busy": esc(t["f_busy"]), "dup": esc(t["f_dup"]),
+        "offline": esc(t["f_offline"]), "unavailable": esc(t["f_unavailable"]),
+        "seal_t": esc(t["seal"]), "supporter": esc(t["supporter"]),
     }
 
     # ---- 06 the day: an archive in preparation, or the archive itself -------

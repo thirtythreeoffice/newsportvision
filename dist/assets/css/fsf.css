@@ -308,7 +308,6 @@
 .fsf-line { display: inline-block; max-width: 100%; vertical-align: baseline; white-space: nowrap; }
 .fsf-line:last-of-type input { width: 4.7em; min-width: 4.5em; }
 .fsf-line input {
-  field-sizing: content;
   width: 9.1em; min-width: 6em; max-width: calc(100% - .5em);
   background: transparent; border: 0; border-radius: 0;
   border-bottom: var(--rule-thin) solid var(--nsv-ink);
@@ -318,9 +317,64 @@
   transition: border-color var(--t-micro) linear;
 }
 .fsf-line input::placeholder { color: var(--nsv-ink); opacity: .38; font-weight: 300; }
+/* the blank grows with what is written: the script sets its width (one
+   way in every browser; field-sizing's percentages loop in Chromium) */
+}
 .fsf-line input:focus { outline: none; border-bottom-color: var(--nsv-blue); box-shadow: 0 1px 0 var(--nsv-blue); }
-.fsf-doc[data-state="missing"] .fsf-line input:invalid { border-bottom-color: #B3261E; box-shadow: 0 1px 0 #B3261E; }
-.fsf-doc[data-state="missing"] .check input:invalid { outline: 2px solid #B3261E; outline-offset: -8px; }
+/* a field the server or the page refused: red rule, and the reason in words
+   below (never colour alone) */
+.fsf-line input[aria-invalid="true"], .fsf-field input[aria-invalid="true"] { border-bottom-color: #B3261E; box-shadow: 0 1px 0 #B3261E; }
+.check input[aria-invalid="true"] { outline: 2px solid #B3261E; outline-offset: -8px; }
+.fsf-errs { list-style: none; margin: 10px 0 0; padding: 0; display: grid; gap: 6px; }
+.fsf-doc__act .fsf-errs { margin-top: calc(var(--space-2) * -1 + 4px); }
+/* once signed, the status line is for screen readers: the seal says it */
+.fsf-doc[data-state="sent"] .fsf-doc__status { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.fsf-errs:not(:has(li:not([hidden]))) { display: none; }
+.fsf-err { display: flex; gap: .6em; align-items: baseline; color: #8E1C16; font-size: var(--fs-small); line-height: 1.35; }
+.fsf-err > span { flex: 0 0 auto; display: inline-grid; place-items: center; width: 1.25em; height: 1.25em;
+  border-radius: 50%; background: #B3261E; color: #FFFFFF; font-weight: 800; font-size: .8em; font-family: var(--font-display); }
+
+/* --- the signature: drawn on a stretch of the horizon -------------------------- */
+.fsf-pad { margin: var(--space-4) 0 0; }
+.fsf-pad__head { display: flex; justify-content: space-between; align-items: baseline; gap: var(--space-2); }
+.fsf-pad__opt { opacity: .62; }
+.fsf-pad__clear {
+  border: 0; background: none; padding: 10px 0; min-height: 44px; cursor: pointer; color: var(--nsv-ink);
+  font: inherit; font-family: var(--font-display); font-weight: 700; font-size: var(--fs-meta);
+  letter-spacing: var(--track-meta); text-transform: uppercase; text-decoration: underline; text-underline-offset: .3em;
+}
+.fsf-pad__clear:disabled { opacity: .35; cursor: default; text-decoration: none; }
+.fsf-pad__clear:focus-visible { outline: 2px solid var(--nsv-ink); outline-offset: 3px; }
+.fsf-pad__area { position: relative; height: clamp(120px, 14vw, 170px); }
+.fsf-pad__canvas { position: absolute; inset: 0; width: 100%; height: 100%; touch-action: none; cursor: crosshair;
+  -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
+.fsf-pad__line { position: absolute; left: 0; right: 0; bottom: 6px; width: 100%; height: 40px; pointer-events: none; overflow: visible; }
+.fsf-pad__hz { fill: none; stroke: #1E5028; stroke-width: 2; }
+.fsf-pad__root { fill: none; stroke: #643214; stroke-width: 1.6; stroke-linecap: round; opacity: .55; }
+.fsf-pad__hint { margin: 6px 0 0; }
+
+/* --- email and who is signing ------------------------------------------------ */
+.fsf-more { margin: var(--space-4) 0 0; display: grid; gap: var(--space-3); }
+.fsf-field { margin: 0; display: grid; gap: 8px; max-width: 30em; }
+.fsf-field input {
+  font: inherit; font-family: var(--font-text); font-size: max(16px, var(--fs-body)); color: var(--nsv-ink);
+  background: transparent; border: 0; border-bottom: var(--rule-thin) solid var(--nsv-ink); border-radius: 0; padding: 6px 2px;
+}
+.fsf-field input:focus { outline: none; border-bottom-color: var(--nsv-blue); box-shadow: 0 1px 0 var(--nsv-blue); }
+.fsf-field__note { margin: 0; }
+.fsf-types { margin: 0; padding: 0; border: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+.fsf-types legend { margin: 0 0 10px; padding: 0; width: 100%; }
+.fsf-chip { position: relative; display: inline-flex; }
+.fsf-chip input { position: absolute; opacity: 0; inset: 0; margin: 0; cursor: pointer; }
+.fsf-chip span {
+  display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border: var(--rule-thin) solid var(--nsv-ink);
+  font-family: var(--font-display); font-weight: 600; font-size: var(--fs-small); cursor: pointer;
+  transition: background var(--t-micro) linear, color var(--t-micro) linear;
+}
+.fsf-chip input:checked + span { background: var(--nsv-ink); color: var(--nsv-paper); }
+.fsf-chip input:focus-visible + span { outline: 2px solid var(--nsv-blue); outline-offset: 2px; }
+@media (hover: hover) { .fsf-chip:hover span { background: rgba(29, 29, 27, .06); } .fsf-chip input:checked + span { background: var(--nsv-ink); } }
+.fsf-wallopt { margin-top: calc(var(--space-2) * -1) !important; }
 .fsf-doc__act { margin-top: var(--space-4); display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--space-3); }
 .fsf-doc__act .check { margin: 0; font-size: var(--fs-body); line-height: var(--lh-text); max-width: 46em; align-items: flex-start; }
 /* A drawn box, 24 px to the eye, 44 px to the finger: the control is the
@@ -373,8 +427,42 @@
 .fsf-seal--stamp { transform: rotate(-7deg); }
 .fsf-doc[data-state="sent"] .fsf-seal--stamp { animation: fsf-stamp 520ms var(--ease-editorial) both; }
 @keyframes fsf-stamp { from { opacity: 0; transform: rotate(-16deg) scale(1.7); } to { opacity: 1; transform: rotate(-7deg) scale(1); } }
-.fsf-doc[data-state="sent"] .fsf-doc__act { display: none; }
-.fsf-doc[data-state="sent"] .fsf-line input { pointer-events: none; }
+.fsf-doc[data-state="sent"] :is(.fsf-doc__act, .fsf-more, .fsf-pad__head, .fsf-pad__hint, .fsf-errs) { display: none; }
+.fsf-doc[data-state="sent"] .fsf-pad__canvas { pointer-events: none; cursor: default; }
+.fsf-doc[data-state="sent"] .fsf-pad:not(.has-ink) { display: none; }
+/* signed: what was typed is set as text, in the text face's italic */
+.fsf-line__set { font-family: var(--font-text); font-style: italic; border-bottom: var(--rule-thin) solid var(--nsv-ink); padding: 0 .12em; }
+.fsf-stamp {
+  margin: 0; display: inline-block; padding: 8px 12px; background: var(--nsv-yellow); color: var(--nsv-ink);
+  font-family: var(--font-display); font-weight: 800; font-size: var(--fs-meta); letter-spacing: var(--track-meta);
+  transform: rotate(-2.5deg); transform-origin: left center;
+}
+.fsf-supporter { margin: var(--space-2) 0 0; font-family: var(--font-display); font-weight: 700; font-size: var(--fs-h3);
+  line-height: var(--lh-tight); letter-spacing: var(--track-h); }
+.fsf-signed { flex-wrap: wrap; }
+.fsf-signed:focus { outline: none; }
+@media (prefers-reduced-motion: no-preference) {
+  .fsf-doc[data-state="sent"] .fsf-stamp { animation: fsf-press 560ms var(--ease-editorial) both; }
+  @keyframes fsf-press { from { opacity: 0; transform: rotate(-9deg) scale(1.6); } 70% { opacity: 1; } to { opacity: 1; transform: rotate(-2.5deg) scale(1); } }
+}
+.fsf-doc[data-state="sending"] .fsf-cta { cursor: progress; }
+.fsf-doc[data-state="sending"] .fsf-cta i { animation: fsf-wait 900ms ease-in-out infinite alternate; }
+@keyframes fsf-wait { from { width: 34px; } to { width: 64px; } }
+@media (prefers-reduced-motion: reduce) { .fsf-doc[data-state="sending"] .fsf-cta i { animation: none; } }
+.fsf-doc[data-state="offline"] .fsf-doc__status, .fsf-doc[data-state="failed"] .fsf-doc__status,
+.fsf-doc[data-state="unavailable"] .fsf-doc__status, .fsf-doc[data-state="busy"] .fsf-doc__status {
+  padding: 10px 14px; border-left: 4px solid #B3261E; background: rgba(179, 38, 30, .06); color: #6E1712; font-style: normal; }
+.fsf-doc[data-state="dup"] .fsf-doc__status { padding: 10px 14px; border-left: 4px solid var(--nsv-yellow); background: rgba(250, 197, 28, .14); font-style: normal; }
+
+/* --- the wall of supporters (only those who asked) ---------------------------- */
+.fsf-wall { margin-top: var(--space-5); }
+.fsf-wall[hidden] { display: none; }
+.fsf-wall__note { margin: 6px 0 0; color: var(--fg-quiet); }
+.fsf-wall__list { list-style: none; margin: var(--space-3) 0 0; padding: 0; columns: 3 18em; column-gap: var(--gutter); }
+.fsf-wall__list li { break-inside: avoid; padding: 10px 0; border-top: var(--rule-hair) solid rgba(242, 239, 231, .25);
+  font-family: var(--font-text); font-size: var(--fs-body); line-height: 1.35; }
+.fsf-wall__list b { font-family: var(--font-display); font-weight: 700; }
+.fsf-wall__list small { display: block; color: var(--fg-quiet); font-size: var(--fs-small); }
 
 /* --- 06 the day ------------------------------------------------------------ */
 .fsf-day { padding-top: var(--act); padding-bottom: var(--act); }

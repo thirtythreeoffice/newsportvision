@@ -1,0 +1,45 @@
+=== chromium
+  EN seal                            SIGNED · FSF 26 · No. 0001 · 16.10.2026
+  EN supporter                       You are supporter No. 1.
+  EN locked text                     ['Đorđe Šćepanović-Žižić', 'Čačak']
+  IT seal                            FIRMATO · FSF 26 · N. 0002 · 16.10.2026
+  IT supporter                       Sei il sostenitore n. 2.
+  page scrolled while drawing (px)   0
+  duplicate                          You have already signed — thank you.
+  fast bot answer                    200 application/json; charset=utf-8
+  errors shown                       ['! Write your full name (2 to 80 characters).', '! Write your city or organisation (2 to 120 characters).', '! Tick the box to agree.']
+  offline                            ('offline', 'You are offline. What you wrote is kept here — sign again when you are back online.', 'Offline Person')
+  numbers issued                     2
+  inline signature                   True
+  reply_to                           [None, 'niccolo@example.it', 'office@newsportvision.com']
+  wall                               {'wall': [{'no': '0002', 'name': "Niccolò D'Alessandro", 'from': 'Città di Castello'}]}
+=== webkit
+  EN seal                            SIGNED · FSF 26 · No. 0001 · 16.10.2026
+  EN supporter                       You are supporter No. 1.
+  EN locked text                     ['Đorđe Šćepanović-Žižić', 'Čačak']
+  IT seal                            FIRMATO · FSF 26 · N. 0002 · 16.10.2026
+  IT supporter                       Sei il sostenitore n. 2.
+  page scrolled while drawing (px)   0
+  duplicate                          You have already signed — thank you.
+  fast bot answer                    200 application/json; charset=utf-8
+  errors shown                       ['! Write your full name (2 to 80 characters).', '! Write your city or organisation (2 to 120 characters).', '! Tick the box to agree.']
+  offline                            ('offline', 'You are offline. What you wrote is kept here — sign again when you are back online.', 'Offline Person')
+  numbers issued                     2
+  inline signature                   True
+  reply_to                           [None, 'niccolo@example.it', 'office@newsportvision.com']
+  wall                               {'wall': [{'no': '0002', 'name': "Niccolò D'Alessandro", 'from': 'Città di Castello'}]}
+=== firefox
+  EN seal                            SIGNED · FSF 26 · No. 0001 · 16.10.2026
+  EN supporter                       You are supporter No. 1.
+  EN locked text                     ['Đorđe Šćepanović-Žižić', 'Čačak']
+  IT seal                            FIRMATO · FSF 26 · N. 0002 · 16.10.2026
+  IT supporter                       Sei il sostenitore n. 2.
+  page scrolled while drawing (px)   0
+  duplicate                          You have already signed — thank you.
+  fast bot answer                    200 application/json; charset=utf-8
+  errors shown                       ['! Write your full name (2 to 80 characters).', '! Write your city or organisation (2 to 120 characters).', '! Tick the box to agree.']
+  offline                            ('offline', 'You are offline. What you wrote is kept here — sign again when you are back online.', 'Offline Person')
+  numbers issued                     2
+  inline signature                   True
+  reply_to                           [None, 'niccolo@example.it', 'office@newsportvision.com']
+  wall                               {'wall': [{'no': '0002', 'name': "Niccolò D'Alessandro", 'from': 'Città di Castello'}]}

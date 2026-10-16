@@ -876,6 +876,27 @@ PRIVACY_SECTIONS = [
         "<ul><li>Google Analytics</li><li>YouTube (Google)</li><li>Twitter</li>"
         "<li>Facebook.</li></ul>",
     ]),
+    ("fsf26", "Dichiarazione di sostegno FSF 26 (firme) / Declaration of support FSF 26 (signatures)", [
+        "Chi firma la dichiarazione “Sostegno ai valori” sulla pagina FSF 2026 ci affida: nome e cognome, città o "
+        "organizzazione e, solo se li fornisce, un indirizzo email, il tipo di firmatario e una firma disegnata. "
+        "Registriamo inoltre la lingua della pagina, data e ora della firma, la versione del consenso e un numero "
+        "progressivo con un codice casuale di verifica.",
+        "Finalità e base giuridica: conservare la testimonianza del sostegno e, se l’indirizzo è fornito, inviare "
+        "la conferma e la dichiarazione firmata; base giuridica è il consenso (art. 6.1.a GDPR), revocabile in "
+        "qualsiasi momento scrivendo a office@newsportvision.com. Il nome e la città compaiono nel muro pubblico "
+        "dei sostenitori solo se il firmatario spunta la relativa casella, separata.",
+        "L’indirizzo IP non viene conservato: serve solo, in forma cifrata (hash) e per dieci minuti, a limitare "
+        "gli invii automatici. Le firme sono conservate presso Upstash (database) e le email sono inviate tramite "
+        "Resend, fornitori che trattano i dati per nostro conto; sono conservate fino alla revoca del consenso e "
+        "comunque non oltre cinque anni dall’evento.",
+        "<em>In English:</em> when you sign the “Support to Values” declaration we keep your name, your city or "
+        "organisation and, only if you give them, your email, the kind of signer and your drawn signature, with "
+        "the date, the language, the consent version and a running number. The basis is your consent, which you "
+        "can withdraw at any time by writing to office@newsportvision.com. Your name appears on the public wall "
+        "of supporters only if you tick that separate box. Your IP address is not kept: it is used, hashed, for "
+        "ten minutes to stop automated submissions. Signatures are stored with Upstash and emails sent with "
+        "Resend, on our behalf, until you withdraw consent and for no more than five years after the event.",
+    ]),
     ("cookie", "Informazioni sui Cookie", [
         "I cookie sono brevi file di testo che vengono scaricati sul dispositivo dell’utente "
         "quando si visita un sito web. Ad ogni visita successiva i cookie sono reinviati al "
@@ -1236,8 +1257,38 @@ FSF2026 = {
         "f_from": "Your city or organisation",
         "ghost_name": "Nemanja Mladenović",
         "ghost_from": "Belgrade",
-        "f_consent": "I agree that NewSportVision may keep my name and where I am from "
-                     "as a record of this support",
+        "f_consent": "I agree that NewSportVision may keep my name, where I am from and, if I give them, "
+                     "my email and my drawn signature, as a record of this support",
+        "consent_version": "fsf26-2026-10-16",
+        "f_email": "Your email (optional)",
+        "email_note": "Leave your email to receive your signed declaration as PDF.",
+        "f_type": "Signing as",
+        "signer_types": [("individual", "an individual"), ("club", "a club"), ("school", "a school"),
+                         ("company", "a company"), ("institution", "an institution")],
+        "sig_label": "Sign here",
+        "sig_optional": "optional",
+        "sig_hint": "Draw your signature with a mouse, a finger or a pen.",
+        "sig_clear": "Clear",
+        "f_wall": "Also show my name and city on the public wall of supporters",
+        "wall_head": "Wall of supporters",
+        "wall_note": "Signed, and shared by choice.",
+        "seal": "SIGNED · FSF 26 · No. %s · %s",
+        "supporter": "You are supporter No. %s.",
+        "f_dup": "You have already signed — thank you.",
+        "f_offline": "You are offline. What you wrote is kept here — sign again when you are back online.",
+        "f_unavailable": "Signing is not open yet. What you wrote is still here — please try again later.",
+        "err_name": "Write your full name (2 to 80 characters).",
+        "err_from": "Write your city or organisation (2 to 120 characters).",
+        "err_email": "This does not look like an email address.",
+        "err_consent": "Tick the box to agree.",
+        "err_signature": "The drawing is too large. Clear it and sign again.",
+        "mail_confirm_subject": "Your declaration of support — FSF 26 · No. %s",
+        "mail_confirm_hello": "Dear %s,",
+        "mail_confirm_body": "thank you for signing the declaration of support for the values of NewSportVision. "
+                             "You are supporter No. %s.",
+        "mail_confirm_pdf": "Your signed declaration as a PDF will follow in a separate email.",
+        "mail_confirm_copy": "Your declaration, as you signed it:",
+        "mail_confirm_sign": "NewSportVision · FSF 26 · Belgrade",
         "f_submit": "Sign the declaration",
         "f_missing": "Write your name and where you are from, and tick the box.",
         "f_sending": "Signing…",
@@ -1312,8 +1363,38 @@ FSF2026 = {
         "f_from": "Città o organizzazione",
         "ghost_name": "Nemanja Mladenović",
         "ghost_from": "Belgrado",
-        "f_consent": "Acconsento a che NewSportVision conservi il mio nome e la mia "
-                     "provenienza come testimonianza di questo sostegno",
+        "f_consent": "Acconsento a che NewSportVision conservi il mio nome, la mia provenienza e, se li "
+                     "fornisco, la mia email e la mia firma disegnata, come testimonianza di questo sostegno",
+        "consent_version": "fsf26-2026-10-16",
+        "f_email": "La tua email (facoltativa)",
+        "email_note": "Lascia la tua email per ricevere la dichiarazione firmata in PDF.",
+        "f_type": "Firmo come",
+        "signer_types": [("individual", "persona"), ("club", "società sportiva"), ("school", "scuola"),
+                         ("company", "azienda"), ("institution", "istituzione")],
+        "sig_label": "Firma qui",
+        "sig_optional": "facoltativo",
+        "sig_hint": "Disegna la tua firma con il mouse, un dito o una penna.",
+        "sig_clear": "Cancella",
+        "f_wall": "Mostra anche il mio nome e la mia città nel muro pubblico dei sostenitori",
+        "wall_head": "Muro dei sostenitori",
+        "wall_note": "Firmato, e condiviso per scelta.",
+        "seal": "FIRMATO · FSF 26 · N. %s · %s",
+        "supporter": "Sei il sostenitore n. %s.",
+        "f_dup": "Hai già firmato: grazie.",
+        "f_offline": "Sei offline. Ciò che hai scritto resta qui: firma di nuovo quando torni online.",
+        "f_unavailable": "La firma non è ancora aperta. Ciò che hai scritto è ancora qui: riprova più tardi.",
+        "err_name": "Scrivi nome e cognome (da 2 a 80 caratteri).",
+        "err_from": "Scrivi la tua città o organizzazione (da 2 a 120 caratteri).",
+        "err_email": "Questo non sembra un indirizzo email.",
+        "err_consent": "Spunta la casella per acconsentire.",
+        "err_signature": "Il disegno è troppo grande. Cancellalo e firma di nuovo.",
+        "mail_confirm_subject": "La tua dichiarazione di sostegno — FSF 26 · N. %s",
+        "mail_confirm_hello": "Gentile %s,",
+        "mail_confirm_body": "grazie per aver firmato la dichiarazione di sostegno ai valori di NewSportVision. "
+                             "Sei il sostenitore n. %s.",
+        "mail_confirm_pdf": "La dichiarazione firmata in PDF ti arriverà con un'email separata.",
+        "mail_confirm_copy": "La tua dichiarazione, come l'hai firmata:",
+        "mail_confirm_sign": "NewSportVision · FSF 26 · Belgrado",
         "f_submit": "Firma la dichiarazione",
         "f_missing": "Scrivi il tuo nome e la tua provenienza, e spunta la casella.",
         "f_sending": "Firma in corso…",

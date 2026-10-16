@@ -23,12 +23,12 @@
 <link rel="apple-touch-icon" href="/assets/media/nsv-logo.png">
 <link rel="preload" href="/assets/fonts/archivo-normal-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/assets/fonts/newsreader-normal-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/assets/css/tokens.css?v=ded9ac7d">
-<link rel="stylesheet" href="/assets/css/base.css?v=ded9ac7d">
-<link rel="stylesheet" href="/assets/css/components.css?v=ded9ac7d">
-<link rel="stylesheet" href="/assets/css/pages.css?v=ded9ac7d">
-<link rel="stylesheet" href="/assets/css/arms.css?v=ded9ac7d">
-<link rel="stylesheet" href="/assets/css/fsf.css?v=ded9ac7d">
+<link rel="stylesheet" href="/assets/css/tokens.css?v=9e84f60a">
+<link rel="stylesheet" href="/assets/css/base.css?v=9e84f60a">
+<link rel="stylesheet" href="/assets/css/components.css?v=9e84f60a">
+<link rel="stylesheet" href="/assets/css/pages.css?v=9e84f60a">
+<link rel="stylesheet" href="/assets/css/arms.css?v=9e84f60a">
+<link rel="stylesheet" href="/assets/css/fsf.css?v=9e84f60a">
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "Event", "name": "FutureSportFuture 2026", "alternateName": "FSF2026", "startDate": "2026-10-03", "endDate": "2026-10-03", "eventStatus": "https://schema.org/EventScheduled", "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode", "inLanguage": "en", "description": "FutureSportFuture 2026 was held in Belgrade on 3 October 2026. The Tree of Sport manifesto, and the declaration of support for the values it stands for.", "url": "https://www.newsportvision.com/fsf2026/", "image": "https://www.newsportvision.com/assets/media/fsf2026/og-fsf2026.jpg", "location": {"@type": "Place", "name": "Belgrade", "address": {"@type": "PostalAddress", "addressLocality": "Belgrade", "addressCountry": "RS"}}, "organizer": {"@type": "Organization", "name": "NewSportVision", "url": "https://www.newsportvision.com"}}</script>
 <script>(function(d){var r=d.documentElement;r.className+=' js js-justify';r.style.setProperty('--vw',r.clientWidth+'px');d.addEventListener('load',function(e){var t=e.target;if(t&&t.tagName==='IMG')t.classList.add('is-loaded')},true)})(document);</script>
 </head>
@@ -85,23 +85,52 @@
         <p class="fsf-idea" data-reveal="up">Sport is the&nbsp;crown.<br>Culture is the root and the&nbsp;trunk.</p>
       </div>
       <form class="fsf-doc c7 s6" method="post" action="/api/support/" data-fsf-form data-reveal="up"
-            data-missing="Write your name and where you are from, and tick the box." data-sending="Signing…" data-sent="Signed. Thank you — your support has reached NewSportVision."
-            data-failed="It could not be sent. What you wrote is still here — please try again." data-busy="Too many in a short time. Please wait a few minutes and try again." novalidate>
+            data-sending="Signing…" data-failed="It could not be sent. What you wrote is still here — please try again." data-busy="Too many in a short time. Please wait a few minutes and try again." data-dup="You have already signed — thank you."
+            data-offline="You are offline. What you wrote is kept here — sign again when you are back online." data-unavailable="Signing is not open yet. What you wrote is still here — please try again later." data-missing="Write your name and where you are from, and tick the box."
+            data-seal="SIGNED · FSF 26 · No. %s · %s" data-supporter="You are supporter No. %s." data-sent="Signed. Thank you — your support has reached NewSportVision." novalidate>
         <div class="fsf-doc__top"><span class="meta">FSF 26&nbsp;· Belgrade&nbsp;· 03.10.2026</span><span class="fsf-seal" aria-hidden="true"><span class="mast" aria-label="NewSportVision — home"><span class="mast__l"><span>New</span><i class="mast__bar"></i></span><span class="mast__l"><span>Sport</span></span><span class="mast__l"><span>Vision</span></span></span></span></div>
         <h2 class="jstack statement-stack fsf-doc__h" data-justify-stack data-jmax="120" id="fsf-sign-h"><span class="hl" data-jl-host><span class="hlw" data-jl>SUPPORT</span></span><span class="hl" data-jl-host><span class="hlw" data-jl>TO VALUES</span></span></h2>
-        <p class="fsf-decl">I, <span class="fsf-line"><label class="visually-hidden" for="fsf-name">Your full name</label><input id="fsf-name" name="name" type="text" placeholder="Nemanja Mladenović" autocomplete="name" maxlength="80" required></span> from <span class="fsf-line"><label class="visually-hidden" for="fsf-from">Your city or organisation</label><input id="fsf-from" name="from" type="text" placeholder="Belgrade" autocomplete="off" maxlength="80" required>,</span> without any institutional formality, with no obligation to pay anything and without committing myself to any action, knowingly and with enthusiasm support the values NewSportVision stands up for and promotes. I give this support in a symbolic, declarative and voluntary way, wishing the values NewSportVision stands for to gain the widest possible momentum and strength. If this declaration of mine helps bring that about, it will be a fine thing, and it will leave me with the satisfaction of having contributed to improving the world we live in.</p>
-        <p class="fsf-signed" data-fsf-signed hidden><span class="meta">Signed on <span data-fsf-date></span></span><span class="fsf-seal fsf-seal--stamp" aria-hidden="true"><span class="mast" aria-label="NewSportVision — home"><span class="mast__l"><span>New</span><i class="mast__bar"></i></span><span class="mast__l"><span>Sport</span></span><span class="mast__l"><span>Vision</span></span></span></span></p>
+        <p class="fsf-decl">I, <span class="fsf-line"><label class="visually-hidden" for="fsf-name">Your full name</label><input id="fsf-name" name="name" type="text" placeholder="Nemanja Mladenović" autocomplete="name" maxlength="80" required spellcheck="false"></span> from <span class="fsf-line"><label class="visually-hidden" for="fsf-from">Your city or organisation</label><input id="fsf-from" name="from" type="text" placeholder="Belgrade" autocomplete="off" maxlength="120" required spellcheck="false">,</span> without any institutional formality, with no obligation to pay anything and without committing myself to any action, knowingly and with enthusiasm support the values NewSportVision stands up for and promotes. I give this support in a symbolic, declarative and voluntary way, wishing the values NewSportVision stands for to gain the widest possible momentum and strength. If this declaration of mine helps bring that about, it will be a fine thing, and it will leave me with the satisfaction of having contributed to improving the world we live in.</p>
+        <ul class="fsf-errs"><li class="fsf-err" id="fsf-name-err" data-for="name" hidden><span aria-hidden="true">!</span> Write your full name (2 to 80 characters).</li><li class="fsf-err" id="fsf-from-err" data-for="from" hidden><span aria-hidden="true">!</span> Write your city or organisation (2 to 120 characters).</li></ul>
+        <div class="fsf-pad" data-fsf-pad>
+          <div class="fsf-pad__head"><span class="meta" id="fsf-pad-label">Sign here <span class="fsf-pad__opt">· optional</span></span>
+            <button type="button" class="fsf-pad__clear" data-fsf-clear disabled>Clear</button></div>
+          <div class="fsf-pad__area"><canvas class="fsf-pad__canvas" role="img" aria-labelledby="fsf-pad-label" aria-describedby="fsf-pad-hint"></canvas><svg class="fsf-pad__line" viewBox="0 0 600 40" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path class="fsf-pad__hz" d="M0 12Q300 2 600 12" vector-effect="non-scaling-stroke"/><path class="fsf-pad__root" d="M84 10C86 18 80 24 84 34M86 14C92 20 96 22 98 30M300 7C298 16 304 24 300 38M302 12C296 20 290 22 288 30M516 10C514 18 520 24 516 34M514 14C508 20 504 22 502 30"/></svg></div>
+          <p class="fsf-pad__hint annot" id="fsf-pad-hint">Draw your signature with a mouse, a finger or a pen.</p>
+          <ul class="fsf-errs"><li class="fsf-err" id="fsf-signature-err" data-for="signature" hidden><span aria-hidden="true">!</span> The drawing is too large. Clear it and sign again.</li></ul>
+        </div>
+        <div class="fsf-more">
+          <p class="fsf-field"><label class="meta" for="fsf-email">Your email (optional)</label>
+            <input id="fsf-email" name="email" type="email" inputmode="email" autocomplete="email" maxlength="254"
+                   aria-describedby="fsf-email-note" spellcheck="false">
+            <span class="fsf-field__note annot" id="fsf-email-note">Leave your email to receive your signed declaration as PDF.</span></p>
+          <ul class="fsf-errs"><li class="fsf-err" id="fsf-email-err" data-for="email" hidden><span aria-hidden="true">!</span> This does not look like an email address.</li></ul>
+          <fieldset class="fsf-types"><legend class="meta">Signing as <span class="fsf-pad__opt">· optional</span></legend><label class="fsf-chip"><input type="radio" name="type" value="individual"><span>an individual</span></label><label class="fsf-chip"><input type="radio" name="type" value="club"><span>a club</span></label><label class="fsf-chip"><input type="radio" name="type" value="school"><span>a school</span></label><label class="fsf-chip"><input type="radio" name="type" value="company"><span>a company</span></label><label class="fsf-chip"><input type="radio" name="type" value="institution"><span>an institution</span></label></fieldset>
+        </div>
         <div class="fsf-doc__act">
           <p class="check"><input id="fsf-consent" name="consent" type="checkbox" required>
-             <label for="fsf-consent">I agree that NewSportVision may keep my name and where I am from as a record of this support —
+             <label for="fsf-consent">I agree that NewSportVision may keep my name, where I am from and, if I give them, my email and my drawn signature, as a record of this support —
                <a class="tlink" href="/privacy/">Privacy &amp; Cookie policy</a></label></p>
+          <ul class="fsf-errs"><li class="fsf-err" id="fsf-consent-err" data-for="consent" hidden><span aria-hidden="true">!</span> Tick the box to agree.</li></ul>
+          <p class="check fsf-wallopt"><input id="fsf-wall" name="wall" type="checkbox">
+             <label for="fsf-wall">Also show my name and city on the public wall of supporters</label></p>
           <p class="fsf-hp" aria-hidden="true"><label for="fsf-website">Website</label>
              <input id="fsf-website" name="website" type="text" tabindex="-1" autocomplete="off"></p>
           <button type="submit" class="fsf-cta"><span>Sign the declaration</span><i aria-hidden="true"></i></button>
         </div>
         <p class="annot fsf-doc__status" data-fsf-status role="status" aria-live="polite"></p>
+        <div class="fsf-signed" data-fsf-signed hidden tabindex="-1">
+          <p class="fsf-stamp" data-fsf-stamp></p>
+          <p class="fsf-supporter" data-fsf-supporter></p>
+          <span class="fsf-seal fsf-seal--stamp" aria-hidden="true"><span class="mast" aria-label="NewSportVision — home"><span class="mast__l"><span>New</span><i class="mast__bar"></i></span><span class="mast__l"><span>Sport</span></span><span class="mast__l"><span>Vision</span></span></span></span>
+        </div>
         <p class="fsf-doc__foot meta" aria-hidden="true"><span>Declaration of&nbsp;support</span><span>symbolic&nbsp;· declarative&nbsp;· voluntary</span></p>
       </form>
+    </div>
+    <div class="fsf-wall" data-fsf-wall hidden>
+      <p class="meta"><i class="tab" aria-hidden="true"></i>Wall of supporters</p>
+      <p class="fsf-wall__note annot">Signed, and shared by choice.</p>
+      <ol class="fsf-wall__list" data-fsf-wall-list></ol>
     </div>
   </div>
 </section>
@@ -122,8 +151,8 @@
 </main>
 <footer class="footer-canvas on-yellow" data-field="yellow"><div class="wrap"><div class="grid"><div class="c7" data-reveal="up"><div class="lead measure-sm"><p>Contact us if you have something to say!</p><p>Don&#x27;t be afraid, remember:</p><p>a good communication is the best start to Success.</p></div></div><div class="c5 s8" data-reveal="up" data-delay="90"><span class="meta meta--quiet">For Questions / Contact us at</span></div></div><div data-justify-stack data-jmax="280" style="margin-top:var(--space-5)"><span class="hl got" data-jl-host><span class="hlw" data-jl>Got an idea?</span></span></div><a class="mailto-big tlink" href="mailto:office@newsportvision.com" data-cursor="Open" style="margin-top:var(--space-3)">office@newsportvision.com</a><div style="margin-top:var(--space-4)"><span class="rule rule--thin" aria-hidden="true"></span></div><div class="footer-grid" style="margin-top:var(--space-4)"><div class="social"><a class="meta tlink tlink--invert" href="https://www.instagram.com/newsportvision/" target="_blank" rel="noopener">Instagram</a><a class="meta tlink tlink--invert" href="https://www.facebook.com/New-Sport-Vision-197163350852306/" target="_blank" rel="noopener">Facebook</a><a class="meta tlink tlink--invert" href="https://twitter.com/NewSportVision1" target="_blank" rel="noopener">Twitter</a></div><a class="meta tlink" href="/privacy/">Privacy &amp; Cookie policy</a><span class="meta meta--quiet">© 2026 Newsportvsion</span><a class="meta to-top" href="#top"><span class="to-top__bar" aria-hidden="true"></span>Top of page</a></div><div class="colophon"><div class="colourbar" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div></div><span class="crop crop--bl" aria-hidden="true"></span><span class="crop crop--br" aria-hidden="true"></span></div></footer>
 <div class="cursor" aria-hidden="true"><i class="cursor__bar"></i><span class="cursor__label"></span></div>
-<script src="/assets/js/justify.js?v=ded9ac7d" defer></script>
-<script src="/assets/js/app.js?v=ded9ac7d" defer></script>
-<script src="/assets/js/fsf2026.js?v=ded9ac7d" defer></script>
+<script src="/assets/js/justify.js?v=9e84f60a" defer></script>
+<script src="/assets/js/app.js?v=9e84f60a" defer></script>
+<script src="/assets/js/fsf2026.js?v=9e84f60a" defer></script>
 </body>
 </html>
